@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo Cáo Ngân Sách & Thu Chi Dự Án</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap&subset=vietnamese"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #C81E1E;
+            --primary-dark: #9F1C1C;
+            --primary-light: #FDE8E8;
+            --bg-dark: #0F172A;
+            --bg-light: #F5F7FB;
+            --surface: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --success: #16A34A;
+            --warning: #F59E0B;
+            --info: #2563EB;
+            --danger: #DC2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #111827 100%);
+            color: white;
+            padding: 24px 16px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding: 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), #F43F5E);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .nav-item {
+            padding: 11px 14px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #9CA3AF;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), #F43F5E);
+            color: white;
+            box-shadow: 0 8px 18px rgba(200, 30, 30, 0.35);
+        }
+
+        .nav-item span {
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px 44px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--surface);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 6px;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .toggle-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 14px;
+            font-size: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 6px 14px rgba(200, 30, 30, 0.3);
+        }
+
+        .filter-select {
+            padding: 9px 10px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 12px;
+            background: var(--surface);
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        .col-15 {
+            flex: 0 0 calc(16% - 16px);
+            min-width: 0;
+        }
+
+        .col-20 {
+            flex: 0 0 calc(21% - 16px);
+            min-width: 0;
+        }
+
+        .col-22 {
+            flex: 0 0 calc(31.5% - 16px);
+            min-width: 0;
+        }
+
+        .col-25 {
+            flex: 0 0 calc(25% - 16px);
+            min-width: 0;
+        }
+
+        .col-40 {
+            flex: 0 0 calc(40% - 10px);
+            min-width: 0;
+        }
+
+        .col-60 {
+            flex: 0 0 calc(60% - 10px);
+            min-width: 0;
+        }
+
+        .col-100 {
+            flex: 0 0 100%;
+            min-width: 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+        }
+
+        .card.card-thu {
+            border-left-color: var(--success);
+        }
+
+        .card-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .card-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .card-change {
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        .chart-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chart-container {
+            width: 100%;
+            min-height: 240px;
+            height: 240px;
+            position: relative;
+        }
+
+        .chart-container.small {
+            min-height: 240px;
+            height: 240px;
+        }
+
+        .chart-container.large {
+            min-height: 350px;
+            height: 350px;
+        }
+
+        .filter-panel {
+            background: linear-gradient(180deg, #ffffff 0%, #fff7f7 100%);
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px solid var(--border);
+        }
+
+        .filter-panel h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--primary);
+        }
+
+        .filter-group {
+            margin-bottom: 12px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .multi-select {
+            position: relative;
+        }
+
+        .multi-select-trigger {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 10px;
+            background: var(--surface);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .multi-select-placeholder {
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        .multi-select-count {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .multi-select-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+            padding: 6px;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+
+        .multi-select.open .multi-select-menu {
+            display: block;
+        }
+
+        .multi-select-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 11px;
+            padding: 7px 8px;
+            border-radius: 8px;
+            border: 1px solid #EEF2F6;
+            background: #F8FAFC;
+            cursor: pointer;
+            margin-bottom: 4px;
+        }
+
+        .multi-select-item:hover {
+            background: var(--surface);
+            border-color: var(--border);
+        }
+
+        .multi-select-item.thu {
+            border-left: 3px solid var(--success);
+        }
+
+        .multi-select-item.chi {
+            border-left: 3px solid var(--danger);
+        }
+
+        .multi-select-item input {
+            accent-color: var(--primary);
+        }
+
+        .kpi-comparison {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .comparison-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--info);
+            text-align: center;
+        }
+
+        .comparison-card.card-thu {
+            border-left-color: var(--success);
+        }
+
+        .comparison-card.card-chi {
+            border-left-color: var(--danger);
+        }
+
+        .comparison-card.card-fhi {
+            border-left-color: var(--warning);
+        }
+
+        .comparison-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .comparison-value {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .data-table thead {
+            background: linear-gradient(135deg, #FEE2E2 0%, #FFF1F2 100%);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .data-table th {
+            padding: 10px 6px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        .data-table td {
+            padding: 8px 6px;
+            border-bottom: 1px solid var(--border);
+            text-align: right;
+            color: var(--text-secondary);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .data-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            background: #F8FAFC;
+            font-size: 11px;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .data-table tbody tr:nth-child(even) td {
+            background: #FBFCFE;
+        }
+
+        .data-table tbody tr:nth-child(even) td:first-child {
+            background: #F1F5F9;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">📊</div>
+            <div class="logo-text">QUẢN TRỊ<br>NGÂN SÁCH</div>
+        </div>
+        <div class="nav-item active" onclick="showPage('page1')"><span>📋</span> Ngân Sách Dự Án</div>
+        <div class="nav-item" onclick="showPage('page2')"><span>💰</span> Hiệu Quả Thu - Chi</div>
+        <div class="nav-item" onclick="showPage('page3')"><span>✅</span> Duyệt Chi</div>
+    </nav>
+
+    <main class="main-content">
+        <!-- PAGE 1: NGÂN SÁCH DỰ ÁN -->
+        <section id="page1" class="page active">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Ngân Sách Dự Án</h1>
+                    <p class="page-subtitle">Tổng quan tình trạng ngân sách và trạng thái điều chỉnh các dự án</p>
+                </div>
+                <div class="toggle-group">
+                    <button class="toggle-btn active" onclick="toggleBudgetType('total',this)">Ngân sách tổng
+                        (1-3)</button>
+                    <button class="toggle-btn" onclick="toggleBudgetType('detail',this)">Ngân sách chi tiết
+                        (1-4)</button>
+                </div>
+            </div>
+
+            <!-- ROW 1: KPI + Pie + 2 Bar Charts Ngang -->
+            <div class="row" style="align-items: stretch;">
+                <div class="col-15" style="display:flex;flex-direction:column;gap:10px;justify-content:space-between;">
+                    <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+                        <div class="card-label">Tổng số dự án</div>
+                        <div class="card-value">24</div>
+                        <div class="card-change">+3 dự án mới</div>
+                    </div>
+                    <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+                        <div class="card-label">Dự án có điều chỉnh</div>
+                        <div class="card-value">8</div>
+                        <div class="card-change">33.3% tổng dự án</div>
+                    </div>
+                </div>
+                <div class="chart-card col-20">
+                    <div class="chart-title">Trạng Thái Dự Án Có Điều Chỉnh</div>
+                    <div class="chart-container small" id="pieStatus"></div>
+                </div>
+                <div class="chart-card col-22">
+                    <div class="chart-header">
+                        <div class="chart-title" style="flex:1;border:none;padding-bottom:0;margin-bottom:0;">Tổng THU
+                            Dự Án</div>
+                        <div class="toggle-group" style="margin:0;">
+                            <button class="toggle-btn active" onclick="switchVersion('thu','v1',this)">Ban đầu - Gần
+                                nhất</button>
+                            <button class="toggle-btn" onclick="switchVersion('thu','v2',this)">Gần nhất - Điều
+                                chỉnh</button>
+                        </div>
+                    </div>
+                    <div class="chart-container small" id="barThuTotal"></div>
+                </div>
+                <div class="chart-card col-22">
+                    <div class="chart-header">
+                        <div class="chart-title" style="flex:1;border:none;padding-bottom:0;margin-bottom:0;">Tổng CHI
+                            Dự Án</div>
+                        <div class="toggle-group" style="margin:0;">
+                            <button class="toggle-btn active" onclick="switchVersion('chi','v1',this)">Ban đầu - Gần
+                                nhất</button>
+                            <button class="toggle-btn" onclick="switchVersion('chi','v2',this)">Gần nhất - Điều
+                                chỉnh</button>
+                        </div>
+                    </div>
+                    <div class="chart-container small" id="barChiTotal"></div>
+                </div>
+            </div>
+
+            <!-- ROW 2: Bar THU + Bar CHI -->
+            <div class="row">
+                <div class="chart-card col-40">
+                    <div class="chart-title">Cơ Cấu THU - 3 Version</div>
+                    <div class="chart-container" id="barThuStructure"></div>
+                </div>
+                <div class="chart-card col-60">
+                    <div class="chart-title">Cơ Cấu CHI - 3 Version (Tầng 1)</div>
+                    <div class="chart-container" id="barChiStructure"></div>
+                </div>
+            </div>
+
+            <!-- ROW 3: 3 Tables -->
+            <div class="row">
+                <div class="chart-card col-100">
+                    <div class="chart-title">Bảng Chi Tiết Ngân Sách Theo Version</div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+                        <div>
+                            <h4 style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--info);">Version Ban
+                                Đầu</h4>
+                            <div class="table-container" id="tableV1"></div>
+                        </div>
+                        <div>
+                            <h4 style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--success);">Version
+                                Gần Nhất</h4>
+                            <div class="table-container" id="tableV2"></div>
+                        </div>
+                        <div>
+                            <h4 style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--primary);">Version
+                                Điều Chỉnh</h4>
+                            <div class="table-container" id="tableV3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: HIỆU QUẢ THU CHI -->
+        <section id="page2" class="page">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Hiệu Quả Thu – Chi Dự Án</h1>
+                    <p class="page-subtitle">Đánh giá chi tiết hiệu quả tài chính của từng dự án</p>
+                </div>
+                <select class="filter-select" id="projectFilter2" onchange="updatePage2()">
+                    <option value="P001">DA Alpha</option>
+                    <option value="P002">DA Beta</option>
+                    <option value="P003">DA Gamma</option>
+                </select>
+            </div>
+
+            <!-- ROW 1: 2 Gauges + 1 Line -->
+            <div class="row">
+                <div class="chart-card col-20">
+                    <div class="chart-title">Tỷ Lệ Đạt Thu</div>
+                    <div class="chart-container" id="gaugeThu"></div>
+                </div>
+                <div class="chart-card col-20">
+                    <div class="chart-title">Tỷ Lệ Sử Dụng Ngân Sách Chi</div>
+                    <div class="chart-container" id="gaugeChi"></div>
+                </div>
+                <div class="chart-card col-60">
+                    <div class="chart-title">Lũy Kế Thu – Chi Theo Thời Gian</div>
+                    <div class="chart-container" id="lineCumulative"></div>
+                </div>
+            </div>
+
+            <!-- ROW 2: Thu Tháng + Chi Tháng -->
+            <div class="row">
+                <div class="chart-card" style="flex:1;">
+                    <div class="chart-title">Thu Theo Tháng</div>
+                    <div class="chart-container" id="barMonthlyThu"></div>
+                </div>
+                <div class="chart-card" style="flex:1;">
+                    <div class="chart-title">Chi Theo Tháng</div>
+                    <div class="chart-container" id="barMonthlyChi"></div>
+                </div>
+            </div>
+
+            <!-- ROW 3: Cơ Cấu THU + CHI -->
+            <div class="row">
+                <div class="chart-card" style="flex:1;">
+                    <div class="chart-title">Cơ Cấu Thu Theo Hạng Mục</div>
+                    <div class="chart-container" id="barStructureThu"></div>
+                </div>
+                <div class="chart-card" style="flex:1;">
+                    <div class="chart-title">Cơ Cấu Chi Theo Hạng Mục</div>
+                    <div class="chart-container" id="barStructureChi"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: DUYỆT CHI -->
+        <section id="page3" class="page">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Duyệt Chi Dự Án</h1>
+                    <p class="page-subtitle">Phục vụ phê duyệt chi và mô phỏng tác động tài chính</p>
+                </div>
+                <div style="display:flex;gap:12px;">
+                    <select class="filter-select" id="projectFilter3" onchange="updatePage3()">
+                        <option value="P001">DA Alpha</option>
+                        <option value="P002">DA Beta</option>
+                    </select>
+                    <select class="filter-select" id="monthFilter3" onchange="updatePage3()">
+                        <option value="202401">Tháng 01/2024</option>
+                        <option value="202402">Tháng 02/2024</option>
+                        <option value="202403">Tháng 03/2024</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ROW 1: Filter Panel + KPI Cards + Table -->
+            <div class="row">
+                <div class="filter-panel col-40">
+                    <h3>Bộ Lọc Hạng Mục CHI</h3>
+                    <div class="filter-group">
+                        <div class="filter-label">CHI tầng 1</div>
+                        <div class="multi-select" data-filter="chi1">
+                            <button type="button" class="multi-select-trigger"
+                                onclick="toggleMultiSelect(this.parentElement)">
+                                <span><span class="multi-select-placeholder">Chọn hạng mục CHI</span><span
+                                        class="multi-select-count">Tất cả</span></span>
+                                <span>▾</span>
+                            </button>
+                            <div class="multi-select-menu">
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.01" checked
+                                        onchange="updatePage3()"> CHI.01 - Chi cho pháp lý dự án</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.02" checked
+                                        onchange="updatePage3()"> CHI.02 - Chi cho kiến thiết cơ bản</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.03" checked
+                                        onchange="updatePage3()"> CHI.03 - Chi cho công tác bán hàng</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.04" checked
+                                        onchange="updatePage3()"> CHI.04 - Chi công tác chuẩn bị</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.05" checked
+                                        onchange="updatePage3()"> CHI.05 - Chi công tác thiết bị</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.06" checked
+                                        onchange="updatePage3()"> CHI.06 - Chi nhân công & thầu phụ</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.07" checked
+                                        onchange="updatePage3()"> CHI.07 - Chi vật tư & NCC</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.08" checked
+                                        onchange="updatePage3()"> CHI.08 - Chi cho hoạt động trực tiếp</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-label">CHI tầng 2</div>
+                        <div class="multi-select" data-filter="chi2">
+                            <button type="button" class="multi-select-trigger"
+                                onclick="toggleMultiSelect(this.parentElement)">
+                                <span><span class="multi-select-placeholder">Chọn hạng mục tầng 2</span><span
+                                        class="multi-select-count">Tất cả</span></span>
+                                <span>▾</span>
+                            </button>
+                            <div class="multi-select-menu">
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.01.10" checked
+                                        onchange="updatePage3()"> CHI.01.10 - Hồ sơ pháp lý dự án</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.01.20" checked
+                                        onchange="updatePage3()"> CHI.01.20 - Phí giấy phép xây dựng</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.02.10" checked
+                                        onchange="updatePage3()"> CHI.02.10 - Khảo sát địa hình</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.02.20" checked
+                                        onchange="updatePage3()"> CHI.02.20 - Thiết kế cơ sở</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-label">CHI tầng 3</div>
+                        <div class="multi-select" data-filter="chi3">
+                            <button type="button" class="multi-select-trigger"
+                                onclick="toggleMultiSelect(this.parentElement)">
+                                <span><span class="multi-select-placeholder">Chọn hạng mục tầng 3</span><span
+                                        class="multi-select-count">Tất cả</span></span>
+                                <span>▾</span>
+                            </button>
+                            <div class="multi-select-menu">
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.06.30" checked
+                                        onchange="updatePage3()"> CHI.06.30 - Gói thầu kết cấu</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.06.40" checked
+                                        onchange="updatePage3()"> CHI.06.40 - Gói thầu hoàn thiện</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-label">CHI tầng 4</div>
+                        <div class="multi-select" data-filter="chi4">
+                            <button type="button" class="multi-select-trigger"
+                                onclick="toggleMultiSelect(this.parentElement)">
+                                <span><span class="multi-select-placeholder">Chọn hạng mục tầng 4</span><span
+                                        class="multi-select-count">Tất cả</span></span>
+                                <span>▾</span>
+                            </button>
+                            <div class="multi-select-menu">
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.06.30.31" checked
+                                        onchange="updatePage3()"> CHI.06.30.31 - Gói thầu kết cấu A</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.06.30.32" checked
+                                        onchange="updatePage3()"> CHI.06.30.32 - Gói thầu kết cấu B</label>
+                                <label class="multi-select-item chi"><input type="checkbox" value="CHI.06.40.06" checked
+                                        onchange="updatePage3()"> CHI.06.40.06 - Gói thầu A</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-60" style="display:flex;flex-direction:column;gap:16px;">
+                    <div class="kpi-comparison">
+                        <div class="comparison-card card-chi">
+                            <div class="comparison-label">Tổng CHI (sau duyệt)</div>
+                            <div class="comparison-value" id="kpi_chi_after">5.23 tỷ</div>
+                            <div style="font-size:11px;margin-top:4px;color:var(--warning);" id="kpi_chi_change">+380 tr
+                                vs trước</div>
+                        </div>
+                        <div class="comparison-card card-thu">
+                            <div class="comparison-label">Vốn Đối Ứng</div>
+                            <div class="comparison-value" id="kpi_vdu">2.85 tỷ</div>
+                            <div style="font-size:11px;margin-top:4px;color:var(--warning);" id="kpi_vdu_change">+120 tr
+                                vs trước</div>
+                        </div>
+                        <div class="comparison-card card-fhi">
+                            <div class="comparison-label">FHI (sau duyệt)</div>
+                            <div class="comparison-value" id="kpi_fhi">1.18</div>
+                            <div style="font-size:11px;margin-top:4px;color:var(--danger);" id="kpi_fhi_change">-0.07 vs
+                                trước</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card" style="flex:1;">
+                        <div class="chart-title">So Sánh Trước / Sau Duyệt</div>
+                        <div class="table-container" id="comparisonTable"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROW 2: Weekly Table -->
+            <div class="row">
+                <div class="chart-card col-100">
+                    <div class="chart-title">Chi Tiết Theo Tuần</div>
+                    <div class="table-container" id="weeklyTable"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="charts.js"></script>
+</body>
+
+</html>

@@ -509,14 +509,195 @@
             <div class="logo-icon">📊</div>
             <div class="logo-text">QUẢN TRỊ<br>NGÂN SÁCH</div>
         </div>
-        <div class="nav-item active" onclick="showPage('page1')"><span>📋</span> Ngân Sách Dự Án</div>
-        <div class="nav-item" onclick="showPage('page2')"><span>💰</span> Hiệu Quả Thu - Chi</div>
-        <div class="nav-item" onclick="showPage('page3')"><span>✅</span> Duyệt Chi</div>
+        <div class="nav-item active" onclick="showPage('pageGuide')"><span>📖</span> Hướng Dẫn</div>
+        <div class="nav-item" onclick="showPage('page1')"><span>📈</span> Hiệu Quả Thu - Chi</div>
+        <div class="nav-item" onclick="showPage('page2')"><span>✅</span> Duyệt Chi</div>
+        <div class="nav-item" onclick="showPage('page3')"><span>📋</span> Chi Tiết Thu - Chi DA</div>
+        <div class="nav-item" onclick="showPage('page4')"><span>💰</span> Ngân Sách Dự Án</div>
     </nav>
 
     <main class="main-content">
-        <!-- PAGE 1: NGÂN SÁCH DỰ ÁN -->
-        <section id="page1" class="page active">
+        <!-- PAGE GUIDE: HƯỚNG DẪN -->
+        <section id="pageGuide" class="page active">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Hướng Dẫn Sử Dụng Dashboard</h1>
+                    <p class="page-subtitle">Tổng quan về các trang báo cáo và cách sử dụng hiệu quả</p>
+                </div>
+            </div>
+
+            <!-- Giới thiệu chung -->
+            <div class="row">
+                <div class="chart-card col-100">
+                    <div class="chart-title"
+                        style="font-size:16px;border-bottom:2px solid var(--primary);padding-bottom:12px;">🎯 Mục Đích
+                        Dashboard</div>
+                    <div style="padding:16px 0;font-size:14px;line-height:1.8;color:var(--text-secondary);">
+                        Dashboard này được thiết kế để <strong style="color:var(--primary);">quản lý và theo dõi ngân
+                            sách, thu chi dự án</strong> một cách toàn diện.
+                        Hệ thống bao gồm 4 trang báo cáo chính, mỗi trang phục vụ một mục đích cụ thể trong quy trình
+                        quản lý tài chính dự án.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chi tiết các trang -->
+            <div class="row">
+                <div class="chart-card" style="flex:1;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <div
+                            style="width:48px;height:48px;background:linear-gradient(135deg,#16A34A,#22C55E);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">
+                            📈</div>
+                        <div>
+                            <h3 style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">
+                                Trang 1: Hiệu Quả Thu - Chi</h3>
+                            <span style="font-size:11px;color:var(--success);font-weight:600;">Đánh giá tổng quan hiệu
+                                quả tài chính</span>
+                        </div>
+                    </div>
+                    <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+                        <p style="margin-bottom:10px;"><strong>Mục đích:</strong> Đánh giá chi tiết hiệu quả tài chính
+                            của từng dự án thông qua các chỉ số quan trọng.</p>
+                        <p style="margin-bottom:8px;"><strong>Các thành phần chính:</strong></p>
+                        <ul style="margin-left:16px;margin-bottom:10px;">
+                            <li>• <strong>Gauge Charts:</strong> Tỷ lệ đạt THU và tỷ lệ sử dụng ngân sách CHI</li>
+                            <li>• <strong>FHI Chart:</strong> Chỉ số hiệu quả tài chính (Financial Health Index) theo dự
+                                án</li>
+                            <li>• <strong>Lũy kế Thu-Chi:</strong> Theo dõi xu hướng thu chi theo thời gian</li>
+                            <li>• <strong>Cơ cấu Thu/Chi:</strong> Phân tích theo hạng mục</li>
+                        </ul>
+                        <p
+                            style="background:#F0FDF4;padding:10px 12px;border-radius:8px;border-left:3px solid var(--success);">
+                            <strong>💡 Tip:</strong> FHI > 1.0 nghĩa là Thu > Chi, dự án có lợi nhuận.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="chart-card" style="flex:1;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <div
+                            style="width:48px;height:48px;background:linear-gradient(135deg,#2563EB,#3B82F6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">
+                            ✅</div>
+                        <div>
+                            <h3 style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">
+                                Trang 2: Duyệt Chi</h3>
+                            <span style="font-size:11px;color:var(--info);font-weight:600;">Hỗ trợ quyết định phê duyệt
+                                chi</span>
+                        </div>
+                    </div>
+                    <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+                        <p style="margin-bottom:10px;"><strong>Mục đích:</strong> Phục vụ quá trình phê duyệt chi và mô
+                            phỏng tác động tài chính trước khi quyết định.</p>
+                        <p style="margin-bottom:8px;"><strong>Các thành phần chính:</strong></p>
+                        <ul style="margin-left:16px;margin-bottom:10px;">
+                            <li>• <strong>Bộ lọc hạng mục:</strong> Chọn các hạng mục CHI cần xem xét</li>
+                            <li>• <strong>KPI Cards:</strong> So sánh chi phí trước/sau khi duyệt</li>
+                            <li>• <strong>Biểu đồ combo:</strong> Doanh thu - Chi phí - FHI theo tháng</li>
+                            <li>• <strong>Ma trận thanh toán:</strong> Trạng thái các khoản cần thanh toán</li>
+                        </ul>
+                        <p
+                            style="background:#EFF6FF;padding:10px 12px;border-radius:8px;border-left:3px solid var(--info);">
+                            <strong>💡 Tip:</strong> Sử dụng bộ lọc để xem tác động của từng hạng mục chi lên tổng thể.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="chart-card" style="flex:1;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <div
+                            style="width:48px;height:48px;background:linear-gradient(135deg,#F59E0B,#FBBF24);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">
+                            📋</div>
+                        <div>
+                            <h3 style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">
+                                Trang 3: Chi Tiết Thu - Chi DA</h3>
+                            <span style="font-size:11px;color:var(--warning);font-weight:600;">Phân tích chi tiết từng
+                                dự án</span>
+                        </div>
+                    </div>
+                    <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+                        <p style="margin-bottom:10px;"><strong>Mục đích:</strong> Theo dõi chi tiết tình hình thu chi
+                            của từng dự án cụ thể.</p>
+                        <p style="margin-bottom:8px;"><strong>Các thành phần chính:</strong></p>
+                        <ul style="margin-left:16px;margin-bottom:10px;">
+                            <li>• <strong>Bộ lọc dự án:</strong> Chọn dự án cụ thể để xem chi tiết</li>
+                            <li>• <strong>FHI Cards:</strong> FHI hiện tại và FHI dự kiến</li>
+                            <li>• <strong>Gauges:</strong> Tỷ lệ đạt thu và sử dụng ngân sách chi</li>
+                            <li>• <strong>Matrix table:</strong> Chi tiết thu-chi theo từng tháng</li>
+                        </ul>
+                        <p
+                            style="background:#FFFBEB;padding:10px 12px;border-radius:8px;border-left:3px solid var(--warning);">
+                            <strong>💡 Tip:</strong> So sánh FHI hiện tại với FHI dự kiến để đánh giá tiến độ dự án.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="chart-card" style="flex:1;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                        <div
+                            style="width:48px;height:48px;background:linear-gradient(135deg,#DC2626,#EF4444);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">
+                            💰</div>
+                        <div>
+                            <h3 style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">
+                                Trang 4: Ngân Sách Dự Án</h3>
+                            <span style="font-size:11px;color:var(--primary);font-weight:600;">Quản lý ngân sách và điều
+                                chỉnh</span>
+                        </div>
+                    </div>
+                    <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+                        <p style="margin-bottom:10px;"><strong>Mục đích:</strong> Tổng quan tình trạng ngân sách và theo
+                            dõi các phiếu yêu cầu điều chỉnh.</p>
+                        <p style="margin-bottom:8px;"><strong>Các thành phần chính:</strong></p>
+                        <ul style="margin-left:16px;margin-bottom:10px;">
+                            <li>• <strong>KPI Cards:</strong> Tổng số dự án và số phiếu điều chỉnh</li>
+                            <li>• <strong>Pie Chart:</strong> Trạng thái các phiếu điều chỉnh (Trong hạn/Quá hạn)</li>
+                            <li>• <strong>Bar Charts:</strong> So sánh ngân sách THU/CHI theo version</li>
+                            <li>• <strong>Bảng Version:</strong> Chi tiết ngân sách theo 3 version với màu so sánh</li>
+                        </ul>
+                        <p
+                            style="background:#FEF2F2;padding:10px 12px;border-radius:8px;border-left:3px solid var(--primary);">
+                            <strong>💡 Tip:</strong> Ô màu vàng = giống 1 version khác, ô màu đỏ = khác cả 2 version còn
+                            lại.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chú thích chung -->
+            <div class="row">
+                <div class="chart-card col-100">
+                    <div class="chart-title" style="font-size:14px;">📌 Chú Thích Chung</div>
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:12px;">
+                        <div style="padding:12px;background:#F0FDF4;border-radius:10px;text-align:center;">
+                            <div style="font-size:24px;margin-bottom:6px;">🟢</div>
+                            <div style="font-size:12px;font-weight:600;color:#16A34A;">THU / Tích cực</div>
+                            <div style="font-size:11px;color:var(--text-secondary);">Các chỉ số liên quan đến thu nhập
+                            </div>
+                        </div>
+                        <div style="padding:12px;background:#FEF2F2;border-radius:10px;text-align:center;">
+                            <div style="font-size:24px;margin-bottom:6px;">🔴</div>
+                            <div style="font-size:12px;font-weight:600;color:#DC2626;">CHI / Cần chú ý</div>
+                            <div style="font-size:11px;color:var(--text-secondary);">Các chỉ số liên quan đến chi phí
+                            </div>
+                        </div>
+                        <div style="padding:12px;background:#FFFBEB;border-radius:10px;text-align:center;">
+                            <div style="font-size:24px;margin-bottom:6px;">🟡</div>
+                            <div style="font-size:12px;font-weight:600;color:#F59E0B;">FHI / Cảnh báo</div>
+                            <div style="font-size:11px;color:var(--text-secondary);">Chỉ số hiệu quả tài chính</div>
+                        </div>
+                        <div style="padding:12px;background:#EFF6FF;border-radius:10px;text-align:center;">
+                            <div style="font-size:24px;margin-bottom:6px;">🔵</div>
+                            <div style="font-size:12px;font-weight:600;color:#2563EB;">Ngân sách / Kế hoạch</div>
+                            <div style="font-size:11px;color:var(--text-secondary);">Các giá trị ngân sách ban đầu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: NGÂN SÁCH DỰ ÁN -->
+        <section id="page4" class="page">
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Ngân Sách Dự Án</h1>
@@ -539,13 +720,12 @@
                         <div class="card-change">+3 dự án mới</div>
                     </div>
                     <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;">
-                        <div class="card-label">Dự án có điều chỉnh</div>
+                        <div class="card-label">Số phiếu yêu cầu điều chỉnh</div>
                         <div class="card-value">8</div>
                         <div class="card-change">33.3% tổng dự án</div>
                     </div>
                 </div>
                 <div class="chart-card col-20">
-                    <div class="chart-title">Trạng Thái Dự Án Có Điều Chỉnh</div>
                     <div class="chart-container small" id="pieStatus"></div>
                 </div>
                 <div class="chart-card col-22">
@@ -592,6 +772,18 @@
             <div class="row">
                 <div class="chart-card col-100">
                     <div class="chart-title">Bảng Chi Tiết Ngân Sách Theo Version</div>
+                    <div style="font-size: 11px; margin-bottom: 12px; display: flex; gap: 20px; flex-wrap: wrap;">
+                        <span style="display: inline-flex; align-items: center; gap: 6px;">
+                            <span
+                                style="width: 14px; height: 14px; background: #FEF9C3; border: 1px solid #FDE047; border-radius: 3px; display: inline-block;"></span>
+                            <span>Giống với 1 trong 2 version còn lại</span>
+                        </span>
+                        <span style="display: inline-flex; align-items: center; gap: 6px;">
+                            <span
+                                style="width: 14px; height: 14px; background: #FEE2E2; border: 1px solid #FCA5A5; border-radius: 3px; display: inline-block;"></span>
+                            <span>Khác với cả 2 version còn lại</span>
+                        </span>
+                    </div>
                     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
                         <div>
                             <h4 style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--info);">Version Ban
@@ -613,33 +805,36 @@
             </div>
         </section>
 
-        <!-- PAGE 2: HIỆU QUẢ THU CHI -->
-        <section id="page2" class="page">
+        <!-- PAGE 1: HIỆU QUẢ THU - CHI -->
+        <section id="page1" class="page">
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Hiệu Quả Thu – Chi Dự Án</h1>
                     <p class="page-subtitle">Đánh giá chi tiết hiệu quả tài chính của từng dự án</p>
                 </div>
-                <select class="filter-select" id="projectFilter2" onchange="updatePage2()">
-                    <option value="P001">DA Alpha</option>
-                    <option value="P002">DA Beta</option>
-                    <option value="P003">DA Gamma</option>
-                </select>
             </div>
 
-            <!-- ROW 1: 2 Gauges + 1 Line -->
-            <div class="row">
-                <div class="chart-card col-20">
-                    <div class="chart-title">Tỷ Lệ Đạt Thu</div>
-                    <div class="chart-container" id="gaugeThu"></div>
+            <!-- ROW 1: 2 Gauges (stacked) + FHI Bar Chart + Line Cumulative -->
+            <div class="row" style="align-items:stretch;">
+                <div class="col-15" style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="chart-card" style="flex:1;padding:12px 14px;">
+                        <div class="chart-title" style="margin-bottom:4px;">Tỷ Lệ Đạt Thu</div>
+                        <div class="chart-container" style="min-height:135px;height:135px;" id="gaugeThu"></div>
+                    </div>
+                    <div class="chart-card" style="flex:1;padding:12px 14px;">
+                        <div class="chart-title" style="margin-bottom:4px;">Tỷ Lệ Sử Dụng NS Chi</div>
+                        <div class="chart-container" style="min-height:135px;height:135px;" id="gaugeChi"></div>
+                    </div>
                 </div>
-                <div class="chart-card col-20">
-                    <div class="chart-title">Tỷ Lệ Sử Dụng Ngân Sách Chi</div>
-                    <div class="chart-container" id="gaugeChi"></div>
+                <div class="chart-card col-40">
+                    <div class="chart-title">FHI Theo Dự Án</div>
+                    <div class="fhi-subtitle" id="fhiSubtitle"
+                        style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;"></div>
+                    <div class="chart-container" style="min-height:280px;height:280px;" id="barFHI"></div>
                 </div>
-                <div class="chart-card col-60">
+                <div class="chart-card col-40">
                     <div class="chart-title">Lũy Kế Thu – Chi Theo Thời Gian</div>
-                    <div class="chart-container" id="lineCumulative"></div>
+                    <div class="chart-container" style="min-height:300px;height:300px;" id="lineCumulative"></div>
                 </div>
             </div>
 
@@ -668,24 +863,102 @@
             </div>
         </section>
 
-        <!-- PAGE 3: DUYỆT CHI -->
+        <!-- PAGE 3: CHI TIẾT THU - CHI DỰ ÁN -->
         <section id="page3" class="page">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Chi Tiết Thu - Chi Dự Án</h1>
+                    <p class="page-subtitle">Theo dõi chi tiết tình hình thu chi của từng dự án</p>
+                </div>
+                <select class="filter-select" id="projectFilterPage3" onchange="updatePage3Detail()"
+                    style="min-width:180px;padding:12px 16px;font-size:14px;">
+                    <option value="P001">DA Alpha</option>
+                    <option value="P002">DA Beta</option>
+                    <option value="P003">DA Gamma</option>
+                </select>
+            </div>
+
+            <!-- ROW 1: 3 columns - 25% + 25% + 50% -->
+            <div class="row" style="align-items:stretch;">
+                <!-- Column 1 (25%): FHI Hiện Tại + Gauge Đạt Thu -->
+                <div class="col-25" style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="card"
+                        style="display:flex;flex-direction:column;justify-content:center;border-left-color:var(--warning);padding:16px;">
+                        <div class="card-label" style="font-size:13px;">FHI Hiện Tại</div>
+                        <div class="card-value" id="fhiCurrent" style="font-size:32px;">1.47</div>
+                        <div class="card-change" id="fhiCurrentStatus" style="color:#16A34A;font-size:12px;">✓ Hiệu quả
+                            tốt</div>
+                    </div>
+                    <div class="chart-card" style="flex:1;padding:14px 16px;">
+                        <div class="chart-title" style="margin-bottom:8px;">Tỷ Lệ Đạt Thu</div>
+                        <div class="chart-container" style="min-height:140px;height:140px;" id="gaugeThuDetail"></div>
+                    </div>
+                </div>
+                <!-- Column 2 (25%): FHI Dự Kiến + Gauge Sử Dụng NS Chi -->
+                <div class="col-25" style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="card"
+                        style="display:flex;flex-direction:column;justify-content:center;border-left-color:var(--info);padding:16px;">
+                        <div class="card-label" style="font-size:13px;">FHI Dự Kiến</div>
+                        <div class="card-value" id="fhiExpected" style="font-size:32px;">1.50</div>
+                        <div class="card-change" id="fhiExpectedNote" style="font-size:11px;">Nếu thu đủ & chi hết</div>
+                    </div>
+                    <div class="chart-card" style="flex:1;padding:14px 16px;">
+                        <div class="chart-title" style="margin-bottom:8px;">Tỷ Lệ Sử Dụng NS Chi</div>
+                        <div class="chart-container" style="min-height:140px;height:140px;" id="gaugeChiDetail"></div>
+                    </div>
+                </div>
+                <!-- Column 3: Lũy Kế Thu Chi (chiếm phần còn lại) -->
+                <div class="chart-card" style="flex:1;">
+                    <div class="chart-title">Lũy Kế Thu – Chi Theo Thời Gian</div>
+                    <div class="chart-container" style="min-height:280px;height:280px;" id="lineCumulativeDetail"></div>
+                </div>
+            </div>
+
+            <!-- ROW 2: Thu/Chi theo tháng (Combo Charts) -->
+            <div class="row">
+                <div class="chart-card" style="flex:1;">
+                    <div class="chart-title">Thu Theo Tháng</div>
+                    <div class="chart-container" id="comboMonthlyThuDetail"></div>
+                </div>
+                <div class="chart-card" style="flex:1;">
+                    <div class="chart-title">Chi Theo Tháng</div>
+                    <div class="chart-container" id="comboMonthlyChiDetail"></div>
+                </div>
+            </div>
+
+            <!-- ROW 3: Cơ cấu Thu/Chi -->
+            <div class="row">
+                <div class="chart-card" style="flex:1;">
+                    <div class="chart-title">Cơ Cấu Thu Theo Hạng Mục</div>
+                    <div class="chart-container" id="barStructureThuDetail"></div>
+                </div>
+                <div class="chart-card" style="flex:1;">
+                    <div class="chart-title">Cơ Cấu Chi Theo Hạng Mục</div>
+                    <div class="chart-container" id="barStructureChiDetail"></div>
+                </div>
+            </div>
+
+            <!-- ROW 4: Matrix THU-CHI theo tháng (moved to bottom) -->
+            <div class="row">
+                <div class="chart-card col-100">
+                    <div class="chart-title">Chi Tiết Thu - Chi Theo Tháng</div>
+                    <div class="table-container" style="max-height:320px;overflow-y:auto;" id="matrixThuChiTable"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: DUYỆT CHI -->
+        <section id="page2" class="page">
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Duyệt Chi Dự Án</h1>
                     <p class="page-subtitle">Phục vụ phê duyệt chi và mô phỏng tác động tài chính</p>
                 </div>
-                <div style="display:flex;gap:12px;">
-                    <select class="filter-select" id="projectFilter3" onchange="updatePage3()">
-                        <option value="P001">DA Alpha</option>
-                        <option value="P002">DA Beta</option>
-                    </select>
-                    <select class="filter-select" id="monthFilter3" onchange="updatePage3()">
-                        <option value="202401">Tháng 01/2024</option>
-                        <option value="202402">Tháng 02/2024</option>
-                        <option value="202403">Tháng 03/2024</option>
-                    </select>
-                </div>
+                <select class="filter-select" id="projectFilter3" onchange="updatePage3()"
+                    style="min-width:180px;padding:12px 16px;font-size:14px;">
+                    <option value="P001">DA Alpha</option>
+                    <option value="P002">DA Beta</option>
+                </select>
             </div>
 
             <!-- ROW 1: Filter Panel + KPI Cards + Table -->
@@ -809,11 +1082,15 @@
                 </div>
             </div>
 
-            <!-- ROW 2: Weekly Table -->
+            <!-- ROW 2: Combo Chart + Payment Matrix -->
             <div class="row">
-                <div class="chart-card col-100">
-                    <div class="chart-title">Chi Tiết Theo Tuần</div>
-                    <div class="table-container" id="weeklyTable"></div>
+                <div class="chart-card col-60">
+                    <div class="chart-title">Doanh Thu - Chi Phí - FHI Theo Tháng</div>
+                    <div class="chart-container" style="min-height:280px;height:280px;" id="comboRevenueCostFHI"></div>
+                </div>
+                <div class="chart-card col-40">
+                    <div class="chart-title">Chi Tiết Thanh Toán Hạng Mục</div>
+                    <div class="table-container" style="max-height:280px;" id="paymentMatrixTable"></div>
                 </div>
             </div>
         </section>

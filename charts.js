@@ -128,6 +128,8 @@ function renderBarThuTotal(ver) {
     const d2 = ver === 'v1' ? [45, 41, 38, 31, 25] : [48, 44, 41, 34, 28];
     const l1 = ver === 'v1' ? 'Ban đầu' : 'Gần nhất';
     const l2 = ver === 'v1' ? 'Gần nhất' : 'Điều chỉnh';
+    const c1 = ver === 'v1' ? '#3B82F6' : '#16A34A'; // Ban đầu: xanh nước biển, Gần nhất: xanh lá
+    const c2 = ver === 'v1' ? '#16A34A' : '#F59E0B'; // Gần nhất: xanh lá, Điều chỉnh: vàng
     if (!charts.barThuTotal) charts.barThuTotal = echarts.init(document.getElementById('barThuTotal'));
     charts.barThuTotal.setOption({
         tooltip: { trigger: 'axis' },
@@ -136,8 +138,8 @@ function renderBarThuTotal(ver) {
         yAxis: { type: 'category', data: projects, axisLabel: { color: '#64748B', fontSize: 10 } },
         xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
         series: [
-            { name: l1, type: 'bar', data: d1, itemStyle: { color: '#3B82F6' } },
-            { name: l2, type: 'bar', data: d2, itemStyle: { color: '#16A34A' } }
+            { name: l1, type: 'bar', data: d1, itemStyle: { color: c1 } },
+            { name: l2, type: 'bar', data: d2, itemStyle: { color: c2 } }
         ]
     });
 }
@@ -148,6 +150,8 @@ function renderBarChiTotal(ver) {
     const d2 = ver === 'v1' ? [42, 36, 32, 26, 22] : [46, 40, 36, 30, 26];
     const l1 = ver === 'v1' ? 'Ban đầu' : 'Gần nhất';
     const l2 = ver === 'v1' ? 'Gần nhất' : 'Điều chỉnh';
+    const c1 = ver === 'v1' ? '#3B82F6' : '#16A34A'; // Ban đầu: xanh nước biển, Gần nhất: xanh lá
+    const c2 = ver === 'v1' ? '#16A34A' : '#F59E0B'; // Gần nhất: xanh lá, Điều chỉnh: vàng
     if (!charts.barChiTotal) charts.barChiTotal = echarts.init(document.getElementById('barChiTotal'));
     charts.barChiTotal.setOption({
         tooltip: { trigger: 'axis' },
@@ -156,8 +160,8 @@ function renderBarChiTotal(ver) {
         yAxis: { type: 'category', data: projects, axisLabel: { color: '#64748B', fontSize: 10 } },
         xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
         series: [
-            { name: l1, type: 'bar', data: d1, itemStyle: { color: '#F59E0B' } },
-            { name: l2, type: 'bar', data: d2, itemStyle: { color: '#DC2626' } }
+            { name: l1, type: 'bar', data: d1, itemStyle: { color: c1 } },
+            { name: l2, type: 'bar', data: d2, itemStyle: { color: c2 } }
         ]
     });
 }

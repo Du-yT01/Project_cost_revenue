@@ -604,29 +604,117 @@ function renderStructureBars() {
     const thuCats = demoData.thuItems.map(i => i.shortName);
     const chiCats = demoData.chiItems.slice(0, 6).map(i => i.shortName);
 
+    // Data for THU
+    const thuActual = [38.5, 18.2, 11.7, 8.4];
+    const thuBudget = [45.2, 25.0, 15.0, 9];
+
     charts.barStructureThu = echarts.init(document.getElementById('barStructureThu'));
     charts.barStructureThu.setOption({
-        tooltip: { trigger: 'axis' },
-        legend: { data: ['Thực thu', 'Ngân sách'], textStyle: { color: '#64748B' }, top: 0 },
-        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+        tooltip: {
+            trigger: 'axis',
+            formatter: params => {
+                const actual = params.find(p => p.seriesName === 'Thực thu');
+                if (!actual) return '';
+                const budget = thuBudget[actual.dataIndex];
+                const pct = ((actual.value / budget) * 100).toFixed(0);
+                return `<strong>${actual.name}</strong><br/>Thực thu: <strong>${actual.value} tỷ</strong><br/>Ngân sách: ${budget} tỷ<br/>Đạt: ${pct}%`;
+            }
+        },
+        grid: { left: '3%', right: '22%', bottom: '3%', top: '3%', containLabel: true },
         yAxis: { type: 'category', data: thuCats, axisLabel: { color: '#64748B' } },
         xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
         series: [
-            { name: 'Thực thu', type: 'bar', data: [38.5, 18.2, 11.7, 8.4], itemStyle: { color: '#16A34A' } },
-            { name: 'Ngân sách', type: 'bar', data: [45.2, 25.0, 15.0, 9], itemStyle: { color: 'rgba(22,163,74,0.3)' } }
+            {
+                name: 'Thực thu',
+                type: 'bar',
+                data: thuActual,
+                itemStyle: { color: '#16A34A' },
+                barWidth: '50%',
+                z: 1
+            },
+            {
+                name: 'Ngân sách',
+                type: 'scatter',
+                symbol: 'rect',
+                symbolSize: [3, 24],
+                data: thuBudget.map((budget, idx) => {
+                    const val = thuActual[idx];
+                    const pct = ((val / budget) * 100 - 100).toFixed(0);
+                    const pctStr = pct >= 0 ? `+${pct}%` : `${pct}%`;
+                    return {
+                        value: [budget, idx],
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: `${val} tỷ | ${pctStr}`,
+                            fontSize: 10,
+                            color: '#333',
+                            distance: 8
+                        }
+                    };
+                }),
+                itemStyle: { color: '#1E293B' },
+                z: 10
+            }
         ]
     });
 
+    // Data for CHI
+    const chiActual = [1.5, 14, 9.8, 7.2, 11.5, 26];
+    const chiBudget = [1.6, 15.2, 10.8, 8.2, 12.5, 29];
+
     charts.barStructureChi = echarts.init(document.getElementById('barStructureChi'));
     charts.barStructureChi.setOption({
-        tooltip: { trigger: 'axis' },
-        legend: { data: ['Thực chi', 'Ngân sách'], textStyle: { color: '#64748B' }, top: 0 },
-        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+        tooltip: {
+            trigger: 'axis',
+            formatter: params => {
+                const actual = params.find(p => p.seriesName === 'Thực chi');
+                if (!actual) return '';
+                const budget = chiBudget[actual.dataIndex];
+                const pct = ((actual.value / budget) * 100).toFixed(0);
+                return `<strong>${actual.name}</strong><br/>Thực chi: <strong>${actual.value} tỷ</strong><br/>Ngân sách: ${budget} tỷ<br/>Sử dụng: ${pct}%`;
+            }
+        },
+        grid: { left: '3%', right: '22%', bottom: '3%', top: '3%', containLabel: true },
         yAxis: { type: 'category', data: chiCats, axisLabel: { color: '#64748B' } },
         xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
         series: [
-            { name: 'Thực chi', type: 'bar', data: [1.5, 14, 9.8, 7.2, 11.5, 26], itemStyle: { color: '#DC2626' } },
-            { name: 'Ngân sách', type: 'bar', data: [1.6, 15.2, 10.8, 8.2, 12.5, 29], itemStyle: { color: 'rgba(220,38,38,0.3)' } }
+            {
+                name: 'Thực chi',
+                type: 'bar',
+                data: chiActual,
+                itemStyle: { color: '#DC2626' },
+                barWidth: '50%',
+                z: 1
+            },
+            {
+                name: 'Ngân sách',
+                type: 'scatter',
+                symbol: 'rect',
+                symbolSize: [3, 24],
+                data: chiBudget.map((budget, idx) => {
+                    const val = chiActual[idx];
+                    const pct = ((val / budget) * 100 - 100).toFixed(0);
+                    const pctStr = pct >= 0 ? `+${pct}%` : `${pct}%`;
+                    const isOver = val > budget;
+                    return {
+                        value: [budget, idx],
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: `${val} tỷ | ${pctStr}`,
+                            fontSize: 10,
+                            padding: [3, 6],
+                            borderRadius: 3,
+                            backgroundColor: isOver ? '#DC2626' : '#16A34A',
+                            color: '#fff',
+                            distance: 8
+                        }
+                    };
+                }),
+                itemStyle: { color: '#1E293B' },
+                z: 10
+            }
         ]
     });
 }
@@ -1054,32 +1142,118 @@ function renderComboMonthlyChiDetail(proj) {
 
 function renderStructureThuDetail() {
     const thuCats = demoData.thuItems.map(i => i.shortName);
+    const thuActual = [42.5, 20.2, 13.7, 9.4];
+    const thuBudget = [48.2, 27.0, 17.0, 11];
+
     charts.barStructureThuDetail = echarts.init(document.getElementById('barStructureThuDetail'));
     charts.barStructureThuDetail.setOption({
-        tooltip: { trigger: 'axis' },
-        legend: { data: ['Thực thu', 'Ngân sách'], textStyle: { color: '#64748B' }, top: 0 },
-        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+        tooltip: {
+            trigger: 'axis',
+            formatter: params => {
+                const actual = params.find(p => p.seriesName === 'Thực thu');
+                if (!actual) return '';
+                const budget = thuBudget[actual.dataIndex];
+                const pct = ((actual.value / budget) * 100).toFixed(0);
+                return `<strong>${actual.name}</strong><br/>Thực thu: <strong>${actual.value} tỷ</strong><br/>Ngân sách: ${budget} tỷ<br/>Đạt: ${pct}%`;
+            }
+        },
+        grid: { left: '3%', right: '22%', bottom: '3%', top: '3%', containLabel: true },
         yAxis: { type: 'category', data: thuCats, axisLabel: { color: '#64748B' } },
         xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
         series: [
-            { name: 'Thực thu', type: 'bar', data: [42.5, 20.2, 13.7, 9.4], itemStyle: { color: '#16A34A' } },
-            { name: 'Ngân sách', type: 'bar', data: [48.2, 27.0, 17.0, 11], itemStyle: { color: 'rgba(22,163,74,0.3)' } }
+            {
+                name: 'Thực thu',
+                type: 'bar',
+                data: thuActual,
+                itemStyle: { color: '#16A34A' },
+                barWidth: '50%',
+                z: 1
+            },
+            {
+                name: 'Ngân sách',
+                type: 'scatter',
+                symbol: 'rect',
+                symbolSize: [3, 24],
+                data: thuBudget.map((budget, idx) => {
+                    const val = thuActual[idx];
+                    const pct = ((val / budget) * 100 - 100).toFixed(0);
+                    const pctStr = pct >= 0 ? `+${pct}%` : `${pct}%`;
+                    return {
+                        value: [budget, idx],
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: `${val} tỷ | ${pctStr}`,
+                            fontSize: 10,
+                            color: '#333',
+                            distance: 8
+                        }
+                    };
+                }),
+                itemStyle: { color: '#1E293B' },
+                z: 10
+            }
         ]
     });
 }
 
 function renderStructureChiDetail() {
     const chiCats = demoData.chiItems.slice(0, 6).map(i => i.shortName);
+    const chiActual = [1.6, 15, 10.5, 7.8, 12.5, 28];
+    const chiBudget = [1.8, 16.2, 11.8, 9.2, 14.5, 32];
+
     charts.barStructureChiDetail = echarts.init(document.getElementById('barStructureChiDetail'));
     charts.barStructureChiDetail.setOption({
-        tooltip: { trigger: 'axis' },
-        legend: { data: ['Thực chi', 'Ngân sách'], textStyle: { color: '#64748B' }, top: 0 },
-        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+        tooltip: {
+            trigger: 'axis',
+            formatter: params => {
+                const actual = params.find(p => p.seriesName === 'Thực chi');
+                if (!actual) return '';
+                const budget = chiBudget[actual.dataIndex];
+                const pct = ((actual.value / budget) * 100).toFixed(0);
+                return `<strong>${actual.name}</strong><br/>Thực chi: <strong>${actual.value} tỷ</strong><br/>Ngân sách: ${budget} tỷ<br/>Sử dụng: ${pct}%`;
+            }
+        },
+        grid: { left: '3%', right: '22%', bottom: '3%', top: '3%', containLabel: true },
         yAxis: { type: 'category', data: chiCats, axisLabel: { color: '#64748B' } },
         xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
         series: [
-            { name: 'Thực chi', type: 'bar', data: [1.6, 15, 10.5, 7.8, 12.5, 28], itemStyle: { color: '#DC2626' } },
-            { name: 'Ngân sách', type: 'bar', data: [1.8, 16.2, 11.8, 9.2, 14.5, 32], itemStyle: { color: 'rgba(220,38,38,0.3)' } }
+            {
+                name: 'Thực chi',
+                type: 'bar',
+                data: chiActual,
+                itemStyle: { color: '#DC2626' },
+                barWidth: '50%',
+                z: 1
+            },
+            {
+                name: 'Ngân sách',
+                type: 'scatter',
+                symbol: 'rect',
+                symbolSize: [3, 24],
+                data: chiBudget.map((budget, idx) => {
+                    const val = chiActual[idx];
+                    const pct = ((val / budget) * 100 - 100).toFixed(0);
+                    const pctStr = pct >= 0 ? `+${pct}%` : `${pct}%`;
+                    const isOver = val > budget;
+                    return {
+                        value: [budget, idx],
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: `${val} tỷ | ${pctStr}`,
+                            fontSize: 10,
+                            padding: [3, 6],
+                            borderRadius: 3,
+                            backgroundColor: isOver ? '#DC2626' : '#16A34A',
+                            color: '#fff',
+                            distance: 8
+                        }
+                    };
+                }),
+                itemStyle: { color: '#1E293B' },
+                z: 10
+            }
         ]
     });
 }

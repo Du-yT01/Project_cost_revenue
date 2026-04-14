@@ -1,4 +1,6 @@
-// Demo Data với cấu trúc THU/CHI chuẩn hóa
+// ============================================================
+// Demo Data với cấu trúc THU/CHI chuẩn hóa theo Excel VictoryCons
+// ============================================================
 const demoData = {
     projects: [
         { id: 'P001', name: 'DA Alpha', budgetThuTotal: 120, budgetChiTotal: 80, actualThu: 115, actualChi: 78 },
@@ -6,96 +8,252 @@ const demoData = {
         { id: 'P003', name: 'DA Gamma', budgetThuTotal: 105, budgetChiTotal: 70, actualThu: 98, actualChi: 66 }
     ],
 
-    // FHI data per project (Thu/Chi ratio)
-    projectFHI: [
-        { name: 'DA Alpha', fhi: 1.47 },
-        { name: 'DA Beta', fhi: 1.51 },
-        { name: 'DA Gamma', fhi: 1.48 },
-        { name: 'DA Delta', fhi: 1.12 },
-        { name: 'DA Epsilon', fhi: 0.95 },
-        { name: 'DA Zeta', fhi: 1.28 },
-        { name: 'DA Eta', fhi: 1.05 },
-        { name: 'DA Theta', fhi: 0.88 }
-    ],
-    fhiThreshold: 1.0, // Ngưỡng FHI tiêu chuẩn
-
-    // Hạng mục THU - Chuẩn hóa theo bảng chi tiết
-    thuItems: [
-        { code: 'THU.01', name: 'THU.01 - Thu từ Chủ Đầu Tư', shortName: 'Thu từ Chủ ĐT', level: 1 },
-        { code: 'THU.02', name: 'THU.02 - Thu Hoạt Động Tài Chính', shortName: 'Thu HĐ Tài chính', level: 1 },
-        { code: 'THU.03', name: 'THU.03 - Thu từ Nguồn Khác', shortName: 'Thu Nguồn khác', level: 1 },
-        { code: 'THU.04', name: 'THU.04 - Thu Khác', shortName: 'Thu Khác', level: 1 }
+    // Chuẩn hóa THU theo Excel
+    thuItemsStd: [
+        { code: '21', name: 'Thu CĐT', level: 1 },
+        { code: '21.10', name: 'Thu Tạm ứng', level: 2 },
+        { code: '21.20', name: 'Thu Thanh toán đợt', level: 2 },
+        { code: '21.30', name: 'Thu Quyết toán', level: 2 },
+        { code: '21.40', name: 'Thu Bảo hành', level: 2 },
+        { code: '22', name: 'Thu hoạt động tài chính', level: 1 },
+        { code: '22.51', name: 'Thu từ vay bank', level: 2 },
+        { code: '22.52', name: 'Thu gốc vay nội bộ, thu tiền mượn', level: 2 },
+        { code: '22.53', name: 'Thu hồi các khoản cho vay', level: 2 },
+        { code: '23', name: 'Thu khác thuộc dự án', level: 1 },
+        { code: '23.99', name: 'Thu khác (thu hoàn ứng, khác…)', level: 2 }
     ],
 
-    thuItemsLevel2: [
-        { code: 'THU.01.01', name: 'THU.01.01 - Tư vấn', parent: 'THU.01', level: 2 },
-        { code: 'THU.01.02', name: 'THU.01.02 - Rao sự', parent: 'THU.01', level: 2 },
-        { code: 'THU.01.03', name: 'THU.01.03 - Bản quyền & Khác', parent: 'THU.01', level: 2 }
+    // Chuẩn hóa CHI theo Excel — đầy đủ 12 mã cấp 1
+    chiItemsStd: [
+        { code: '01', name: 'Chi phát triển dự án', level: 1 },
+        { code: '02', name: 'Chi kiến thiết cơ bản', level: 1 },
+        { code: '03', name: 'Chi cho dịch vụ kinh doanh BĐS', level: 1 },
+        { code: '04', name: 'Công tác chuẩn bị', level: 1 },
+        { code: '05', name: 'Công tác thiết bị', level: 1 },
+        { code: '06', name: 'Chi cho thầu phụ / tổ đội', level: 1 },
+        { code: '07', name: 'Chi vật tư', level: 1 },
+        { code: '08', name: 'Chi hoạt động trực tiếp', level: 1 },
+        { code: '09', name: 'Chi phí gián tiếp', level: 1 },
+        { code: '10', name: 'Chi hoạt động tài chính', level: 1 },
+        { code: '11', name: 'Chi khác', level: 1 },
+        { code: '12', name: 'Dự phòng phí', level: 1 }
     ],
 
-    // Hạng mục CHI - Chuẩn hóa theo bảng chi tiết
-    chiItems: [
-        { code: 'CHI.01', name: 'CHI.01 - Chi cho pháp lý dự án', shortName: 'Pháp lý', level: 1 },
-        { code: 'CHI.02', name: 'CHI.02 - Chi cho kiến thiết cơ bản', shortName: 'Kiến thiết', level: 1 },
-        { code: 'CHI.03', name: 'CHI.03 - Chi cho công tác bán hàng', shortName: 'Bán hàng', level: 1 },
-        { code: 'CHI.04', name: 'CHI.04 - Chi công tác chuẩn bị', shortName: 'Chuẩn bị', level: 1 },
-        { code: 'CHI.05', name: 'CHI.05 - Chi công tác thiết bị', shortName: 'Thiết bị', level: 1 },
-        { code: 'CHI.06', name: 'CHI.06 - Chi nhân công & thầu phụ', shortName: 'Nhân công', level: 1 },
-        { code: 'CHI.07', name: 'CHI.07 - Chi vật tư & NCC', shortName: 'Vật tư', level: 1 },
-        { code: 'CHI.08', name: 'CHI.08 - Chi cho hoạt động trực tiếp', shortName: 'HĐ trực tiếp', level: 1 }
-    ],
+    // Cascading filter data — cấp 2 (đầy đủ theo Excel)
+    chiLevel2: {
+        '01': [
+            { code: '01.51', name: 'Xin chấp thuận chủ trương đầu tư' }, { code: '01.52', name: 'Điều chỉnh cục bộ quy hoạch 1/2000' },
+            { code: '01.53', name: 'Thỏa thuận cao độ tĩnh không' }, { code: '01.54', name: 'Thỏa thuận đấu nối hệ thống điện' },
+            { code: '01.55', name: 'Thỏa thuận đấu nối hệ thống cấp nước' }, { code: '01.56', name: 'Thủ tục giao đất' },
+            { code: '01.57', name: 'Thẩm định giá trị tiền sử dụng đất' }, { code: '01.58', name: 'Cấp giấy chứng nhận QSDĐ' },
+            { code: '01.59', name: 'Quy hoạch tổng mặt bằng 1/500' }, { code: '01.60', name: 'Đánh giá tác động môi trường' },
+            { code: '01.61', name: 'Thỏa thuận đấu nối giao thông' }, { code: '01.62', name: 'Thỏa thuận đấu nối thoát nước' },
+            { code: '01.63', name: 'Thỏa thuận thiết kế đấu nối cấp điện' }, { code: '01.64', name: 'Thỏa thuận thiết kế đấu nối cấp nước' },
+            { code: '01.65', name: 'Thỏa thuận phương án kiến trúc cho PCCC' }, { code: '01.66', name: 'Thẩm duyệt hồ sơ PCCC' },
+            { code: '01.67', name: 'Thẩm định thiết kế cơ sở công trình' }, { code: '01.68', name: 'Thẩm định thiết kế kỹ thuật công trình' },
+            { code: '01.69', name: 'Cấp giấy phép xây dựng' }, { code: '01.70', name: 'Văn bản xác nhận đủ ĐK bán hàng' },
+            { code: '01.71', name: 'Nghiệm thu hệ thống PCCC' }, { code: '01.72', name: 'Nghiệm thu công trình đưa vào sử dụng' },
+            { code: '01.73', name: 'Xin cấp số nhà' }, { code: '01.74', name: 'VB xác nhận đủ ĐK cấp GCNQSHN&SDĐ' },
+            { code: '01.75', name: 'Cấp GCNQSHN&QSDĐ cho khách hàng' }, { code: '01.76', name: 'Cấp GCNQSDĐ cho khách hàng' },
+            { code: '01.77', name: 'Cấp GCNSHN&QSDĐ cho khách hàng' }
+        ],
+        '02': [
+            { code: '02.51', name: 'Thiết kế ý tưởng' }, { code: '02.52', name: 'Thiết kế Quy hoạch 1/500' },
+            { code: '02.53', name: 'Thiết kế triển khai' }, { code: '02.54', name: 'Thẩm tra' },
+            { code: '02.55', name: 'Lập khái toán - dự toán' }, { code: '02.56', name: 'Chi phí tư vấn' },
+            { code: '02.57', name: 'Chi phí kiến thiết cơ bản khác' }
+        ],
+        '03': [
+            { code: '03.51', name: 'ADKIT - Tiếp thị, Marketing' }, { code: '03.52', name: 'Site décor' },
+            { code: '03.53', name: 'Sự kiện và tài trợ' }, { code: '03.54', name: 'PR truyền thông dự án' },
+            { code: '03.55', name: 'Outdoor ad' }, { code: '03.56', name: 'Indoor ad' },
+            { code: '03.57', name: 'Digital Marketing' }, { code: '03.58', name: 'Marketing trực tiếp' },
+            { code: '03.59', name: 'Quỹ Cộng đồng' }, { code: '03.60', name: 'Chi cho thi công nhà mẫu' },
+            { code: '03.61', name: 'Chi cho hoạt động bán hàng' }, { code: '03.62', name: 'Chi phí bán hàng khác' }
+        ],
+        '04': [
+            { code: '04.00', name: 'Chi phí bảo lãnh, bảo hiểm' }, { code: '04.10', name: 'Chi phí tiện ích phục vụ thi công' },
+            { code: '04.20', name: 'An toàn lao động & VSMT & PCCC' }, { code: '04.30', name: 'An ninh cho công trường' },
+            { code: '04.40', name: 'Trắc đạc công trình' }, { code: '04.50', name: 'Chi phí thiết kế, thẩm tra BPTC, thí nghiệm' },
+            { code: '04.70', name: 'Hệ thống điện, nước tạm phục vụ thi công' }, { code: '04.80', name: 'Chi phí xin phép thi công tạm' },
+            { code: '04.99', name: 'Chi phí khác (công nhật…)' }
+        ],
+        '05': [{ code: '05.40', name: 'Thiết bị phục vụ thi công' }],
+        '06': [
+            { code: '06.10', name: 'Gói thầu cọc' }, { code: '06.20', name: 'Gói thầu Biện pháp thi công' },
+            { code: '06.30', name: 'Gói thầu kết cấu' }, { code: '06.40', name: 'Gói thầu hoàn thiện' },
+            { code: '06.50', name: 'Kết cấu thép' }, { code: '06.60', name: 'Gói thầu MEP' },
+            { code: '06.70', name: 'Gói thầu trung hạ thế, máy biến thế' }, { code: '06.80', name: 'Gói thầu Hạ Tầng - Cảnh quan' }
+        ],
+        '07': [
+            { code: '07.10', name: 'Vật tư cọc' }, { code: '07.20', name: 'Vật tư hệ shoring, sàn đạo, Kingpost' },
+            { code: '07.30', name: 'Vật tư kết cấu' }, { code: '07.40', name: 'Vật tư hoàn thiện' },
+            { code: '07.50', name: 'Kết cấu thép' }, { code: '07.60', name: 'Vật tư MEP' },
+            { code: '07.70', name: 'Vật tư trung hạ thế, máy biến thế' }, { code: '07.80', name: 'Vật tư máy phát điện' },
+            { code: '07.90', name: 'Vật tư khác (XD và MEP)' }
+        ],
+        '08': [
+            { code: '08.10', name: 'Chi phí trực tiếp BCH' }, { code: '08.20', name: 'Chi phí hành chính tại công trình' },
+            { code: '08.30', name: 'Chi phí trực tiếp khác' }
+        ],
+        '09': [{ code: '09.10.51', name: 'Chi phí gián tiếp' }],
+        '10': [{ code: '10.10.51', name: 'Chi trả nợ gốc vay Bank' }, { code: '10.10.52', name: 'Chi trả tiền mượn' }, { code: '10.10.53', name: 'Chi trả lãi vay Bank' }],
+        '11': [{ code: '11.10.51', name: 'Chi hoàn trả tiền tạm ứng cho CĐT' }, { code: '11.10.52', name: 'Chi khác XD' }],
+        '12': [{ code: '12.10.51', name: 'Dự phòng phí' }]
+    },
 
-    chiItemsLevel2: [
-        { code: 'CHI.01.10', name: 'CHI.01.10 - Hồ sơ pháp lý dự án', parent: 'CHI.01', level: 2 },
-        { code: 'CHI.01.20', name: 'CHI.01.20 - Phí giấy phép xây dựng', parent: 'CHI.01', level: 2 }
-    ],
-
-    chiItemsLevel3: [
-        { code: 'CHI.06.30', name: 'CHI.06.30 - Gói thầu kết cấu', shortName: 'Gói thầu KC', parent: 'CHI.06', level: 3 },
-        { code: 'CHI.06.40', name: 'CHI.06.40 - Gói thầu hoàn thiện', parent: 'CHI.06', level: 3 }
-    ],
-
-    chiItemsLevel4: [
-        { code: 'CHI.06.30.31', name: 'CHI.06.30.31 - Gói thầu kết cấu A', shortName: 'Gói thầu KC A', parent: 'CHI.06.30', level: 4 },
-        { code: 'CHI.06.30.32', name: 'CHI.06.30.32 - Gói thầu kết cấu B', parent: 'CHI.06.30', level: 4 },
-        { code: 'CHI.06.40.06', name: 'CHI.06.40.06 - Gói thầu A', parent: 'CHI.06.40', level: 4 }
-    ],
-
-    versions: {
-        thu: { banDau: [42, 23, 12, 8], ganNhat: [45.2, 25, 15, 9], dieuChinh: [48.5, 27, 16.5, 10] },
-        chi: { banDau: [1.5, 14.8, 10.3, 7.8, 12, 28.1, 16, 8.5], ganNhat: [1.6, 15.2, 10.8, 8.2, 12.5, 29, 16.5, 9], dieuChinh: [1.7, 15.8, 11.2, 8.5, 13, 30, 17, 9.5] }
+    // Cascading filter data — cấp 3 (đầy đủ theo Excel)
+    chiLevel3: {
+        '04.00': [
+            { code: '04.00.51', name: 'Bảo lãnh dự thầu' }, { code: '04.00.52', name: 'Bảo lãnh tạm ứng' },
+            { code: '04.00.53', name: 'Bảo lãnh thực hiện hợp đồng' }, { code: '04.00.54', name: 'Bảo lãnh bảo hành' },
+            { code: '04.00.61', name: 'Bảo hiểm công trình và bên thứ ba' }, { code: '04.00.62', name: 'Bảo hiểm công nhân' },
+            { code: '04.00.63', name: 'Bảo hiểm máy móc thiết bị' }, { code: '04.00.99', name: 'Các bảo hiểm khác' }
+        ],
+        '04.10': [
+            { code: '04.10.51', name: 'Gói thầu hàng rào tạm, cổng tạm' }, { code: '04.10.52', name: 'Gói thầu văn phòng BCH' },
+            { code: '04.10.53', name: 'Gói thầu cầu rửa xe, đường tạm' }, { code: '04.10.54', name: 'Gói thầu kho dự án, bãi gia công' },
+            { code: '04.10.55', name: 'Gói thầu biển bảng công trình' }, { code: '04.10.99', name: 'Tiện ích phục vụ thi công khác' }
+        ],
+        '04.20': [
+            { code: '04.20.51', name: 'Hộp cứu thương, phòng y tế' }, { code: '04.20.52', name: 'Huấn luyện an toàn' },
+            { code: '04.20.53', name: 'Huấn luyện PCCC' }, { code: '04.20.54', name: 'Biển báo an toàn lao động' },
+            { code: '04.20.55', name: 'Bảo hộ lao động' }, { code: '04.20.56', name: 'Thiết lập cơ khí tạm ATLĐ' },
+            { code: '04.20.61', name: 'Vận chuyển rác thải' }, { code: '04.20.62', name: 'Vệ sinh trong quá trình thi công' },
+            { code: '04.20.63', name: 'Kiểm soát, phun thuốc diệt côn trùng' }, { code: '04.20.64', name: 'Quan trắc môi trường' },
+            { code: '04.20.71', name: 'Bố trí bình chữa cháy, tiêu lệnh' }, { code: '04.20.72', name: 'Bảo trì, bảo dưỡng' },
+            { code: '04.20.99', name: 'ATLĐ & VSMT & PCCC khác' }
+        ],
+        '04.30': [
+            { code: '04.30.51', name: 'Bố trí nhân viên bảo vệ 24/24' }, { code: '04.30.52', name: 'Nhà bảo vệ' },
+            { code: '04.30.61', name: 'Thiết lập hệ thống camera' }, { code: '04.30.62', name: 'Thiết lập cổng tự động / Barie' },
+            { code: '04.30.99', name: 'Hạng mục an ninh công trường khác' }
+        ],
+        '04.40': [
+            { code: '04.40.51', name: 'Khảo sát công trình lân cận' }, { code: '04.40.61', name: 'Quan trắc lún, nghiêng' },
+            { code: '04.40.71', name: 'Trắc đạc cho nhà thầu' }, { code: '04.40.99', name: 'Trắc đạc khác' }
+        ],
+        '04.50': [
+            { code: '04.50.51', name: 'Gói thầu thiết kế' }, { code: '04.50.61', name: 'Gói thầu thẩm tra' },
+            { code: '04.50.71', name: 'Gói thầu thí nghiệm' }, { code: '04.50.99', name: 'Thiết kế, thẩm tra BPTC khác' }
+        ],
+        '04.70': [
+            { code: '04.70.51', name: 'Thiết lập hệ thống điện tạm' }, { code: '04.70.52', name: 'Chi phí sử dụng điện thi công' },
+            { code: '04.70.61', name: 'Thiết lập hệ thống cấp thoát nước tạm' }, { code: '04.70.62', name: 'Chi phí sử dụng nước thi công' },
+            { code: '04.70.99', name: 'Điện nước tạm khác' }
+        ],
+        '04.80': [
+            { code: '04.80.51', name: 'Chi phí xả thải' }, { code: '04.80.61', name: 'Chi phí sử dụng vỉa hè, ký quỹ hạ tầng' },
+            { code: '04.80.71', name: 'Chi phí đấu nối thoát nước mưa, thải' }
+        ],
+        '06.10': [
+            { code: '06.10.51', name: 'Gói thầu cọc BTCT' }, { code: '06.10.52', name: 'Gói thầu cọc khoan nhồi' },
+            { code: '06.10.53', name: 'Gói thầu cọc Barrette' }, { code: '06.10.99', name: 'Gói thầu cọc khác' }
+        ],
+        '06.20': [
+            { code: '06.20.51', name: 'BPTC: Cọc biện pháp' }, { code: '06.20.52', name: 'BPTC: Hệ văng chống' },
+            { code: '06.20.53', name: 'BPTC: Cừ vây Larsen' }, { code: '06.20.54', name: 'BPTC: Cọc xi măng đất' },
+            { code: '06.20.55', name: 'BPTC: Cọc, móng cẩu tháp / hoist' }, { code: '06.20.99', name: 'BPTC khác' }
+        ],
+        '06.30': [
+            { code: '06.30.51', name: 'Gói thầu tường Barrette' }, { code: '06.30.52', name: 'Gói thầu công tác đất' },
+            { code: '06.30.53', name: 'Gói thầu BTCT' }, { code: '06.30.54', name: 'Gói thầu chống mối' },
+            { code: '06.30.55', name: 'Gói thầu chống thấm kết cấu' }, { code: '06.30.56', name: 'Gói thầu cáp dự ứng lực' },
+            { code: '06.30.57', name: 'Gói thầu nhân công giàn giáo bao che' }, { code: '06.30.99', name: 'Gói thầu kết cấu khác' }
+        ],
+        '06.40': [
+            { code: '06.40.51', name: 'Gói thầu Hồ' }, { code: '06.40.52', name: 'Gói thầu Chống thấm hoàn thiện' },
+            { code: '06.40.53', name: 'Gói thầu Vách, trần' }, { code: '06.40.54', name: 'Gói thầu Sơn nước' },
+            { code: '06.40.55', name: 'Gói thầu Sàn gỗ' }, { code: '06.40.56', name: 'Gói thầu Cửa (gỗ, nhựa)' },
+            { code: '06.40.57', name: 'Gói thầu Kim loại' }, { code: '06.40.58', name: 'Gói thầu Nhôm kính' },
+            { code: '06.40.59', name: 'Gói thầu Đá' }, { code: '06.40.60', name: 'Gói thầu Bảng chỉ dẫn' },
+            { code: '06.40.61', name: 'Gói thầu Nội thất' }, { code: '06.40.62', name: 'Gói thầu Vệ sinh CN bàn giao' },
+            { code: '06.40.63', name: 'Gói thầu Tường Panel' }, { code: '06.40.99', name: 'Gói thầu hoàn thiện khác' }
+        ],
+        '06.50': [{ code: '06.50.51', name: 'Gói thầu kết cấu thép' }],
+        '06.60': [
+            { code: '06.60.51', name: 'Hệ thống điện' }, { code: '06.60.52', name: 'Hệ thống cấp thoát nước' },
+            { code: '06.60.53', name: 'Hệ thống ĐHKK' }, { code: '06.60.54', name: 'Hệ thống PCCC' },
+            { code: '06.60.55', name: 'Hệ thống XLNT' }, { code: '06.60.56', name: 'Hệ thống công nghệ hồ bơi' },
+            { code: '06.60.57', name: 'Hệ thống quản lý xe' }, { code: '06.60.58', name: 'Hệ thống thang máy' },
+            { code: '06.60.99', name: 'Hệ thống MEP khác' }
+        ],
+        '06.70': [{ code: '06.70.51', name: 'Trung thế, hạ thế, TBA' }, { code: '06.70.99', name: 'Hệ thống trung, hạ thế khác' }],
+        '05.40': [{ code: '05.40.51', name: 'Cần trục tháp' }, { code: '05.40.52', name: 'Vận thăng' }, { code: '05.40.99', name: 'TB thi công khác' }],
+        '07.10': [
+            { code: '07.10.51', name: 'Cọc vuông BTCT' }, { code: '07.10.52', name: 'Cọc ly tâm DUL' },
+            { code: '07.10.53', name: 'VT cọc khoan nhồi' }, { code: '07.10.54', name: 'VT tường Barrette' },
+            { code: '07.10.55', name: 'VT cọc xi măng đất CDM' }, { code: '07.10.56', name: 'VT xử lý đầu cọc' },
+            { code: '07.10.99', name: 'Vật tư cọc khác' }
+        ],
+        '07.20': [{ code: '07.20.51', name: 'Thép hình (thép hình, thép tấm)' }],
+        '07.30': [
+            { code: '07.30.51', name: 'Đất, cát san lấp' }, { code: '07.30.52', name: 'Cốt thép xây dựng' },
+            { code: '07.30.53', name: 'Bê tông' }, { code: '07.30.54', name: 'Ván khuôn' },
+            { code: '07.30.55', name: 'VT chống mối' }, { code: '07.30.99', name: 'VT kết cấu khác' }
+        ],
+        '07.40': [
+            { code: '07.40.51', name: 'VT cát, đá, xi măng' }, { code: '07.40.52', name: 'VT gạch xây' },
+            { code: '07.40.53', name: 'VT vữa trộn sẵn' }, { code: '07.40.54', name: 'VT hoàn thiện nền' },
+            { code: '07.40.55', name: 'VT ốp lát' }, { code: '07.40.56', name: 'VT chống thấm' },
+            { code: '07.40.57', name: 'VT thạch cao' }, { code: '07.40.58', name: 'VT sơn nước' },
+            { code: '07.40.59', name: 'VT sơn sàn, tường' }, { code: '07.40.60', name: 'VT sàn gỗ' },
+            { code: '07.40.61', name: 'VT cửa gỗ' }, { code: '07.40.62', name: 'VT cửa nhựa' },
+            { code: '07.40.63', name: 'VT cửa kim loại' }, { code: '07.40.64', name: 'VT nhôm kính' },
+            { code: '07.40.65', name: 'VT đá' }, { code: '07.40.66', name: 'VT bảng chỉ dẫn' },
+            { code: '07.40.67', name: 'VT nội thất' }, { code: '07.40.99', name: 'VT phụ, hoàn thiện khác' }
+        ],
+        '07.50': [
+            { code: '07.50.51', name: 'VT lắp dựng lan can' }, { code: '07.50.52', name: 'VT mái Canopy' },
+            { code: '07.50.53', name: 'VT bulong chờ trong BT' }, { code: '07.50.54', name: 'VT khung kèo thép hình' },
+            { code: '07.50.55', name: 'VT cầu thang thép hình' }, { code: '07.50.99', name: 'VT kết cấu thép khác' }
+        ],
+        '07.60': [
+            { code: '07.60.51', name: 'VT Điện, điện nhẹ' }, { code: '07.60.52', name: 'VT ĐHKK' },
+            { code: '07.60.53', name: 'VT Cấp thoát nước' }, { code: '07.60.54', name: 'VT Thiết bị vệ sinh' },
+            { code: '07.60.99', name: 'VT MEP khác' }
+        ],
+        '07.70': [
+            { code: '07.70.51', name: 'Đường dây trung thế' }, { code: '07.70.52', name: 'Trạm biến thế' },
+            { code: '07.70.53', name: 'Tủ điện MSB, tủ điện kế' }, { code: '07.70.54', name: 'Busway, cáp điện' },
+            { code: '07.70.99', name: 'Hệ thống khác' }
+        ],
+        '08.10': [
+            { code: '08.10.51', name: 'Lương trực tiếp BCH' }, { code: '08.10.52', name: 'Chi phí thuế TNCN BCH' },
+            { code: '08.10.53', name: 'Chi phí công đoàn BCH' }, { code: '08.10.54', name: 'BHXH / Y tế / BH thất nghiệp BCH' },
+            { code: '08.10.55', name: 'Chi hỗ trợ công tác xa' }, { code: '08.10.56', name: 'Chi phí thuê ngoài / Outsource' }
+        ],
+        '08.20': [
+            { code: '08.20.51', name: 'Internet, Điện thoại' }, { code: '08.20.52', name: 'Thuê máy in, máy photo' },
+            { code: '08.20.53', name: 'Văn phòng phẩm' }, { code: '08.20.54', name: 'Khởi công' },
+            { code: '08.20.55', name: 'Thuê nhà, điện, nước cho BCH' }, { code: '08.20.56', name: 'Chi phí nhỏ lẻ hàng tháng' },
+            { code: '08.20.57', name: 'Chi phí công nhân trực tiếp' }
+        ]
     },
 
     months: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
     approval: { before: { chi: 4.85, vdu: 2.73, fhi: 1.25 }, after: { chi: 5.23, vdu: 2.85, fhi: 1.18 } }
 };
 
-let currentBudgetType = 'total', charts = {};
+let charts = {};
 
+// ============================================================
 // Navigation
+// ============================================================
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('onclick') && l.getAttribute('onclick').includes(pageId)) {
+            l.classList.add('active');
+        }
+    });
     document.getElementById(pageId).classList.add('active');
-    event.currentTarget.classList.add('active');
     setTimeout(() => Object.values(charts).forEach(c => c && c.resize()), 100);
 }
 
-function toggleBudgetType(type, btn) {
-    currentBudgetType = type;
-    btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderBudgetTables();
-}
-
-function switchVersion(type, ver, btn) {
-    btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    if (type === 'thu') renderBarThuTotal(ver);
-    else renderBarChiTotal(ver);
-}
-
 function toggleMultiSelect(el) {
+    if (el.classList.contains('disabled')) return;
     document.querySelectorAll('.multi-select').forEach(m => m !== el && m.classList.remove('open'));
     el.classList.toggle('open');
 }
@@ -105,427 +263,406 @@ document.addEventListener('click', e => {
     if (!e.target.closest('.multi-select')) document.querySelectorAll('.multi-select').forEach(m => m.classList.remove('open'));
 });
 
-// Page 4 Charts (Quản Lý Ngân Sách)
-// Budget management data
-const budgetMgmtData = {
-    projects: [
-        {
-            id: 'L59', name: 'L59',
-            items: [
-                { code: 'THU01', nganSach: 85.0, hd: 82.5, sl: [6.5, 7.2, 7.8, 8.0, 8.5, 9.0, 8.8, 8.2, 7.5, 6.8, 0, 0], bill: [6.0, 6.8, 7.5, 7.8, 8.2, 8.5, 8.5, 7.8, 7.0, 6.5, 0, 0], nhanTT: [5.5, 6.2, 7.0, 7.2, 7.8, 8.0, 8.0, 7.2, 6.5, 0, 0, 0], congNo: 5.8, overdueDays: 0 },
-                { code: 'THU02', nganSach: 22.5, hd: 20.0, sl: [1.8, 1.9, 2.0, 2.1, 2.0, 1.9, 1.8, 1.7, 1.6, 1.5, 0, 0], bill: [1.5, 1.7, 1.8, 1.9, 1.8, 1.7, 1.6, 1.5, 1.4, 1.3, 0, 0], nhanTT: [1.2, 1.5, 1.6, 1.7, 1.6, 1.5, 1.4, 1.3, 0, 0, 0, 0], congNo: 2.4, overdueDays: 12 },
-                { code: 'THU03', nganSach: 8.0, hd: 7.5, sl: [0.5, 0.6, 0.7, 0.7, 0.8, 0.8, 0.7, 0.6, 0.5, 0.5, 0, 0], bill: [0.4, 0.5, 0.6, 0.6, 0.7, 0.7, 0.6, 0.5, 0.4, 0.4, 0, 0], nhanTT: [0.3, 0.4, 0.5, 0.5, 0.6, 0.6, 0.5, 0.4, 0, 0, 0, 0], congNo: 0.8, overdueDays: 0 },
-                { code: 'CHI01', nganSach: 2.5, hd: 2.3, sl: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI02', nganSach: 18.5, hd: 17.8, sl: [1.5, 1.6, 1.7, 1.8, 1.8, 1.9, 1.8, 1.7, 1.6, 1.5, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI03', nganSach: 12.0, hd: 11.5, sl: [1.0, 1.1, 1.1, 1.2, 1.2, 1.2, 1.1, 1.0, 0.9, 0.8, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI04', nganSach: 8.2, hd: 7.8, sl: [0.6, 0.7, 0.7, 0.8, 0.8, 0.8, 0.7, 0.6, 0.5, 0.5, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI05', nganSach: 15.0, hd: 14.2, sl: [1.2, 1.3, 1.4, 1.4, 1.5, 1.5, 1.4, 1.3, 1.2, 1.1, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI06', nganSach: 32.0, hd: 30.5, sl: [2.5, 2.8, 3.0, 3.2, 3.4, 3.5, 3.3, 3.0, 2.8, 2.5, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI07', nganSach: 20.0, hd: 19.0, sl: [1.6, 1.7, 1.8, 1.9, 2.0, 2.0, 1.9, 1.8, 1.7, 1.5, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI08', nganSach: 10.5, hd: 10.0, sl: [0.8, 0.9, 0.9, 1.0, 1.0, 1.0, 0.9, 0.8, 0.7, 0.7, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI09', nganSach: 5.5, hd: 5.2, sl: [0.4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.4, 0.4, 0.3, 0.3, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 }
-            ]
-        },
-        {
-            id: 'GSW', name: 'GSW',
-            items: [
-                { code: 'THU01', nganSach: 65.0, hd: 62.0, sl: [5.0, 5.5, 5.8, 6.0, 6.2, 6.5, 6.3, 5.8, 5.5, 5.0, 0, 0], bill: [4.5, 5.0, 5.5, 5.8, 6.0, 6.2, 6.0, 5.5, 5.0, 4.5, 0, 0], nhanTT: [4.0, 4.5, 5.0, 5.2, 5.5, 5.8, 5.5, 5.0, 0, 0, 0, 0], congNo: 4.5, overdueDays: 5 },
-                { code: 'THU02', nganSach: 18.0, hd: 16.5, sl: [1.2, 1.3, 1.4, 1.5, 1.5, 1.6, 1.5, 1.4, 1.3, 1.2, 0, 0], bill: [1.0, 1.1, 1.2, 1.3, 1.3, 1.4, 1.3, 1.2, 1.1, 1.0, 0, 0], nhanTT: [0.8, 0.9, 1.0, 1.1, 1.1, 1.2, 1.1, 1.0, 0, 0, 0, 0], congNo: 1.8, overdueDays: 0 },
-                { code: 'THU03', nganSach: 5.5, hd: 5.0, sl: [0.3, 0.4, 0.4, 0.5, 0.5, 0.5, 0.4, 0.4, 0.3, 0.3, 0, 0], bill: [0.3, 0.3, 0.4, 0.4, 0.4, 0.4, 0.3, 0.3, 0.3, 0.2, 0, 0], nhanTT: [0.2, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0, 0, 0, 0, 0], congNo: 0.5, overdueDays: 0 },
-                { code: 'CHI01', nganSach: 1.8, hd: 1.6, sl: [0.1, 0.1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI02', nganSach: 14.0, hd: 13.2, sl: [1.1, 1.2, 1.3, 1.3, 1.4, 1.4, 1.3, 1.2, 1.1, 1.0, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI03', nganSach: 9.5, hd: 9.0, sl: [0.7, 0.8, 0.8, 0.9, 0.9, 0.9, 0.8, 0.7, 0.7, 0.6, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI04', nganSach: 6.0, hd: 5.5, sl: [0.4, 0.5, 0.5, 0.6, 0.6, 0.6, 0.5, 0.4, 0.4, 0.3, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI05', nganSach: 11.0, hd: 10.5, sl: [0.8, 0.9, 1.0, 1.0, 1.1, 1.1, 1.0, 0.9, 0.8, 0.7, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI06', nganSach: 25.0, hd: 23.5, sl: [1.8, 2.0, 2.2, 2.4, 2.5, 2.6, 2.4, 2.2, 2.0, 1.8, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI07', nganSach: 15.0, hd: 14.2, sl: [1.1, 1.2, 1.3, 1.4, 1.5, 1.5, 1.4, 1.3, 1.2, 1.1, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI08', nganSach: 8.0, hd: 7.5, sl: [0.6, 0.6, 0.7, 0.7, 0.7, 0.8, 0.7, 0.6, 0.5, 0.5, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI09', nganSach: 4.0, hd: 3.8, sl: [0.3, 0.3, 0.3, 0.4, 0.4, 0.4, 0.3, 0.3, 0.2, 0.2, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 }
-            ]
-        },
-        {
-            id: 'VHG', name: 'VHG',
-            items: [
-                { code: 'THU01', nganSach: 45.0, hd: 42.0, sl: [3.5, 3.8, 4.0, 4.2, 4.5, 4.5, 4.2, 3.8, 3.5, 3.2, 0, 0], bill: [3.2, 3.5, 3.8, 4.0, 4.2, 4.2, 3.8, 3.5, 3.2, 2.8, 0, 0], nhanTT: [2.8, 3.2, 3.5, 3.6, 3.8, 3.8, 3.5, 3.0, 0, 0, 0, 0], congNo: 3.2, overdueDays: 45 },
-                { code: 'THU02', nganSach: 12.0, hd: 11.0, sl: [0.8, 0.9, 1.0, 1.0, 1.1, 1.1, 1.0, 0.9, 0.8, 0.7, 0, 0], bill: [0.7, 0.8, 0.9, 0.9, 1.0, 1.0, 0.9, 0.8, 0.7, 0.6, 0, 0], nhanTT: [0.6, 0.7, 0.8, 0.8, 0.9, 0.9, 0.8, 0, 0, 0, 0, 0], congNo: 0.9, overdueDays: 0 },
-                { code: 'CHI01', nganSach: 1.2, hd: 1.1, sl: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI06', nganSach: 18.0, hd: 17.0, sl: [1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.7, 1.5, 1.4, 1.2, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI07', nganSach: 10.0, hd: 9.5, sl: [0.8, 0.8, 0.9, 0.9, 1.0, 1.0, 0.9, 0.8, 0.8, 0.7, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 }
-            ]
-        },
-        {
-            id: 'TPK', name: 'TPK',
-            items: [
-                { code: 'THU01', nganSach: 38.0, hd: 36.0, sl: [3.0, 3.2, 3.5, 3.6, 3.8, 3.8, 3.5, 3.2, 3.0, 2.8, 0, 0], bill: [2.8, 3.0, 3.2, 3.4, 3.6, 3.5, 3.2, 3.0, 2.8, 2.5, 0, 0], nhanTT: [2.5, 2.8, 3.0, 3.1, 3.3, 3.2, 2.9, 2.5, 0, 0, 0, 0], congNo: 2.8, overdueDays: 14 },
-                { code: 'CHI06', nganSach: 15.0, hd: 14.0, sl: [1.1, 1.2, 1.3, 1.4, 1.5, 1.5, 1.4, 1.2, 1.1, 1.0, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 },
-                { code: 'CHI07', nganSach: 8.0, hd: 7.5, sl: [0.6, 0.7, 0.7, 0.8, 0.8, 0.8, 0.7, 0.6, 0.6, 0.5, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 }
-            ]
-        },
-        {
-            id: 'BDN', name: 'BDN',
-            items: [
-                { code: 'THU01', nganSach: 28.0, hd: 26.0, sl: [2.0, 2.2, 2.5, 2.6, 2.8, 2.8, 2.5, 2.2, 2.0, 1.8, 0, 0], bill: [1.8, 2.0, 2.3, 2.4, 2.6, 2.5, 2.3, 2.0, 1.8, 1.5, 0, 0], nhanTT: [1.5, 1.8, 2.0, 2.1, 2.3, 2.2, 2.0, 1.5, 0, 0, 0, 0], congNo: 1.9, overdueDays: 22 },
-                { code: 'CHI06', nganSach: 10.0, hd: 9.5, sl: [0.7, 0.8, 0.9, 1.0, 1.0, 1.0, 0.9, 0.8, 0.7, 0.6, 0, 0], bill: [], nhanTT: [], congNo: 0, overdueDays: 0 }
-            ]
+// ============================================================
+// CASCADING FILTER LOGIC (Duyệt Chi — page2)
+// ============================================================
+function toggleSelectAll(menuId, isChecked) {
+    const checkboxes = document.querySelectorAll(`#${menuId} input[type="checkbox"]:not(.select-all)`);
+    checkboxes.forEach(cb => cb.checked = isChecked);
+    // Determine level from menuId and trigger onCascadeFilter
+    const level = parseInt(menuId.replace('chi', '').replace('Menu', ''));
+    if (!isNaN(level)) onCascadeFilter(level);
+}
+
+function onCascadeFilter(changedLevel) {
+    // Rebuild level 2 based on level 1 selections
+    if (changedLevel <= 1) {
+        const level1Checked = Array.from(document.querySelectorAll('#chi1Menu input[type="checkbox"]:not(.select-all):checked')).map(cb => cb.value);
+        const chi2Menu = document.getElementById('chi2Menu');
+        const chi2Container = chi2Menu.closest('.multi-select');
+        chi2Menu.innerHTML = '';
+
+        if (level1Checked.length === 0) {
+            chi2Container.classList.add('disabled');
+        } else {
+            chi2Container.classList.remove('disabled');
+            chi2Menu.innerHTML = `<label style="padding:6px 12px;font-weight:bold;color:#2563EB;cursor:pointer;display:block;border-bottom:1px solid #E2E8F0;"><input type="checkbox" class="select-all" checked onchange="toggleSelectAll('chi2Menu', this.checked)"> Chọn tất cả</label>`;
+            level1Checked.forEach(parentCode => {
+                const children = demoData.chiLevel2[parentCode] || [];
+                children.forEach(child => {
+                    const label = document.createElement('label');
+                    label.className = 'multi-select-item chi';
+                    label.innerHTML = `<input type="checkbox" value="${child.code}" checked onchange="onCascadeFilter(2)"> ${child.code} — ${child.name}`;
+                    chi2Menu.appendChild(label);
+                });
+            });
         }
-    ],
-    periods: ['T01', 'T02', 'T03', 'T04', 'T05', 'T06', 'T07', 'T08', 'T09', 'T10', 'T11', 'T12']
-};
-
-function initPage1() {
-    renderBudgetKPIs();
-    renderBarCongNo();
-    renderBarBudgetExecution();
-    renderBudgetDetailTable();
-}
-
-function renderBudgetKPIs() {
-    const projects = budgetMgmtData.projects;
-    const totalProjects = projects.length;
-
-    // Tổng công nợ
-    let totalCongNo = 0;
-    let totalBill = 0;
-    let totalNhanTT = 0;
-    let totalHD = 0;
-
-    projects.forEach(p => {
-        p.items.forEach(item => {
-            totalCongNo += item.congNo;
-            totalHD += item.hd;
-            if (item.bill.length) totalBill += item.bill.reduce((a, b) => a + b, 0);
-            if (item.nhanTT.length) totalNhanTT += item.nhanTT.reduce((a, b) => a + b, 0);
-        });
-    });
-
-    const collectRate = totalBill > 0 ? ((totalNhanTT / totalBill) * 100).toFixed(1) : 0;
-
-    document.getElementById('kpiBudgetProjects').textContent = totalProjects;
-    document.getElementById('kpiBudgetCongNo').textContent = totalCongNo.toFixed(1) + ' tỷ';
-    document.getElementById('kpiBudgetCollect').textContent = collectRate + '%';
-    document.getElementById('kpiBudgetHD').textContent = totalHD.toFixed(1) + ' tỷ';
-}
-
-function renderBarCongNo() {
-    // Calculate công nợ per project
-    const projectCongNo = budgetMgmtData.projects.map(p => {
-        const congNo = p.items.reduce((sum, item) => sum + item.congNo, 0);
-        return { name: p.name, value: +congNo.toFixed(1) };
-    }).sort((a, b) => b.value - a.value);
-
-    charts.barCongNo = echarts.init(document.getElementById('barCongNo'));
-    charts.barCongNo.setOption({
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: { type: 'shadow' },
-            formatter: params => {
-                const p = params[0];
-                return `<strong>${p.name}</strong><br/>Công nợ: <strong style="color:#DC2626;">${p.value} tỷ</strong>`;
-            }
-        },
-        grid: { left: '3%', right: '12%', bottom: '3%', top: '8%', containLabel: true },
-        yAxis: {
-            type: 'category',
-            data: projectCongNo.map(p => p.name),
-            axisLabel: { color: '#64748B', fontSize: 12, fontWeight: 600 },
-            axisTick: { show: false },
-            axisLine: { lineStyle: { color: '#E2E8F0' } }
-        },
-        xAxis: {
-            type: 'value',
-            axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' },
-            splitLine: { lineStyle: { color: '#E2E8F0', type: 'dashed' } }
-        },
-        series: [{
-            type: 'bar',
-            data: projectCongNo.map((p, i) => ({
-                value: p.value,
-                itemStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                        { offset: 0, color: i === 0 ? '#DC2626' : (i === 1 ? '#F59E0B' : '#3B82F6') },
-                        { offset: 1, color: i === 0 ? '#EF4444' : (i === 1 ? '#FBBF24' : '#60A5FA') }
-                    ]),
-                    borderRadius: [0, 6, 6, 0]
-                }
-            })),
-            barWidth: '55%',
-            label: {
-                show: true,
-                position: 'right',
-                formatter: '{c} tỷ',
-                color: '#64748B',
-                fontSize: 12,
-                fontWeight: 600
-            }
-        }]
-    });
-}
-
-function renderBarBudgetExecution() {
-    const projectNames = budgetMgmtData.projects.map(p => p.name);
-
-    // Per project: total Bill, total Nhận TT, tỷ lệ thu hồi, tổng công nợ
-    const billData = budgetMgmtData.projects.map(p => {
-        const total = p.items.reduce((sum, item) => sum + item.bill.reduce((a, b) => a + b, 0), 0);
-        return +total.toFixed(1);
-    });
-    const nhanTTData = budgetMgmtData.projects.map(p => {
-        const total = p.items.reduce((sum, item) => sum + item.nhanTT.reduce((a, b) => a + b, 0), 0);
-        return +total.toFixed(1);
-    });
-    const tyleData = billData.map((bill, i) =>
-        bill > 0 ? +(nhanTTData[i] / bill * 100).toFixed(1) : 0
-    );
-    const congNoData = budgetMgmtData.projects.map(p =>
-        +p.items.reduce((sum, item) => sum + item.congNo, 0).toFixed(1)
-    );
-
-    if (!charts.barBudgetExecution) {
-        charts.barBudgetExecution = echarts.init(document.getElementById('barBudgetExecution'));
     }
-    charts.barBudgetExecution.setOption({
+
+    // Rebuild level 3 based on level 2 selections
+    if (changedLevel <= 2) {
+        const level2Checked = Array.from(document.querySelectorAll('#chi2Menu input[type="checkbox"]:not(.select-all):checked')).map(cb => cb.value);
+        const chi3Menu = document.getElementById('chi3Menu');
+        const chi3Container = chi3Menu.closest('.multi-select');
+        chi3Menu.innerHTML = '';
+
+        if (level2Checked.length === 0) {
+            chi3Container.classList.add('disabled');
+        } else {
+            chi3Container.classList.remove('disabled');
+            chi3Menu.innerHTML = `<label style="padding:6px 12px;font-weight:bold;color:#2563EB;cursor:pointer;display:block;border-bottom:1px solid #E2E8F0;"><input type="checkbox" class="select-all" checked onchange="toggleSelectAll('chi3Menu', this.checked)"> Chọn tất cả</label>`;
+            level2Checked.forEach(parentCode => {
+                const children = demoData.chiLevel3[parentCode] || [];
+                children.forEach(child => {
+                    const label = document.createElement('label');
+                    label.className = 'multi-select-item chi';
+                    label.innerHTML = `<input type="checkbox" value="${child.code}" checked onchange="onCascadeFilter(3)"> ${child.code} — ${child.name}`;
+                    chi3Menu.appendChild(label);
+                });
+            });
+        }
+    }
+
+    // Level 4 — based on level 3
+    if (changedLevel <= 3) {
+        const level3Checked = Array.from(document.querySelectorAll('#chi3Menu input[type="checkbox"]:not(.select-all):checked')).map(cb => cb.value);
+        const chi4Menu = document.getElementById('chi4Menu');
+        const chi4Container = chi4Menu.closest('.multi-select');
+        chi4Menu.innerHTML = '';
+        
+        if (level3Checked.length === 0) {
+            chi4Menu.innerHTML = '<div style="padding:8px;color:#94A3B8;font-size:11px;text-align:center;">Chọn tầng 3 để xem chi tiết tầng 4</div>';
+            chi4Container.classList.add('disabled');
+        } else {
+            chi4Container.classList.remove('disabled');
+            chi4Menu.innerHTML = '<div style="padding:8px;color:#64748B;font-size:11px;text-align:center;">Dữ liệu demo không có chi tiết tầng 4</div>';
+        }
+    }
+
+    // Update counter displays
+
+    document.querySelectorAll('#page2 .multi-select').forEach(ms => {
+        const checkboxes = ms.querySelectorAll('input[type="checkbox"]');
+        const checkedCount = ms.querySelectorAll('input[type="checkbox"]:checked').length;
+        const totalCount = checkboxes.length;
+        const countSpan = ms.querySelector('.multi-select-count');
+        if (totalCount === 0) {
+            countSpan.textContent = '—';
+        } else if (checkedCount === 0) {
+            countSpan.textContent = 'Không có';
+        } else if (checkedCount === totalCount) {
+            countSpan.textContent = 'Tất cả';
+        } else {
+            countSpan.textContent = `${checkedCount}/${totalCount}`;
+        }
+    });
+
+    // Re-render page2 content
+    updatePage3();
+}
+
+// ============================================================
+// Matrix Table Expand/Collapse Helper
+// ============================================================
+function toggleMatrixRow(el) {
+    const levelStr = el.getAttribute('data-level');
+    if (!levelStr) return;
+    const level = parseInt(levelStr);
+    const isExpanded = el.getAttribute('data-expanded') !== 'false';
+    const nextDisplay = isExpanded ? 'none' : '';
+    el.setAttribute('data-expanded', isExpanded ? 'false' : 'true');
+    
+    // Toggle the indicator icon if present
+    const icon = el.querySelector('.toggle-icon');
+    if (icon) icon.textContent = isExpanded ? '▶' : '▼';
+    
+    let sibling = el.nextElementSibling;
+    while (sibling) {
+        const sibLevelStr = sibling.getAttribute('data-level');
+        if (!sibLevelStr) break;
+        const sibLevel = parseInt(sibLevelStr);
+        if (sibLevel <= level) break; // Reached next sibling at same or higher level
+        
+        if (!isExpanded) {
+            // expanding: we only show immediate children
+            if (sibLevel === level + 1) {
+                sibling.style.display = '';
+            }
+        } else {
+            // collapsing: hide all descendants
+            sibling.style.display = 'none';
+            // Also mark them as collapsed so expanding parent doesn't auto expand children incorrectly
+            if (sibling.hasAttribute('data-expanded')) {
+                sibling.setAttribute('data-expanded', 'false');
+                const sibIcon = sibling.querySelector('.toggle-icon');
+                if (sibIcon) sibIcon.textContent = '▶';
+            }
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+// ============================================================
+// PAGE 2: DUYỆT CHI
+// ============================================================
+function initPage3() {
+    onCascadeFilter(1); // Initialize cascading filters
+    renderComparisonTable();
+    renderComboRevenueCostFHI();
+    renderPaymentMatrix();
+}
+
+// Comparison Table — New 8-column structure per feedback
+function renderComparisonTable(selectedCategories = null) {
+    const allItems = [
+        { name: '01 — Chi phát triển dự án', code: '01', level: 1, nsda: 2.5, gtHD: 2.3, luykeDuyet: 1.40, nsThang: 0.35, nsThangDaChi: 0.28 },
+        { name: '02 — Chi kiến thiết cơ bản', code: '02', level: 1, nsda: 18.5, gtHD: 17.8, luykeDuyet: 14.2, nsThang: 2.50, nsThangDaChi: 2.10 },
+        { name: '03 — Chi cho dịch vụ kinh doanh BĐS', code: '03', level: 1, nsda: 12.0, gtHD: 11.5, luykeDuyet: 9.2, nsThang: 1.80, nsThangDaChi: 1.50 },
+        { name: '04 — Công tác chuẩn bị', code: '04', level: 1, nsda: 8.2, gtHD: 7.8, luykeDuyet: 6.5, nsThang: 1.20, nsThangDaChi: 0.95 },
+        { name: '05 — Công tác thiết bị', code: '05', level: 1, nsda: 15.0, gtHD: 14.2, luykeDuyet: 11.0, nsThang: 2.00, nsThangDaChi: 1.60 },
+        { name: '06 — Chi cho thầu phụ / tổ đội', code: '06', level: 1, nsda: 32.0, gtHD: 30.5, luykeDuyet: 26.5, nsThang: 4.50, nsThangDaChi: 3.80 },
+        { name: '  06.10 — Gói thầu cọc', code: '06.10', level: 2, nsda: 5.0, gtHD: 4.8, luykeDuyet: 4.2, nsThang: 0.70, nsThangDaChi: 0.60 },
+        { name: '  06.20 — Gói thầu BPTC', code: '06.20', level: 2, nsda: 3.5, gtHD: 3.2, luykeDuyet: 2.8, nsThang: 0.50, nsThangDaChi: 0.42 },
+        { name: '  06.30 — Gói thầu kết cấu', code: '06.30', level: 2, nsda: 12.0, gtHD: 11.5, luykeDuyet: 9.6, nsThang: 1.80, nsThangDaChi: 1.50 },
+        { name: '    06.30.51 — Tường Barrette', code: '06.30.51', level: 3, nsda: 4.0, gtHD: 3.8, luykeDuyet: 3.2, nsThang: 0.60, nsThangDaChi: 0.50 },
+        { name: '    06.30.52 — Cọc nhồi', code: '06.30.52', level: 3, nsda: 3.5, gtHD: 3.3, luykeDuyet: 2.8, nsThang: 0.50, nsThangDaChi: 0.42 },
+        { name: '  06.40 — Gói thầu hoàn thiện', code: '06.40', level: 2, nsda: 8.0, gtHD: 7.5, luykeDuyet: 6.2, nsThang: 1.00, nsThangDaChi: 0.85 },
+        { name: '  06.60 — Gói thầu MEP', code: '06.60', level: 2, nsda: 3.5, gtHD: 3.5, luykeDuyet: 3.0, nsThang: 0.50, nsThangDaChi: 0.43 },
+        { name: '07 — Chi vật tư', code: '07', level: 1, nsda: 20.0, gtHD: 19.0, luykeDuyet: 15.0, nsThang: 3.00, nsThangDaChi: 2.50 },
+        { name: '08 — Chi hoạt động trực tiếp', code: '08', level: 1, nsda: 10.5, gtHD: 10.0, luykeDuyet: 8.2, nsThang: 1.50, nsThangDaChi: 1.20 },
+        { name: '09 — Chi phí gián tiếp', code: '09', level: 1, nsda: 5.5, gtHD: 5.2, luykeDuyet: 4.0, nsThang: 0.80, nsThangDaChi: 0.65 },
+        { name: '10 — Chi hoạt động tài chính', code: '10', level: 1, nsda: 3.0, gtHD: 2.8, luykeDuyet: 2.2, nsThang: 0.40, nsThangDaChi: 0.32 },
+        { name: '11 — Chi khác', code: '11', level: 1, nsda: 2.0, gtHD: 1.8, luykeDuyet: 1.4, nsThang: 0.25, nsThangDaChi: 0.20 },
+        { name: '12 — Dự phòng phí', code: '12', level: 1, nsda: 4.0, gtHD: 0, luykeDuyet: 0, nsThang: 0, nsThangDaChi: 0 }
+    ];
+
+    const items = selectedCategories && selectedCategories.length > 0
+        ? allItems.filter(item => selectedCategories.some(cat => item.code.startsWith(cat)))
+        : allItems;
+
+    if (items.length === 0) {
+        document.getElementById('comparisonTable').innerHTML = '<p style="text-align:center;padding:20px;color:#888;">Không có dữ liệu với bộ lọc hiện tại</p>';
+        return;
+    }
+
+    let html = `<table class="data-table" style="font-size:12px;min-width:1000px;">
+    <thead>
+        <tr>
+            <th style="min-width:220px;position:sticky;left:0;background:#F1F5F9;z-index:3;">(1) Hạng Mục</th>
+            <th style="text-align:right;background:#EFF6FF;color:#2563EB;">(2) NSDA</th>
+            <th style="text-align:right;background:#EFF6FF;color:#2563EB;">(3) GT Hợp đồng</th>
+            <th style="text-align:right;background:#F0FDF4;color:#16A34A;">(4) Lũy kế đã duyệt</th>
+            <th style="text-align:right;background:#FFFBEB;color:#D97706;">(5) NS tháng hiện tại</th>
+            <th style="text-align:right;background:#FFFBEB;color:#D97706;">(6) NS tháng đã chi</th>
+            <th style="text-align:right;background:#FEF2F2;color:#DC2626;">(7) GT còn lại của HĐ</th>
+            <th style="text-align:right;background:#FEF2F2;color:#DC2626;">(8) GT còn lại NS tháng</th>
+        </tr>
+    </thead>
+    <tbody>`;
+
+    let totNSDA = 0, totHD = 0, totLK = 0, totNST = 0, totNSC = 0;
+
+    items.forEach((item, idx) => {
+        const indent = (item.level - 1) * 14;
+        const isBold = item.level === 1;
+        const bg = idx % 2 === 0 ? '' : 'background:#FBFCFE;';
+        const boldStyle = isBold ? 'font-weight:700;' : 'font-weight:400;';
+
+        const conLaiHD = +(item.gtHD - item.luykeDuyet).toFixed(2);
+        const conLaiNS = +(item.nsThang - item.nsThangDaChi).toFixed(2);
+
+        if (item.level === 1) {
+            totNSDA += item.nsda; totHD += item.gtHD; totLK += item.luykeDuyet;
+            totNST += item.nsThang; totNSC += item.nsThangDaChi;
+        }
+
+        const fmtConLai = (v) => {
+            const color = v > 0.05 ? '#16A34A' : v < -0.05 ? '#DC2626' : '#64748B';
+            return `<span style="color:${color};font-weight:600;">${v.toFixed(1)} tỷ</span>`;
+        };
+
+        const nextItem = items[idx + 1];
+        const hasChildren = nextItem && nextItem.level > item.level;
+        const toggleIcon = hasChildren 
+            ? '<span class="toggle-icon" style="display:inline-block;width:12px;color:#64748B;font-size:10px;">▼</span>' 
+            : '<span style="display:inline-block;width:12px;"></span>';
+        const cursor = hasChildren ? 'cursor:pointer;' : '';
+        const click = hasChildren ? 'onclick="toggleMatrixRow(this)"' : '';
+
+        html += `<tr style="${bg}${cursor}" data-level="${item.level}" data-expanded="true" ${click}>
+            <td style="padding-left:${8 + indent}px;${boldStyle}${bg}position:sticky;left:0;">${toggleIcon}${item.name.replace(/^\s+/, '')}</td>
+            <td style="text-align:right;color:#2563EB;">${item.nsda.toFixed(1)} tỷ</td>
+            <td style="text-align:right;color:#2563EB;">${item.gtHD > 0 ? item.gtHD.toFixed(1) + ' tỷ' : '<span style="color:#CBD5E1">—</span>'}</td>
+            <td style="text-align:right;color:#16A34A;font-weight:600;">${item.luykeDuyet > 0 ? item.luykeDuyet.toFixed(1) + ' tỷ' : '<span style="color:#CBD5E1">—</span>'}</td>
+            <td style="text-align:right;color:#D97706;">${item.nsThang > 0 ? item.nsThang.toFixed(2) + ' tỷ' : '<span style="color:#CBD5E1">—</span>'}</td>
+            <td style="text-align:right;color:#D97706;">${item.nsThangDaChi > 0 ? item.nsThangDaChi.toFixed(2) + ' tỷ' : '<span style="color:#CBD5E1">—</span>'}</td>
+            <td style="text-align:right;">${item.gtHD > 0 ? fmtConLai(conLaiHD) : '<span style="color:#CBD5E1">—</span>'}</td>
+            <td style="text-align:right;">${item.nsThang > 0 ? fmtConLai(conLaiNS) : '<span style="color:#CBD5E1">—</span>'}</td>
+        </tr>`;
+    });
+
+    // Total row
+    const totConLaiHD = +(totHD - totLK).toFixed(1);
+    const totConLaiNS = +(totNST - totNSC).toFixed(1);
+    html += `<tr style="background:linear-gradient(135deg,#F1F5F9,#E2E8F0);font-weight:700;">
+        <td style="position:sticky;left:0;background:#E2E8F0;font-weight:700;">TỔNG</td>
+        <td style="text-align:right;color:#2563EB;">${totNSDA.toFixed(1)} tỷ</td>
+        <td style="text-align:right;color:#2563EB;">${totHD.toFixed(1)} tỷ</td>
+        <td style="text-align:right;color:#16A34A;">${totLK.toFixed(1)} tỷ</td>
+        <td style="text-align:right;color:#D97706;">${totNST.toFixed(2)} tỷ</td>
+        <td style="text-align:right;color:#D97706;">${totNSC.toFixed(2)} tỷ</td>
+        <td style="text-align:right;color:#16A34A;">${totConLaiHD.toFixed(1)} tỷ</td>
+        <td style="text-align:right;color:#16A34A;">${totConLaiNS.toFixed(2)} tỷ</td>
+    </tr>`;
+
+    document.getElementById('comparisonTable').innerHTML = html + '</tbody></table>';
+}
+
+// Combo chart: Doanh Thu - Chi Phí - FHI theo tháng (giữ nguyên)
+function renderComboRevenueCostFHI(selectedCategories = null) {
+    const months = demoData.months.slice(0, 10);
+    let revenue = [8.5, 9.0, 9.2, 9.5, 9.8, 10.2, 10.5, 10.0, 9.8, 9.5];
+    let cost = [6.5, 7.0, 7.2, 7.5, 7.8, 8.2, 8.5, 8.0, 7.8, 7.5];
+
+    if (selectedCategories && selectedCategories.length > 0) {
+        const ratio = selectedCategories.length / 14;
+        cost = cost.map(v => +(v * ratio).toFixed(1));
+    }
+
+    const fhi = revenue.map((r, i) => +(r / cost[i]).toFixed(2));
+
+    charts.comboRevenueCostFHI = echarts.init(document.getElementById('comboRevenueCostFHI'));
+    charts.comboRevenueCostFHI.setOption({
         tooltip: {
             trigger: 'axis',
-            axisPointer: { type: 'shadow' },
+            axisPointer: { type: 'cross' },
             formatter: params => {
-                let html = `<strong>${params[0].name}</strong><br/>`;
+                let html = `<strong>${params[0].axisValue}</strong><br/>`;
                 params.forEach(p => {
-                    const unit = p.seriesName === 'Tỷ lệ thu hồi' ? '%' : ' tỷ';
+                    const unit = p.seriesName === 'FHI' ? '' : ' tỷ';
                     html += `<span style="color:${p.color}">●</span> ${p.seriesName}: <strong>${p.value}${unit}</strong><br/>`;
                 });
-                const billP = params.find(p => p.seriesName === 'Đã bill');
-                const ttP = params.find(p => p.seriesName === 'Đã nhận TT');
-                if (billP && ttP) {
-                    const gap = (billP.value - ttP.value).toFixed(1);
-                    html += `<span style="color:#DC2626">●</span> Còn phải thu: <strong style="color:#DC2626">${gap} tỷ</strong>`;
-                }
                 return html;
             }
         },
-        legend: {
-            data: ['Đã bill', 'Đã nhận TT', 'Tỷ lệ thu hồi'],
-            textStyle: { color: '#64748B', fontSize: 10 },
-            top: 0
-        },
-        grid: { left: '3%', right: '10%', bottom: '5%', top: '14%', containLabel: true },
-        xAxis: {
-            type: 'category',
-            data: projectNames,
-            axisLabel: { color: '#1E293B', fontSize: 11, fontWeight: 600 },
-            axisTick: { show: false }
-        },
+        legend: { data: ['Doanh thu', 'Chi phí', 'FHI'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
+        grid: { left: '3%', right: '8%', bottom: '10%', top: '15%', containLabel: true },
+        xAxis: { type: 'category', data: months, axisLabel: { color: '#64748B' } },
         yAxis: [
-            {
-                type: 'value',
-                name: 'Tỷ đồng',
-                nameTextStyle: { color: '#64748B', fontSize: 10 },
-                axisLabel: { color: '#64748B', fontSize: 10, formatter: v => v + ' tỷ' },
-                splitLine: { lineStyle: { color: '#E2E8F0', type: 'dashed' } }
-            },
-            {
-                type: 'value',
-                name: 'Tỷ lệ (%)',
-                nameTextStyle: { color: '#64748B', fontSize: 10 },
-                min: 0, max: 100,
-                axisLabel: { color: '#64748B', fontSize: 10, formatter: v => v + '%' },
-                splitLine: { show: false }
-            }
+            { type: 'value', name: 'Giá trị (tỷ)', position: 'left', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' }, splitLine: { lineStyle: { color: '#E2E8F0' } } },
+            { type: 'value', name: 'FHI', position: 'right', min: 0, max: 2, axisLabel: { color: '#F59E0B' }, splitLine: { show: false } }
         ],
         series: [
             {
-                name: 'Đã bill',
-                type: 'bar',
-                yAxisIndex: 0,
-                data: billData,
-                barWidth: '35%',
-                itemStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        { offset: 0, color: 'rgba(37,99,235,0.85)' },
-                        { offset: 1, color: 'rgba(37,99,235,0.3)' }
-                    ]),
-                    borderRadius: [4, 4, 0, 0]
-                }
+                name: 'FHI', type: 'bar', yAxisIndex: 1,
+                data: fhi.map(v => ({ value: v, itemStyle: { color: v >= 1 ? 'rgba(22,163,74,0.6)' : 'rgba(220,38,38,0.6)' } })),
+                barWidth: '30%', label: { show: true, position: 'top', formatter: '{c}', fontSize: 9, color: '#64748B' }
             },
-            {
-                name: 'Đã nhận TT',
-                type: 'bar',
-                yAxisIndex: 0,
-                data: nhanTTData,
-                barWidth: '35%',
-                itemStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        { offset: 0, color: 'rgba(22,163,74,0.85)' },
-                        { offset: 1, color: 'rgba(22,163,74,0.3)' }
-                    ]),
-                    borderRadius: [4, 4, 0, 0]
-                }
-            },
-            {
-                name: 'Tỷ lệ thu hồi',
-                type: 'line',
-                yAxisIndex: 1,
-                data: tyleData,
-                smooth: true,
-                symbol: 'circle',
-                symbolSize: 8,
-                lineStyle: { color: '#F59E0B', width: 2.5 },
-                itemStyle: { color: '#F59E0B', borderWidth: 2, borderColor: '#fff' },
-                label: {
-                    show: true,
-                    position: 'top',
-                    formatter: '{c}%',
-                    fontSize: 10,
-                    fontWeight: 700,
-                    color: '#B45309'
-                }
-            }
+            { name: 'Doanh thu', type: 'line', smooth: true, data: revenue, lineStyle: { color: '#16A34A', width: 3 }, itemStyle: { color: '#16A34A' }, symbol: 'circle', symbolSize: 6 },
+            { name: 'Chi phí', type: 'line', smooth: true, data: cost, lineStyle: { color: '#DC2626', width: 3 }, itemStyle: { color: '#DC2626' }, symbol: 'circle', symbolSize: 6 }
         ]
     });
 }
 
-function renderBudgetDetailTable(filterProject) {
-    const periods = budgetMgmtData.periods;
-    const projects = filterProject && filterProject !== 'all'
-        ? budgetMgmtData.projects.filter(p => p.id === filterProject)
-        : budgetMgmtData.projects;
+// Payment Matrix — Updated: merge status into due date, add Lũy kế Chi & Công nợ
+function renderPaymentMatrix(selectedCategories = null) {
+    const allItems = [
+        { name: '01 — Chi phát triển dự án', code: '01', level: 1, dueDate: '15/02/2024', status: 'paid', luykeDaDuyet: 1.40, luykeChi: 1.32, congNo: 0.08 },
+        { name: '02 — Chi kiến thiết cơ bản', code: '02', level: 1, dueDate: '28/02/2024', status: 'pending', luykeDaDuyet: 14.2, luykeChi: 12.8, congNo: 1.40 },
+        { name: '04 — Công tác chuẩn bị', code: '04', level: 1, dueDate: '20/02/2024', status: 'overdue', luykeDaDuyet: 6.5, luykeChi: 5.8, congNo: 0.70 },
+        { name: '06 — Chi cho thầu phụ / tổ đội', code: '06', level: 1, dueDate: '10/02/2024', status: 'pending', luykeDaDuyet: 26.5, luykeChi: 23.2, congNo: 3.30 },
+        { name: '  06.30 — Gói thầu kết cấu', code: '06.30', level: 2, dueDate: '10/02/2024', status: 'paid', luykeDaDuyet: 9.6, luykeChi: 8.8, congNo: 0.80 },
+        { name: '    06.30.51 — Tường Barrette', code: '06.30.51', level: 3, dueDate: '10/02/2024', status: 'paid', luykeDaDuyet: 3.2, luykeChi: 3.0, congNo: 0.20 },
+        { name: '  06.40 — Gói thầu hoàn thiện', code: '06.40', level: 2, dueDate: '15/02/2024', status: 'pending', luykeDaDuyet: 6.2, luykeChi: 5.5, congNo: 0.70 },
+        { name: '07 — Chi vật tư', code: '07', level: 1, dueDate: '05/03/2024', status: 'pending', luykeDaDuyet: 15.0, luykeChi: 13.5, congNo: 1.50 },
+        { name: '08 — Chi hoạt động trực tiếp', code: '08', level: 1, dueDate: '15/03/2024', status: 'overdue', luykeDaDuyet: 8.2, luykeChi: 7.5, congNo: 0.70 }
+    ];
 
-    // Common sticky style strings
-    // Row-1 header (top:0), Row-2 header (top:36px)
-    // Col "Dự án" (left:0), Col "Mã NS" (left:55px)
-    // Corner cells need both top + left + highest z-index
-    const thBase = `padding:8px 6px;font-size:11px;font-weight:600;white-space:nowrap;border-bottom:1px solid #CBD5E1;`;
+    const items = selectedCategories && selectedCategories.length > 0
+        ? allItems.filter(item => selectedCategories.some(cat => item.code.startsWith(cat)))
+        : allItems;
 
-    // sticky-top styles for normal header cells
-    const stickyTop      = `position:sticky;top:0;z-index:5;`;
-    const stickyTop36    = `position:sticky;top:36px;z-index:4;`;
-    // sticky-left styles for body cells
-    const stickyL0body   = `position:sticky;left:0;z-index:3;`;
-    const stickyL55body  = `position:sticky;left:55px;z-index:3;`;
-    // corner = sticky both directions — highest z-index
-    const cornerTopL0    = `position:sticky;top:0;left:0;z-index:20;`;
-    const cornerTopL55   = `position:sticky;top:0;left:55px;z-index:20;`;
+    if (items.length === 0) {
+        document.getElementById('paymentMatrixTable').innerHTML = '<p style="text-align:center;padding:20px;color:#888;">Không có dữ liệu</p>';
+        return;
+    }
 
-    let html = `<table style="font-size:11px;border-collapse:collapse;border-spacing:0;width:100%;min-width:1200px;">`;
-    html += `<thead>`;
+    const statusIcons = {
+        'paid': '✓ Đã TT',
+        'pending': '⏳ Chờ TT',
+        'overdue': '⚠ Quá hạn'
+    };
+    const statusColors = {
+        'paid': '#16A34A',
+        'pending': '#F59E0B',
+        'overdue': '#DC2626'
+    };
 
-    // ── Row 1: group headers ──────────────────────────────────────────────
-    html += `<tr style="height:36px;">`;
+    let html = `<table class="data-table"><thead><tr>
+        <th>(1) Hạng mục</th>
+        <th>(2) Thời hạn TT</th>
+        <th style="text-align:right;">(3) LK Chi đã duyệt</th>
+        <th style="text-align:right;">(4) Lũy kế Chi</th>
+        <th style="text-align:right;">(5) Công nợ còn lại</th>
+    </tr></thead><tbody>`;
 
-    // Corner: Dự án (rowspan 2)
-    html += `<th rowspan="2" style="${thBase}${cornerTopL0}width:55px;min-width:55px;max-width:55px;text-align:left;background:#FEE2E2;border-right:2px solid #FCA5A5;">Dự án</th>`;
-    // Corner: Mã NS (rowspan 2)
-    html += `<th rowspan="2" style="${thBase}${cornerTopL55}width:65px;min-width:65px;max-width:65px;text-align:left;background:#FEE2E2;border-right:1px solid #E2E8F0;box-shadow:2px 0 4px -2px rgba(0,0,0,0.08);">Mã NS</th>`;
-    // Non-sticky headers (rowspan 2)
-    html += `<th rowspan="2" style="${thBase}${stickyTop}min-width:72px;text-align:right;background:#F1F5F9;">Ngân sách</th>`;
-    html += `<th rowspan="2" style="${thBase}${stickyTop}min-width:60px;text-align:right;background:#F1F5F9;">HĐ</th>`;
-    // Group spans
-    html += `<th colspan="${periods.length}" style="${thBase}${stickyTop}text-align:center;background:#DBEAFE;border-bottom:2px solid #93C5FD;">Sản lượng</th>`;
-    html += `<th colspan="${periods.length}" style="${thBase}${stickyTop}text-align:center;background:#DCFCE7;border-bottom:2px solid #86EFAC;">Bill</th>`;
-    html += `<th colspan="${periods.length}" style="${thBase}${stickyTop}text-align:center;background:#FEF3C7;border-bottom:2px solid #FDE68A;">Nhận thanh toán</th>`;
-    html += `<th rowspan="2" style="${thBase}${stickyTop}min-width:72px;text-align:right;background:#FEE2E2;color:#DC2626;font-weight:700;">Công nợ</th>`;
-    html += `<th rowspan="2" style="${thBase}${stickyTop}min-width:68px;text-align:center;background:#F1F5F9;">TG quá hạn<br>(ngày)</th>`;
-    html += `</tr>`;
-
-    // ── Row 2: period sub-headers ─────────────────────────────────────────
-    html += `<tr style="height:26px;">`;
-    periods.forEach(p => { html += `<th style="${thBase}${stickyTop36}min-width:48px;text-align:right;background:#EFF6FF;font-size:10px;">${p}</th>`; });
-    periods.forEach(p => { html += `<th style="${thBase}${stickyTop36}min-width:48px;text-align:right;background:#F0FDF4;font-size:10px;">${p}</th>`; });
-    periods.forEach(p => { html += `<th style="${thBase}${stickyTop36}min-width:48px;text-align:right;background:#FFFBEB;font-size:10px;">${p}</th>`; });
-    html += `</tr>`;
-    html += `</thead><tbody>`;
-
-    // ── Data rows ─────────────────────────────────────────────────────────
-    const tdBase = `padding:7px 6px;border-bottom:1px solid #E2E8F0;white-space:nowrap;font-size:11px;`;
-
-    projects.forEach((proj, pIdx) => {
-        proj.items.forEach((item, iIdx) => {
-            const isFirst = iIdx === 0;
-            const isThu = item.code.startsWith('THU');
-            const rowBg = isThu ? '#FAFAFA' : '#FFFFFF';
-            const codeColor = isThu ? '#16A34A' : '#DC2626';
-            const codeWeight = isThu ? '700' : '500';
-
-            html += `<tr>`;
-
-            // Dự án cell (rowspan, sticky left:0)
-            if (isFirst) {
-                html += `<td rowspan="${proj.items.length}" style="${tdBase}${stickyL0body}width:55px;min-width:55px;max-width:55px;text-align:left;font-weight:700;color:var(--primary);background:#FFF5F5;border-right:2px solid #FCA5A5;vertical-align:top;padding-top:10px;">${proj.name}</td>`;
-            }
-
-            // Mã NS cell (sticky left:55px)
-            html += `<td style="${tdBase}${stickyL55body}width:65px;min-width:65px;max-width:65px;text-align:left;font-weight:${codeWeight};color:${codeColor};background:${rowBg};border-right:1px solid #E2E8F0;box-shadow:2px 0 4px -2px rgba(0,0,0,0.08);">${item.code}</td>`;
-
-            // Ngân sách
-            html += `<td style="${tdBase}text-align:right;font-weight:600;background:${rowBg};">${item.nganSach.toFixed(1)}</td>`;
-            // HĐ
-            html += `<td style="${tdBase}text-align:right;background:${rowBg};">${item.hd.toFixed(1)}</td>`;
-
-            // Sản lượng
-            item.sl.forEach(v => {
-                const bg = v > 0 ? '#EFF6FF' : rowBg;
-                html += `<td style="${tdBase}text-align:right;background:${bg};color:#2563EB;">${v > 0 ? v.toFixed(1) : ''}</td>`;
-            });
-
-            // Bill
-            if (item.bill.length) {
-                item.bill.forEach(v => {
-                    const bg = v > 0 ? '#F0FDF4' : rowBg;
-                    html += `<td style="${tdBase}text-align:right;background:${bg};color:#16A34A;">${v > 0 ? v.toFixed(1) : ''}</td>`;
-                });
-            } else {
-                periods.forEach(() => { html += `<td style="${tdBase}text-align:center;color:#CBD5E1;background:${rowBg};">—</td>`; });
-            }
-
-            // Nhận TT
-            if (item.nhanTT.length) {
-                item.nhanTT.forEach(v => {
-                    const bg = v > 0 ? '#FFFBEB' : rowBg;
-                    html += `<td style="${tdBase}text-align:right;background:${bg};color:#D97706;">${v > 0 ? v.toFixed(1) : ''}</td>`;
-                });
-            } else {
-                periods.forEach(() => { html += `<td style="${tdBase}text-align:center;color:#CBD5E1;background:${rowBg};">—</td>`; });
-            }
-
-            // Công nợ
-            if (item.congNo > 0) {
-                html += `<td style="${tdBase}text-align:right;background:#FEE2E2;color:#DC2626;font-weight:700;">${item.congNo.toFixed(1)}</td>`;
-            } else {
-                html += `<td style="${tdBase}text-align:right;color:#CBD5E1;background:${rowBg};">—</td>`;
-            }
-
-            // TG Quá hạn
-            const isOverdue = item.overdueDays > 0;
-            const isCrit = item.overdueDays > 40;
-            const overBg = isCrit ? '#FEF2F2' : rowBg;
-            const overColor = isOverdue ? (isCrit ? '#DC2626' : '#F59E0B') : '#CBD5E1';
-            const overW = isCrit ? '700' : '500';
-            html += `<td style="${tdBase}text-align:center;background:${overBg};color:${overColor};font-weight:${overW};">${isOverdue ? item.overdueDays : '—'}</td>`;
-
-            html += `</tr>`;
-        });
-
-        // Separator row between projects
-        if (pIdx < projects.length - 1) {
-            const totalCols = 4 + (periods.length * 3) + 2;
-            html += `<tr><td colspan="${totalCols}" style="height:5px;background:#E2E8F0;padding:0;border:none;"></td></tr>`;
-        }
+    items.forEach(i => {
+        const indent = (i.level - 1) * 12;
+        const nameStyle = i.level === 1 ? 'font-weight:600;' : '';
+        const statusStr = `<span style="color:${statusColors[i.status]};font-weight:600;">${statusIcons[i.status]}</span>`;
+        const congNoColor = i.congNo > 1 ? '#DC2626' : i.congNo > 0 ? '#F59E0B' : '#16A34A';
+        html += `<tr>
+            <td style="padding-left:${6 + indent}px;${nameStyle}">${i.name}</td>
+            <td>${i.dueDate} ${statusStr}</td>
+            <td style="text-align:right;font-weight:500;">${i.luykeDaDuyet.toFixed(1)} tỷ</td>
+            <td style="text-align:right;font-weight:500;">${i.luykeChi.toFixed(1)} tỷ</td>
+            <td style="text-align:right;font-weight:700;color:${congNoColor};">${i.congNo.toFixed(2)} tỷ</td>
+        </tr>`;
     });
-
-    html += `</tbody></table>`;
-    document.getElementById('budgetDetailTable').innerHTML = html;
+    document.getElementById('paymentMatrixTable').innerHTML = html + '</tbody></table>';
 }
 
+function updatePage3() {
+    const selectedCategories = Array.from(document.querySelectorAll('#page2 .multi-select-menu input[type="checkbox"]:checked'))
+        .map(cb => cb.value);
 
+    renderComparisonTable(selectedCategories);
+    renderComboRevenueCostFHI(selectedCategories);
+    renderPaymentMatrix(selectedCategories);
 
-function updateBudgetPage() {
-    const filter = document.getElementById('budgetProjectFilter').value;
-    renderBudgetKPIs();
-    renderBarCongNo();
-    renderBarBudgetExecution();
-    renderBudgetDetailTable(filter);
+    // Update 4 KPI cards (lũy kế)
+    const baseData = demoData.approval;
+    const filterRatio = Math.max(selectedCategories.length / 14, 0.1);
+
+    const luykeThu = (85.2 * filterRatio).toFixed(1);
+    const luykeChi = (72.5 * filterRatio).toFixed(1);
+    const luykeSL = (45.8 * filterRatio).toFixed(1);
+    const fhiLuyke = (luykeThu / luykeChi).toFixed(2);
+
+    document.getElementById('kpi_luyke_thu').textContent = luykeThu + ' tỷ';
+    document.getElementById('kpi_luyke_chi').textContent = luykeChi + ' tỷ';
+    document.getElementById('kpi_luyke_sl').textContent = luykeSL + ' tỷ';
+    document.getElementById('kpi_fhi_luyke').textContent = fhiLuyke;
 }
 
-// Page 1 Charts (Quản Lý Dòng Tiền)
+// ============================================================
+// PAGE 1: HIỆU QUẢ DỰ ÁN (giữ nguyên hoàn toàn)
+// ============================================================
+const cashflowData = {
+    months: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+    slKH: [8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5, 12.0, 12.5, 13.0, 13.5],
+    slTT: [7.8, 8.2, 9.1, 9.3, 10.2, 10.8, 11.2, 11.0, 11.8, 12.0, 0, 0],
+    chiKH: [5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5],
+    chiTT: [4.8, 5.3, 5.8, 6.2, 6.8, 7.2, 7.6, 8.2, 8.7, 9.1, 0, 0],
+    thuKH: [6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5],
+    thuTT: [5.5, 6.2, 7.1, 7.3, 8.1, 8.8, 9.2, 9.0, 9.7, 10.2, 0, 0]
+};
+
+function cumSum(arr) {
+    let sum = 0;
+    return arr.map(v => { sum += v; return +sum.toFixed(1); });
+}
+
 function initPage2() {
     renderCashflowGauges();
     renderComboCashflow();
@@ -533,27 +670,6 @@ function initPage2() {
     renderCashflowTable();
 }
 
-// Cashflow data
-const cashflowData = {
-    months: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
-    // Sản lượng (tỷ)
-    slKH:   [8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5, 12.0, 12.5, 13.0, 13.5],
-    slTT:   [7.8, 8.2, 9.1, 9.3, 10.2, 10.8, 11.2, 11.0, 11.8, 12.0, 0, 0],
-    // Chi phí (tỷ)
-    chiKH:  [5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5],
-    chiTT:  [4.8, 5.3, 5.8, 6.2, 6.8, 7.2, 7.6, 8.2, 8.7, 9.1, 0, 0],
-    // Thu (tỷ)
-    thuKH:  [6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5],
-    thuTT:  [5.5, 6.2, 7.1, 7.3, 8.1, 8.8, 9.2, 9.0, 9.7, 10.2, 0, 0]
-};
-
-// Tính lũy kế
-function cumSum(arr) {
-    let sum = 0;
-    return arr.map(v => { sum += v; return +sum.toFixed(1); });
-}
-
-// Render 3 gauge charts cho trang Quản Lý Dòng Tiền
 function renderCashflowGauges() {
     const activeMonths = cashflowData.thuTT.filter(v => v > 0).length;
 
@@ -568,34 +684,6 @@ function renderCashflowGauges() {
     const totalSLTT = cashflowData.slTT.reduce((a, b) => a + b, 0);
     const totalSLKH = cashflowData.slKH.slice(0, activeMonths).reduce((a, b) => a + b, 0);
     const slPct = Math.round(totalSLTT / totalSLKH * 100);
-
-    // Populate KPI insight cards
-    const nets = cashflowData.months.map((_, i) =>
-        +(cashflowData.thuTT[i] - cashflowData.chiTT[i]).toFixed(1)
-    );
-    const totalNet = nets.reduce((a, b) => a + b, 0);
-    const negMonths = nets.filter((n, i) => cashflowData.thuTT[i] > 0 && n < 0).length;
-    const bestIdx = nets.reduce((bi, v, i, arr) => (v > arr[bi] ? i : bi), 0);
-    const costOverrunPct = totalChiKH > 0 ? ((totalChiTT / totalChiKH - 1) * 100).toFixed(1) : 0;
-
-    const netEl = document.getElementById('kpiNetCashflow');
-    if (netEl) {
-        const netVal = +totalNet.toFixed(1);
-        netEl.textContent = (netVal >= 0 ? '+' : '') + netVal + ' tỷ';
-        netEl.style.color = netVal >= 0 ? 'var(--success)' : 'var(--danger)';
-    }
-    const bestEl = document.getElementById('kpiBestMonth');
-    if (bestEl) bestEl.textContent = cashflowData.months[bestIdx];
-    const bestValEl = document.getElementById('kpiBestMonthVal');
-    if (bestValEl) bestValEl.textContent = '+' + nets[bestIdx].toFixed(1) + ' tỷ ròng';
-    const negEl = document.getElementById('kpiNegMonths');
-    if (negEl) negEl.textContent = negMonths;
-    const overrunEl = document.getElementById('kpiCostOverrun');
-    if (overrunEl) {
-        const ov = +costOverrunPct;
-        overrunEl.textContent = ov > 0 ? '+' + ov + '%' : ov + '%';
-        overrunEl.style.color = ov > 5 ? 'var(--danger)' : ov > 0 ? 'var(--warning)' : 'var(--success)';
-    }
 
     const gaugeOpts = (pct, pointerColor, colorMap) => ({
         series: [{
@@ -624,11 +712,8 @@ function renderCashflowGauges() {
         [[0.5, '#FCA5A5'], [0.7, '#FCD34D'], [0.84, '#4ADE80'], [1, '#16A34A']]));
 }
 
-// Combo chart: Lines (lũy kế Thu/Chi TT + KH) + Bars (Sản lượng TT/KH lũy kế)
 function renderComboCashflow() {
     const months = cashflowData.months;
-
-    // Lũy kế
     const cumChiTT = cumSum(cashflowData.chiTT);
     const cumThuTT = cumSum(cashflowData.thuTT);
     const cumChiKH = cumSum(cashflowData.chiKH);
@@ -638,144 +723,33 @@ function renderComboCashflow() {
 
     charts.comboCashflow = echarts.init(document.getElementById('comboCashflow'));
     charts.comboCashflow.setOption({
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: { type: 'cross' },
-            formatter: params => {
-                let html = `<strong>${params[0].axisValue}</strong><br/>`;
-                params.forEach(p => {
-                    html += `<span style="color:${p.color}">●</span> ${p.seriesName}: <strong>${p.value} tỷ</strong><br/>`;
-                });
-                return html;
-            }
-        },
+        tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
         legend: {
             data: ['SL Thực lũy kế', 'SL KH lũy kế', 'Chi phí lũy kế', 'Thu lũy kế', 'Chi phí KH lũy kế', 'Thu KH lũy kế'],
-            textStyle: { color: '#64748B', fontSize: 10 },
-            top: 0,
-            itemGap: 12
+            textStyle: { color: '#64748B', fontSize: 10 }, top: 0, itemGap: 12
         },
         grid: { left: '3%', right: '5%', bottom: '10%', top: '14%', containLabel: true },
-        xAxis: {
-            type: 'category',
-            data: months,
-            axisLabel: { color: '#64748B', fontSize: 11 },
-            axisLine: { lineStyle: { color: '#E2E8F0' } }
-        },
+        xAxis: { type: 'category', data: months, axisLabel: { color: '#64748B', fontSize: 11 }, axisLine: { lineStyle: { color: '#E2E8F0' } } },
         yAxis: [
-            {
-                type: 'value',
-                name: 'Lũy kế (tỷ)',
-                position: 'left',
-                axisLabel: { color: '#64748B', formatter: v => v + ' tỷ', fontSize: 10 },
-                splitLine: { lineStyle: { color: '#E2E8F0', type: 'dashed' } },
-                nameTextStyle: { color: '#64748B', fontSize: 10 }
-            },
-            {
-                type: 'value',
-                name: 'Sản lượng (tỷ)',
-                position: 'right',
-                axisLabel: { color: '#64748B', formatter: v => v + ' tỷ', fontSize: 10 },
-                splitLine: { show: false },
-                nameTextStyle: { color: '#64748B', fontSize: 10 }
-            }
+            { type: 'value', name: 'Lũy kế (tỷ)', position: 'left', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ', fontSize: 10 }, splitLine: { lineStyle: { color: '#E2E8F0', type: 'dashed' } } },
+            { type: 'value', name: 'Sản lượng (tỷ)', position: 'right', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ', fontSize: 10 }, splitLine: { show: false } }
         ],
         series: [
-            // Bar: Sản lượng thực lũy kế
-            {
-                name: 'SL Thực lũy kế',
-                type: 'bar',
-                yAxisIndex: 1,
-                data: cumSLTT,
-                barWidth: '25%',
-                barGap: '10%',
-                itemStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        { offset: 0, color: 'rgba(37,99,235,0.7)' },
-                        { offset: 1, color: 'rgba(37,99,235,0.2)' }
-                    ]),
-                    borderRadius: [3, 3, 0, 0]
-                },
-                z: 0
-            },
-            // Bar: Sản lượng KH lũy kế
-            {
-                name: 'SL KH lũy kế',
-                type: 'bar',
-                yAxisIndex: 1,
-                data: cumSLKH,
-                barWidth: '25%',
-                itemStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        { offset: 0, color: 'rgba(148,163,184,0.5)' },
-                        { offset: 1, color: 'rgba(148,163,184,0.15)' }
-                    ]),
-                    borderRadius: [3, 3, 0, 0],
-                    borderColor: 'rgba(148,163,184,0.6)',
-                    borderWidth: 1,
-                    borderType: 'dashed'
-                },
-                z: 0
-            },
-            // Line: Chi phí lũy kế thực tế
-            {
-                name: 'Chi phí lũy kế',
-                type: 'line',
-                smooth: true,
-                data: cumChiTT,
-                lineStyle: { color: '#DC2626', width: 3 },
-                itemStyle: { color: '#DC2626' },
-                symbol: 'circle',
-                symbolSize: 6,
-                z: 5
-            },
-            // Line: Thu lũy kế thực tế
-            {
-                name: 'Thu lũy kế',
-                type: 'line',
-                smooth: true,
-                data: cumThuTT,
-                lineStyle: { color: '#16A34A', width: 3 },
-                itemStyle: { color: '#16A34A' },
-                symbol: 'circle',
-                symbolSize: 6,
-                z: 5
-            },
-            // Line dashed: Chi phí KH lũy kế
-            {
-                name: 'Chi phí KH lũy kế',
-                type: 'line',
-                smooth: true,
-                data: cumChiKH,
-                lineStyle: { color: '#F87171', width: 2, type: 'dashed' },
-                itemStyle: { color: '#F87171' },
-                symbol: 'diamond',
-                symbolSize: 5,
-                z: 4
-            },
-            // Line dashed: Thu KH lũy kế
-            {
-                name: 'Thu KH lũy kế',
-                type: 'line',
-                smooth: true,
-                data: cumThuKH,
-                lineStyle: { color: '#4ADE80', width: 2, type: 'dashed' },
-                itemStyle: { color: '#4ADE80' },
-                symbol: 'diamond',
-                symbolSize: 5,
-                z: 4
-            }
+            { name: 'SL Thực lũy kế', type: 'bar', yAxisIndex: 1, data: cumSLTT, barWidth: '25%', barGap: '10%', itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(37,99,235,0.7)' }, { offset: 1, color: 'rgba(37,99,235,0.2)' }]), borderRadius: [3, 3, 0, 0] }, z: 0 },
+            { name: 'SL KH lũy kế', type: 'bar', yAxisIndex: 1, data: cumSLKH, barWidth: '25%', itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(148,163,184,0.5)' }, { offset: 1, color: 'rgba(148,163,184,0.15)' }]), borderRadius: [3, 3, 0, 0], borderColor: 'rgba(148,163,184,0.6)', borderWidth: 1, borderType: 'dashed' }, z: 0 },
+            { name: 'Chi phí lũy kế', type: 'line', smooth: true, data: cumChiTT, lineStyle: { color: '#DC2626', width: 3 }, itemStyle: { color: '#DC2626' }, symbol: 'circle', symbolSize: 6, z: 5 },
+            { name: 'Thu lũy kế', type: 'line', smooth: true, data: cumThuTT, lineStyle: { color: '#16A34A', width: 3 }, itemStyle: { color: '#16A34A' }, symbol: 'circle', symbolSize: 6, z: 5 },
+            { name: 'Chi phí KH lũy kế', type: 'line', smooth: true, data: cumChiKH, lineStyle: { color: '#F87171', width: 2, type: 'dashed' }, itemStyle: { color: '#F87171' }, symbol: 'diamond', symbolSize: 5, z: 4 },
+            { name: 'Thu KH lũy kế', type: 'line', smooth: true, data: cumThuKH, lineStyle: { color: '#4ADE80', width: 2, type: 'dashed' }, itemStyle: { color: '#4ADE80' }, symbol: 'diamond', symbolSize: 5, z: 4 }
         ]
     });
 }
 
-// Bảng chi tiết Thu - Chi - Sản lượng theo tháng
 function renderCashflowTable() {
     const months = cashflowData.months;
     const d = cashflowData;
 
     let html = '<table class="data-table" style="font-size:12px;">';
-    // Header
     html += '<thead><tr>';
     html += '<th style="min-width:60px;text-align:center;position:sticky;left:0;background:#FEE2E2;z-index:3;">Tháng</th>';
     html += '<th style="min-width:90px;text-align:right;background:linear-gradient(135deg,#EFF6FF,#DBEAFE);">KH Sản lượng</th>';
@@ -790,18 +764,9 @@ function renderCashflowTable() {
     let totalSLKH = 0, totalSLTT = 0, totalChiKH = 0, totalChiTT = 0, totalThuKH = 0, totalThuTT = 0, totalNet = 0;
 
     months.forEach((m, i) => {
-        const slKH = d.slKH[i];
-        const slTT = d.slTT[i];
-        const chiKH = d.chiKH[i];
-        const chiTT = d.chiTT[i];
-        const thuKH = d.thuKH[i];
-        const thuTT = d.thuTT[i];
+        const slKH = d.slKH[i], slTT = d.slTT[i], chiKH = d.chiKH[i], chiTT = d.chiTT[i], thuKH = d.thuKH[i], thuTT = d.thuTT[i];
         const net = +(thuTT - chiTT).toFixed(1);
-
-        totalSLKH += slKH; totalSLTT += slTT;
-        totalChiKH += chiKH; totalChiTT += chiTT;
-        totalThuKH += thuKH; totalThuTT += thuTT;
-        totalNet += net;
+        totalSLKH += slKH; totalSLTT += slTT; totalChiKH += chiKH; totalChiTT += chiTT; totalThuKH += thuKH; totalThuTT += thuTT; totalNet += net;
 
         const netColor = net >= 0 ? '#16A34A' : '#DC2626';
         const netIcon = net >= 0 ? '▲' : '▼';
@@ -821,7 +786,6 @@ function renderCashflowTable() {
         html += '</tr>';
     });
 
-    // Total row
     const totalNetVal = +totalNet.toFixed(1);
     const totalNetColor = totalNetVal >= 0 ? '#16A34A' : '#DC2626';
     const totalNetIcon = totalNetVal >= 0 ? '▲' : '▼';
@@ -834,121 +798,38 @@ function renderCashflowTable() {
     html += `<td style="text-align:right;color:#16A34A;">${totalThuKH.toFixed(1)}</td>`;
     html += `<td style="text-align:right;color:#16A34A;">${totalThuTT.toFixed(1)}</td>`;
     html += `<td style="text-align:right;color:${totalNetColor};">${totalNetIcon} ${Math.abs(totalNetVal).toFixed(1)}</td>`;
-    html += '</tr>';
-
-    html += '</tbody></table>';
+    html += '</tr></tbody></table>';
     document.getElementById('cashflowTable').innerHTML = html;
 }
 
 function renderNetCashflowBar() {
     const d = cashflowData;
     const months = d.months;
-
-    // Net = Thu TT - Chi TT (chỉ tính tháng có dữ liệu)
     const nets = months.map((_, i) => +(d.thuTT[i] - d.chiTT[i]).toFixed(1));
     const hasData = months.map((_, i) => d.thuTT[i] > 0 || d.chiTT[i] > 0);
-
-    // Running cumulative net
     let cum = 0;
     const cumNets = nets.map((v, i) => hasData[i] ? +(cum += v).toFixed(1) : null);
 
     const barColors = nets.map((v, i) => {
         if (!hasData[i]) return 'rgba(203,213,225,0.3)';
         return v >= 0
-            ? new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: 'rgba(22,163,74,0.9)' },
-                { offset: 1, color: 'rgba(22,163,74,0.35)' }
-              ])
-            : new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: 'rgba(220,38,38,0.9)' },
-                { offset: 1, color: 'rgba(220,38,38,0.35)' }
-              ]);
+            ? new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(22,163,74,0.9)' }, { offset: 1, color: 'rgba(22,163,74,0.35)' }])
+            : new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(220,38,38,0.9)' }, { offset: 1, color: 'rgba(220,38,38,0.35)' }]);
     });
 
-    if (!charts.barNetCashflow) {
-        charts.barNetCashflow = echarts.init(document.getElementById('barNetCashflow'));
-    }
+    if (!charts.barNetCashflow) charts.barNetCashflow = echarts.init(document.getElementById('barNetCashflow'));
     charts.barNetCashflow.setOption({
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: { type: 'shadow' },
-            formatter: params => {
-                const m = params[0].axisValue;
-                let html = `<strong>${m}</strong><br/>`;
-                params.forEach(p => {
-                    if (p.value === null || p.value === undefined) return;
-                    const unit = p.seriesName === 'Lũy kế ròng' ? ' tỷ (tích lũy)' : ' tỷ';
-                    const sign = p.value > 0 ? '+' : '';
-                    html += `<span style="color:${p.color}">●</span> ${p.seriesName}: <strong>${sign}${p.value}${unit}</strong><br/>`;
-                });
-                return html;
-            }
-        },
-        legend: {
-            data: ['Dòng tiền ròng', 'Lũy kế ròng'],
-            textStyle: { color: '#64748B', fontSize: 10 },
-            top: 0
-        },
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        legend: { data: ['Dòng tiền ròng', 'Lũy kế ròng'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
         grid: { left: '3%', right: '8%', bottom: '8%', top: '14%', containLabel: true },
-        xAxis: {
-            type: 'category',
-            data: months,
-            axisLabel: { color: '#64748B', fontSize: 11, fontWeight: 600 },
-            axisTick: { show: false },
-            axisLine: { lineStyle: { color: '#E2E8F0' } }
-        },
+        xAxis: { type: 'category', data: months, axisLabel: { color: '#64748B', fontSize: 11, fontWeight: 600 }, axisTick: { show: false }, axisLine: { lineStyle: { color: '#E2E8F0' } } },
         yAxis: [
-            {
-                type: 'value',
-                name: 'Tỷ đồng',
-                nameTextStyle: { color: '#64748B', fontSize: 10 },
-                axisLabel: { color: '#64748B', fontSize: 10, formatter: v => v + ' tỷ' },
-                splitLine: { lineStyle: { color: '#E2E8F0', type: 'dashed' } }
-            },
-            {
-                type: 'value',
-                name: 'Lũy kế',
-                nameTextStyle: { color: '#64748B', fontSize: 10 },
-                axisLabel: { color: '#64748B', fontSize: 10, formatter: v => v + ' tỷ' },
-                splitLine: { show: false }
-            }
+            { type: 'value', name: 'Tỷ đồng', axisLabel: { color: '#64748B', fontSize: 10, formatter: v => v + ' tỷ' }, splitLine: { lineStyle: { color: '#E2E8F0', type: 'dashed' } } },
+            { type: 'value', name: 'Lũy kế', axisLabel: { color: '#64748B', fontSize: 10, formatter: v => v + ' tỷ' }, splitLine: { show: false } }
         ],
-        markLine: {
-            silent: true,
-            lineStyle: { color: '#CBD5E1', type: 'dashed' },
-            data: [{ yAxis: 0 }]
-        },
         series: [
-            {
-                name: 'Dòng tiền ròng',
-                type: 'bar',
-                yAxisIndex: 0,
-                data: nets.map((v, i) => ({
-                    value: hasData[i] ? v : null,
-                    itemStyle: { color: barColors[i], borderRadius: v >= 0 ? [4, 4, 0, 0] : [0, 0, 4, 4] }
-                })),
-                barWidth: '42%',
-                label: {
-                    show: true,
-                    position: 'top',
-                    formatter: p => p.value !== null ? (p.value > 0 ? '+' : '') + p.value : '',
-                    fontSize: 9,
-                    fontWeight: 700,
-                    color: '#374151'
-                }
-            },
-            {
-                name: 'Lũy kế ròng',
-                type: 'line',
-                yAxisIndex: 1,
-                data: cumNets,
-                smooth: true,
-                connectNulls: false,
-                lineStyle: { color: '#6366F1', width: 2.5, type: 'solid' },
-                itemStyle: { color: '#6366F1', borderWidth: 2, borderColor: '#fff' },
-                symbol: 'circle',
-                symbolSize: 7
-            }
+            { name: 'Dòng tiền ròng', type: 'bar', yAxisIndex: 0, data: nets.map((v, i) => ({ value: hasData[i] ? v : null, itemStyle: { color: barColors[i], borderRadius: v >= 0 ? [4, 4, 0, 0] : [0, 0, 4, 4] } })), barWidth: '42%', label: { show: true, position: 'top', formatter: p => p.value !== null ? (p.value > 0 ? '+' : '') + p.value : '', fontSize: 9, fontWeight: 700, color: '#374151' } },
+            { name: 'Lũy kế ròng', type: 'line', yAxisIndex: 1, data: cumNets, smooth: true, connectNulls: false, lineStyle: { color: '#6366F1', width: 2.5 }, itemStyle: { color: '#6366F1', borderWidth: 2, borderColor: '#fff' }, symbol: 'circle', symbolSize: 7 }
         ]
     });
 }
@@ -960,357 +841,119 @@ function updatePage2() {
     renderCashflowTable();
 }
 
-// Page 3
-function initPage3() {
-    renderComparisonTable();
-    renderComboRevenueCostFHI();
-    renderPaymentMatrix();
-}
-
-function renderComparisonTable(selectedCategories = null) {
-    // Dữ liệu mẫu với đầy đủ các cột mới
-    // kh = Kế hoạch duyệt, lkKH = Lũy kế KH, yc = Yêu cầu lần này, lkDuyet = Lũy kế đã duyệt trước
-    const allItems = [
-        { name: 'CHI.01 - Pháp lý dự án',     code: 'CHI.01',       level: 1, kh: 2.0,  lkKH: 2.0,  yc: 1.55, lkDuyet: 1.40 },
-        { name: 'CHI.01.10 - Hồ sơ pháp lý',  code: 'CHI.01.10',    level: 2, kh: 1.0,  lkKH: 1.0,  yc: 0.90, lkDuyet: 0.80 },
-        { name: 'CHI.01.20 - Phí giấy phép',    code: 'CHI.01.20',    level: 2, kh: 1.0,  lkKH: 1.0,  yc: 0.65, lkDuyet: 0.60 },
-        { name: 'CHI.02 - Kiến thiết cơ bản',  code: 'CHI.02',       level: 1, kh: 16.0, lkKH: 16.0, yc: 15.0, lkDuyet: 14.2 },
-        { name: 'CHI.02.10 - Khảo sát địa hình', code: 'CHI.02.10',   level: 2, kh: 4.0,  lkKH: 4.0,  yc: 3.5,  lkDuyet: 3.2  },
-        { name: 'CHI.02.20 - Thiết kế cơ sở',  code: 'CHI.02.20',    level: 2, kh: 6.0,  lkKH: 5.5,  yc: 5.8,  lkDuyet: 5.2  },
-        { name: 'CHI.03 - Bán hàng',             code: 'CHI.03',       level: 1, kh: 5.0,  lkKH: 4.5,  yc: 4.2,  lkDuyet: 3.8  },
-        { name: 'CHI.04 - Chuẩn bị dự án',      code: 'CHI.04',       level: 1, kh: 3.0,  lkKH: 2.8,  yc: 2.5,  lkDuyet: 2.2  },
-        { name: 'CHI.05 - Thiết bị',             code: 'CHI.05',       level: 1, kh: 8.0,  lkKH: 7.0,  yc: 7.2,  lkDuyet: 6.5  },
-        { name: 'CHI.06 - Nhân công & Thầu phụ', code: 'CHI.06',       level: 1, kh: 30.0, lkKH: 27.0, yc: 28.1, lkDuyet: 26.5 },
-        { name: 'CHI.06.30 - Gói thầu kết cấu',  code: 'CHI.06.30',    level: 2, kh: 12.0, lkKH: 10.5, yc: 9.6,  lkDuyet: 8.2  },
-        { name: 'CHI.06.30.31 - KC A',           code: 'CHI.06.30.31', level: 3, kh: 4.0,  lkKH: 0.0,  yc: 2.4,  lkDuyet: 0.0  },
-        { name: 'CHI.06.30.32 - KC B',           code: 'CHI.06.30.32', level: 3, kh: 4.0,  lkKH: 0.0,  yc: 2.1,  lkDuyet: 0.0  },
-        { name: 'CHI.06.40.06 - Gói A',          code: 'CHI.06.40.06', level: 3, kh: 3.0,  lkKH: 0.0,  yc: 2.4,  lkDuyet: 0.0  },
-        { name: 'CHI.07 - Vật tư & NCC',         code: 'CHI.07',       level: 1, kh: 12.0, lkKH: 10.0, yc: 9.8,  lkDuyet: 8.5  },
-        { name: 'CHI.08 - Hoạt động trực tiếp', code: 'CHI.08',       level: 1, kh: 6.0,  lkKH: 5.0,  yc: 4.8,  lkDuyet: 4.2  },
-    ];
-
-    const items = selectedCategories && selectedCategories.length > 0
-        ? allItems.filter(item => selectedCategories.some(cat => item.code.startsWith(cat)))
-        : allItems;
-
-    if (items.length === 0) {
-        document.getElementById('comparisonTable').innerHTML = '<p style="text-align:center;padding:20px;color:#888;">Không có dữ liệu với bộ lọc hiện tại</p>';
-        return;
-    }
-
-    // Header
-    let html = `<table class="data-table" style="font-size:12px;min-width:900px;">
-    <thead>
-        <tr>
-            <th rowspan="2" style="min-width:200px;position:sticky;left:0;background:#F1F5F9;z-index:3;">Hạng Mục</th>
-            <th colspan="2" style="text-align:center;background:#EFF6FF;color:#2563EB;">Kế Hoạch</th>
-            <th colspan="2" style="text-align:center;background:#F0FDF4;color:#16A34A;">Thực Hiện</th>
-            <th colspan="2" style="text-align:center;background:#FFFBEB;color:#D97706;">Chênh Lệch</th>
-        </tr>
-        <tr>
-            <th style="text-align:right;background:#EFF6FF;color:#2563EB;">KH Duyệt</th>
-            <th style="text-align:right;background:#EFF6FF;color:#2563EB;">Lũy kế KH</th>
-            <th style="text-align:right;background:#F0FDF4;color:#16A34A;">Yêu cầu duyệt</th>
-            <th style="text-align:right;background:#F0FDF4;color:#16A34A;">Lũy kế đã duyệt</th>
-            <th style="text-align:right;background:#FFFBEB;color:#D97706;">YC vs KH</th>
-            <th style="text-align:right;background:#FFFBEB;color:#D97706;">LK duyệt vs LK KH</th>
-        </tr>
-    </thead>
-    <tbody>`;
-
-    let totKH = 0, totLKKH = 0, totYC = 0, totLKD = 0;
-
-    items.forEach((item, idx) => {
-        const indent = (item.level - 1) * 14;
-        const isBold = item.level === 1;
-        const bg = idx % 2 === 0 ? '' : 'background:#FBFCFE;';
-        const boldStyle = isBold ? 'font-weight:700;' : 'font-weight:400;';
-
-        // Chênh lệch YC so KH (âm = tiết kiệm, dương = vượt)
-        const diffYCKH = +(item.yc - item.kh).toFixed(2);
-        const diffLKKH = item.lkKH > 0 ? +(item.lkDuyet - item.lkKH).toFixed(2) : null;
-
-        const fmtDiff = (v) => {
-            if (v === null) return '<span style="color:#94A3B8;">—</span>';
-            const color = v > 0.05 ? '#DC2626' : v < -0.05 ? '#16A34A' : '#64748B';
-            const sign = v > 0 ? '+' : '';
-            return `<span style="color:${color};font-weight:600;">${sign}${v.toFixed(1)} tỷ</span>`;
-        };
-
-        if (item.level === 1) { totKH += item.kh; totLKKH += item.lkKH; totYC += item.yc; totLKD += item.lkDuyet; }
-
-        html += `<tr style="${bg}">
-            <td style="padding-left:${8 + indent}px;${boldStyle}${bg}position:sticky;left:0;">${item.name}</td>
-            <td style="text-align:right;color:#2563EB;">${item.kh.toFixed(1)} tỷ</td>
-            <td style="text-align:right;color:#2563EB;">${item.lkKH > 0 ? item.lkKH.toFixed(1) + ' tỷ' : '<span style="color:#CBD5E1">—</span>'}</td>
-            <td style="text-align:right;color:#16A34A;font-weight:600;">${item.yc.toFixed(1)} tỷ</td>
-            <td style="text-align:right;color:#16A34A;">${item.lkDuyet > 0 ? item.lkDuyet.toFixed(1) + ' tỷ' : '<span style="color:#CBD5E1">—</span>'}</td>
-            <td style="text-align:right;">${fmtDiff(diffYCKH)}</td>
-            <td style="text-align:right;">${fmtDiff(diffLKKH)}</td>
-        </tr>`;
-    });
-
-    // Tổng
-    const totDiff1 = +(totYC - totKH).toFixed(2);
-    const totDiff2 = totLKKH > 0 ? +(totLKD - totLKKH).toFixed(2) : null;
-    const fmtTot = (v) => {
-        if (v === null) return '<span style="color:#94A3B8;">—</span>';
-        const color = v > 0 ? '#DC2626' : '#16A34A';
-        return `<span style="color:${color};">${v > 0 ? '+' : ''}${v.toFixed(1)} tỷ</span>`;
-    };
-    html += `<tr style="background:linear-gradient(135deg,#F1F5F9,#E2E8F0);font-weight:700;">
-        <td style="position:sticky;left:0;background:#E2E8F0;font-weight:700;">TỔNG</td>
-        <td style="text-align:right;color:#2563EB;">${totKH.toFixed(1)} tỷ</td>
-        <td style="text-align:right;color:#2563EB;">${totLKKH.toFixed(1)} tỷ</td>
-        <td style="text-align:right;color:#16A34A;">${totYC.toFixed(1)} tỷ</td>
-        <td style="text-align:right;color:#16A34A;">${totLKD.toFixed(1)} tỷ</td>
-        <td style="text-align:right;">${fmtTot(totDiff1)}</td>
-        <td style="text-align:right;">${fmtTot(totDiff2)}</td>
-    </tr>`;
-
-    document.getElementById('comparisonTable').innerHTML = html + '</tbody></table>';
-}
-
-// Combo chart: Doanh Thu - Chi Phí - FHI theo tháng
-function renderComboRevenueCostFHI(selectedCategories = null) {
-    const months = demoData.months.slice(0, 10);
-
-    // Base data - sẽ thay đổi theo filter
-    let revenue = [8.5, 9.0, 9.2, 9.5, 9.8, 10.2, 10.5, 10.0, 9.8, 9.5];
-    let cost = [6.5, 7.0, 7.2, 7.5, 7.8, 8.2, 8.5, 8.0, 7.8, 7.5];
-
-    // Điều chỉnh theo selected categories
-    if (selectedCategories && selectedCategories.length > 0) {
-        const ratio = selectedCategories.length / 14;
-        cost = cost.map(v => +(v * ratio).toFixed(1));
-    }
-
-    // Calculate FHI for each month
-    const fhi = revenue.map((r, i) => +(r / cost[i]).toFixed(2));
-
-    charts.comboRevenueCostFHI = echarts.init(document.getElementById('comboRevenueCostFHI'));
-    charts.comboRevenueCostFHI.setOption({
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: { type: 'cross' },
-            formatter: params => {
-                let html = `<strong>${params[0].axisValue}</strong><br/>`;
-                params.forEach(p => {
-                    const unit = p.seriesName === 'FHI' ? '' : ' tỷ';
-                    html += `<span style="color:${p.color}">●</span> ${p.seriesName}: <strong>${p.value}${unit}</strong><br/>`;
-                });
-                return html;
-            }
-        },
-        legend: { data: ['Doanh thu', 'Chi phí', 'FHI'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
-        grid: { left: '3%', right: '8%', bottom: '10%', top: '15%', containLabel: true },
-        xAxis: { type: 'category', data: months, axisLabel: { color: '#64748B' } },
-        yAxis: [
-            { type: 'value', name: 'Giá trị (tỷ)', position: 'left', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' }, splitLine: { lineStyle: { color: '#E2E8F0' } } },
-            { type: 'value', name: 'FHI', position: 'right', min: 0, max: 2, axisLabel: { color: '#F59E0B' }, splitLine: { show: false } }
-        ],
-        series: [
-            {
-                name: 'FHI',
-                type: 'bar',
-                yAxisIndex: 1,
-                data: fhi.map(v => ({
-                    value: v,
-                    itemStyle: { color: v >= 1 ? 'rgba(22,163,74,0.6)' : 'rgba(220,38,38,0.6)' }
-                })),
-                barWidth: '30%',
-                label: { show: true, position: 'top', formatter: '{c}', fontSize: 9, color: '#64748B' }
-            },
-            {
-                name: 'Doanh thu',
-                type: 'line',
-                smooth: true,
-                data: revenue,
-                lineStyle: { color: '#16A34A', width: 3 },
-                itemStyle: { color: '#16A34A' },
-                symbol: 'circle',
-                symbolSize: 6
-            },
-            {
-                name: 'Chi phí',
-                type: 'line',
-                smooth: true,
-                data: cost,
-                lineStyle: { color: '#DC2626', width: 3 },
-                itemStyle: { color: '#DC2626' },
-                symbol: 'circle',
-                symbolSize: 6
-            }
-        ]
-    });
-}
-
-// Payment Matrix Table
-function renderPaymentMatrix(selectedCategories = null) {
-    const allItems = [
-        { name: 'CHI.01 - Pháp lý', code: 'CHI.01', level: 1, dueDate: '15/02/2024', status: 'pending', amount: 1.55 },
-        { name: 'CHI.01.10 - Hồ sơ pháp lý', code: 'CHI.01.10', level: 2, dueDate: '15/02/2024', status: 'paid', amount: 0.9 },
-        { name: 'CHI.01.20 - Phí giấy phép', code: 'CHI.01.20', level: 2, dueDate: '20/02/2024', status: 'overdue', amount: 0.65 },
-        { name: 'CHI.02 - Kiến thiết', code: 'CHI.02', level: 1, dueDate: '28/02/2024', status: 'pending', amount: 15.0 },
-        { name: 'CHI.06 - Nhân công', code: 'CHI.06', level: 1, dueDate: '10/02/2024', status: 'pending', amount: 28.1 },
-        { name: 'CHI.06.30 - Gói thầu KC', code: 'CHI.06.30', level: 2, dueDate: '10/02/2024', status: 'paid', amount: 9.6 },
-        { name: 'CHI.06.30.31 - KC A', code: 'CHI.06.30.31', level: 3, dueDate: '10/02/2024', status: 'paid', amount: 2.4 },
-        { name: 'CHI.06.40.06 - Gói A', code: 'CHI.06.40.06', level: 3, dueDate: '15/02/2024', status: 'pending', amount: 2.4 }
-    ];
-
-    const items = selectedCategories && selectedCategories.length > 0
-        ? allItems.filter(item => selectedCategories.some(cat => item.code.startsWith(cat)))
-        : allItems;
-
-    if (items.length === 0) {
-        document.getElementById('paymentMatrixTable').innerHTML = '<p style="text-align:center;padding:20px;color:#888;">Không có dữ liệu</p>';
-        return;
-    }
-
-    const statusLabels = {
-        'paid': '<span style="color:#16A34A;font-weight:600;">✓ Đã TT</span>',
-        'pending': '<span style="color:#F59E0B;font-weight:600;">⏳ Chờ TT</span>',
-        'overdue': '<span style="color:#DC2626;font-weight:600;">⚠ Quá hạn</span>'
-    };
-
-    let html = '<table class="data-table"><thead><tr><th>Hạng mục</th><th>Thời hạn TT</th><th>Trạng thái</th><th style="text-align:right;">Giá trị cần duyệt</th></tr></thead><tbody>';
-    items.forEach(i => {
-        const indent = (i.level - 1) * 12;
-        const nameStyle = i.level === 1 ? 'font-weight:600;' : '';
-        html += `<tr>
-            <td style="padding-left:${6 + indent}px;${nameStyle}">${i.name}</td>
-            <td>${i.dueDate}</td>
-            <td>${statusLabels[i.status]}</td>
-            <td style="text-align:right;font-weight:500;">${i.amount.toFixed(1)} tỷ</td>
-        </tr>`;
-    });
-    document.getElementById('paymentMatrixTable').innerHTML = html + '</tbody></table>';
-}
-
-function updatePage3() {
-    // Lấy danh sách categories được chọn
-    const selectedCategories = Array.from(document.querySelectorAll('.multi-select-menu input[type="checkbox"]:checked'))
-        .map(cb => cb.value);
-
-    // Cập nhật multi-select counters
-    document.querySelectorAll('.multi-select').forEach(ms => {
-        const checkboxes = ms.querySelectorAll('input[type="checkbox"]');
-        const checkedCount = ms.querySelectorAll('input[type="checkbox"]:checked').length;
-        const totalCount = checkboxes.length;
-        const countSpan = ms.querySelector('.multi-select-count');
-
-        if (checkedCount === 0) {
-            countSpan.textContent = 'Không có';
-        } else if (checkedCount === totalCount) {
-            countSpan.textContent = 'Tất cả';
-        } else {
-            countSpan.textContent = `${checkedCount}/${totalCount}`;
-        }
-    });
-
-    // Render với filtered data
-    renderComparisonTable(selectedCategories);
-    renderComboRevenueCostFHI(selectedCategories);
-    renderPaymentMatrix(selectedCategories);
-
-    // Tính toán KPIs dựa trên categories được chọn
-    const baseData = demoData.approval;
-
-    // Giả lập việc tính toán dựa trên số categories được chọn
-    const filterRatio = selectedCategories.length / 14; // 14 là tổng số categories
-
-    const data = {
-        before: {
-            chi: baseData.before.chi * filterRatio,
-            vdu: baseData.before.vdu * filterRatio,
-            fhi: baseData.before.fhi * filterRatio
-        },
-        after: {
-            chi: baseData.after.chi * filterRatio,
-            vdu: baseData.after.vdu * filterRatio,
-            fhi: baseData.after.fhi * filterRatio
-        }
-    };
-
-    const chiDiff = ((data.after.chi - data.before.chi) * 1000).toFixed(0);
-    const vduDiff = ((data.after.vdu - data.before.vdu) * 1000).toFixed(0);
-    const fhiDiff = (data.after.fhi - data.before.fhi).toFixed(2);
-
-    document.getElementById('kpi_chi_after').textContent = data.after.chi.toFixed(2) + ' tỷ';
-    document.getElementById('kpi_chi_change').textContent = '+' + chiDiff + ' tr vs trước';
-    document.getElementById('kpi_vdu').textContent = data.after.vdu.toFixed(2) + ' tỷ';
-    document.getElementById('kpi_vdu_change').textContent = '+' + vduDiff + ' tr vs trước';
-    document.getElementById('kpi_fhi').textContent = data.after.fhi.toFixed(2);
-    document.getElementById('kpi_fhi_change').textContent = fhiDiff + ' vs trước';
-}
-
-// Resize handler
-window.addEventListener('resize', () => Object.values(charts).forEach(c => c && c.resize()));
-
-// Page 3 Detail (Chi tiết Thu - Chi DA)
+// ============================================================
+// PAGE 3: QUẢN LÝ THU - CHI DỰ ÁN
+// ============================================================
 function initPage3Detail() {
-    const proj = demoData.projects[0]; // Default to first project
+    const proj = demoData.projects[0];
     renderPage3DetailGauges(proj);
     renderLineCumulativeDetail(proj);
     renderMatrixThuChiTable();
-    renderComboMonthlyThuDetail(proj);
-    renderComboMonthlyChiDetail(proj);
     renderStructureThuDetail();
     renderStructureChiDetail();
     updateFHICards(proj);
 }
 
-// Matrix THU-CHI table by months
+function onProjectFilterChange(level) {
+    // Placeholder for cascading project filter logic
+    updatePage3Detail();
+}
+
+// Matrix THU-CHI table — Updated with NSDA, %, Excel names, 48 months
 function renderMatrixThuChiTable() {
-    const months = demoData.months.slice(0, 10);
+    // Generate 48-month labels
+    const months48 = [];
+    for (let y = 1; y <= 4; y++) {
+        for (let m = 1; m <= 12; m++) {
+            months48.push(`Y${y}T${m}`);
+        }
+    }
+    const displayMonths = months48.slice(0, 24); // Show 24 months (2 years) for demo
 
-    // THU items data
+    // THU items — chuẩn Excel (đầy đủ 22.51→22.53, 23.99)
     const thuItems = [
-        { code: 'THU', name: 'TỔNG THU', level: 0, type: 'thu', data: [8.5, 9.0, 9.2, 9.5, 9.8, 10.2, 10.5, 10.0, 9.8, 9.5] },
-        { code: 'THU.01', name: 'THU.01 - Doanh thu bán hàng', level: 1, type: 'thu', data: [6.0, 6.3, 6.5, 6.8, 7.0, 7.3, 7.5, 7.2, 7.0, 6.8] },
-        { code: 'THU.02', name: 'THU.02 - Thu từ dịch vụ', level: 1, type: 'thu', data: [1.5, 1.7, 1.7, 1.7, 1.8, 1.9, 2.0, 1.8, 1.8, 1.7] },
-        { code: 'THU.03', name: 'THU.03 - Thu khác', level: 1, type: 'thu', data: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] }
+        { code: 'THU', name: 'THU', level: 0, type: 'thu', nsda: 178.5 },
+        { code: '21', name: '21 — Thu CĐT', level: 1, type: 'thu', nsda: 145.0 },
+        { code: '21.10', name: '  21.10 — Thu Tạm ứng', level: 2, type: 'thu', nsda: 35.0 },
+        { code: '21.20', name: '  21.20 — Thu Thanh toán đợt', level: 2, type: 'thu', nsda: 80.0 },
+        { code: '21.30', name: '  21.30 — Thu Quyết toán', level: 2, type: 'thu', nsda: 20.0 },
+        { code: '21.40', name: '  21.40 — Thu Bảo hành', level: 2, type: 'thu', nsda: 10.0 },
+        { code: '22', name: '22 — Thu hoạt động tài chính', level: 1, type: 'thu', nsda: 25.0 },
+        { code: '22.51', name: '  22.51 — Thu từ vay bank', level: 2, type: 'thu', nsda: 12.0 },
+        { code: '22.52', name: '  22.52 — Thu gốc vay nội bộ, thu tiền mượn', level: 2, type: 'thu', nsda: 8.0 },
+        { code: '22.53', name: '  22.53 — Thu hồi các khoản cho vay', level: 2, type: 'thu', nsda: 5.0 },
+        { code: '23', name: '23 — Thu khác thuộc dự án', level: 1, type: 'thu', nsda: 8.5 },
+        { code: '23.99', name: '  23.99 — Thu khác (thu hoàn ứng, khác…)', level: 2, type: 'thu', nsda: 8.5 }
     ];
 
-    // CHI items data
+    // CHI items — đầy đủ 01→12 (tên chuẩn Excel)
     const chiItems = [
-        { code: 'CHI', name: 'TỔNG CHI', level: 0, type: 'chi', data: [6.5, 7.0, 7.2, 7.5, 7.8, 8.2, 8.5, 8.0, 7.8, 7.5] },
-        { code: 'CHI.01', name: 'CHI.01 - Chi pháp lý', level: 1, type: 'chi', data: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2] },
-        { code: 'CHI.02', name: 'CHI.02 - Chi kiến thiết', level: 1, type: 'chi', data: [2.0, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.5, 2.4, 2.3] },
-        { code: 'CHI.06', name: 'CHI.06 - Chi nhân công', level: 1, type: 'chi', data: [3.0, 3.2, 3.3, 3.4, 3.5, 3.8, 4.0, 3.8, 3.7, 3.5] },
-        { code: 'CHI.07', name: 'CHI.07 - Chi vật tư', level: 1, type: 'chi', data: [1.3, 1.4, 1.4, 1.5, 1.6, 1.6, 1.6, 1.5, 1.5, 1.5] }
+        { code: 'CHI', name: 'CHI', level: 0, type: 'chi', nsda: 133.2 },
+        { code: '01', name: '01 — Chi phát triển dự án', level: 1, type: 'chi', nsda: 2.5 },
+        { code: '02', name: '02 — Chi kiến thiết cơ bản', level: 1, type: 'chi', nsda: 18.5 },
+        { code: '03', name: '03 — Chi cho dịch vụ kinh doanh BĐS', level: 1, type: 'chi', nsda: 12.0 },
+        { code: '04', name: '04 — Công tác chuẩn bị', level: 1, type: 'chi', nsda: 8.2 },
+        { code: '05', name: '05 — Công tác thiết bị', level: 1, type: 'chi', nsda: 15.0 },
+        { code: '06', name: '06 — Chi cho thầu phụ / tổ đội', level: 1, type: 'chi', nsda: 32.0 },
+        { code: '07', name: '07 — Chi vật tư', level: 1, type: 'chi', nsda: 20.0 },
+        { code: '08', name: '08 — Chi hoạt động trực tiếp', level: 1, type: 'chi', nsda: 10.5 },
+        { code: '09', name: '09 — Chi phí gián tiếp', level: 1, type: 'chi', nsda: 5.5 },
+        { code: '10', name: '10 — Chi hoạt động tài chính', level: 1, type: 'chi', nsda: 3.0 },
+        { code: '11', name: '11 — Chi khác', level: 1, type: 'chi', nsda: 2.0 },
+        { code: '12', name: '12 — Dự phòng phí', level: 1, type: 'chi', nsda: 4.0 }
     ];
 
-    // Combine all items with spacing row
-    const allItems = [...thuItems, { code: '', name: '', level: 0, type: 'spacer', data: [] }, ...chiItems];
+    // Generate random monthly data
+    const generateData = (nsda, months) => {
+        const monthly = months / 2; // Only first half has data
+        const perMonth = nsda / monthly;
+        return Array.from({ length: months }, (_, i) => i < monthly ? +(perMonth * (0.8 + Math.random() * 0.4)).toFixed(1) : 0);
+    };
+
+    thuItems.forEach(item => { item.data = generateData(item.nsda, displayMonths.length); });
+    chiItems.forEach(item => { item.data = generateData(item.nsda, displayMonths.length); });
+
+    const allItems = [...thuItems, { code: '', name: '', level: 0, type: 'spacer', data: [], nsda: 0 }, ...chiItems];
 
     // Build header
-    let html = '<table class="data-table" style="font-size:12px;"><thead><tr>';
-    html += '<th style="min-width:200px;text-align:left;position:sticky;left:0;background:#F8FAFC;z-index:2;">Hạng mục</th>';
-    months.forEach(m => { html += `<th style="min-width:70px;text-align:right;">${m}</th>`; });
-    html += '<th style="min-width:80px;text-align:right;font-weight:bold;background:#F1F5F9;">Tổng</th>';
+    let html = '<table class="data-table" style="font-size:11px;"><thead><tr>';
+    html += '<th style="min-width:220px;text-align:left;position:sticky;left:0;background:#F8FAFC;z-index:3;">Hạng mục</th>';
+    html += '<th style="min-width:80px;text-align:right;background:#EFF6FF;color:#2563EB;">Tổng NSDA</th>';
+    displayMonths.forEach(m => { html += `<th style="min-width:55px;text-align:right;font-size:10px;">${m}</th>`; });
+    html += '<th style="min-width:70px;text-align:right;font-weight:bold;background:#F1F5F9;">Tổng TH</th>';
+    html += '<th style="min-width:60px;text-align:right;font-weight:bold;background:#FFFBEB;color:#D97706;">Tỷ lệ %</th>';
     html += '</tr></thead><tbody>';
 
-    // Build rows
-    allItems.forEach(item => {
+    allItems.forEach((item, idx) => {
         if (item.type === 'spacer') {
-            html += '<tr style="height:12px;"><td colspan="' + (months.length + 2) + '"></td></tr>';
+            html += '<tr style="height:12px;"><td colspan="' + (displayMonths.length + 4) + '"></td></tr>';
             return;
         }
 
         const isHeader = item.level === 0;
-        const indent = item.level * 16;
+        const nextItem = allItems[idx + 1];
+        const hasChildren = nextItem && nextItem.level > item.level;
+        const toggleIcon = hasChildren 
+            ? '<span class="toggle-icon" style="display:inline-block;width:12px;color:#64748B;font-size:10px;cursor:pointer;">▼</span>' 
+            : '<span style="display:inline-block;width:12px;"></span>';
+        const indent = item.level * 14;
         const bgColor = isHeader ? (item.type === 'thu' ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)') : '';
         const fontWeight = isHeader ? 'bold' : 'normal';
         const textColor = item.type === 'thu' ? '#16A34A' : '#DC2626';
         const total = item.data.reduce((a, b) => a + b, 0).toFixed(1);
+        const pct = item.nsda > 0 ? ((total / item.nsda) * 100).toFixed(0) : '—';
+        
+        const cursor = hasChildren ? 'cursor:pointer;' : '';
+        const click = hasChildren ? 'onclick="toggleMatrixRow(this)"' : '';
 
-        html += `<tr style="background:${bgColor};">`;
-        html += `<td style="padding-left:${8 + indent}px;font-weight:${fontWeight};text-align:left;position:sticky;left:0;background:${bgColor || '#fff'};z-index:1;">${item.name}</td>`;
+        html += `<tr style="${cursor}background:${bgColor};" data-level="${item.level}" data-expanded="true" ${click}>`;
+        html += `<td style="padding-left:${8 + indent}px;font-weight:${fontWeight};text-align:left;position:sticky;left:0;background:${bgColor || '#fff'};z-index:1;white-space:nowrap;">${toggleIcon}${item.name.replace(/^\s+/, '')}</td>`;
+        html += `<td style="text-align:right;color:#2563EB;font-weight:600;">${item.nsda.toFixed(1)}</td>`;
         item.data.forEach(v => {
-            html += `<td style="text-align:right;color:${textColor};">${v.toFixed(1)}</td>`;
+            html += `<td style="text-align:right;color:${textColor};font-size:10px;">${v > 0 ? v.toFixed(1) : ''}</td>`;
         });
         html += `<td style="text-align:right;font-weight:bold;background:#F1F5F9;color:${textColor};">${total}</td>`;
+        html += `<td style="text-align:right;font-weight:bold;background:#FFFBEB;color:${pct !== '—' && parseFloat(pct) > 100 ? '#DC2626' : '#D97706'};">${pct}${pct !== '—' ? '%' : ''}</td>`;
         html += '</tr>';
     });
 
@@ -1319,256 +962,128 @@ function renderMatrixThuChiTable() {
 }
 
 function renderPage3DetailGauges(proj) {
-    const thuPct = Math.round(proj.actualThu / proj.budgetThuTotal * 100);
-    const chiPct = Math.round(proj.actualChi / proj.budgetChiTotal * 100);
+    const thuPct = 82; // Mock %
+    const chiPct = 76; // Mock %
+    const slPct = 85;  // Mock %
 
     const makeGaugeOpt = (pct, colorStops) => ({
         series: [{
-            type: 'gauge',
-            startAngle: 210, endAngle: -30,
-            min: 0, max: 100,
-            radius: '92%',
-            center: ['50%', '60%'],
-            pointer: {
-                show: true, length: '65%', width: 5,
-                itemStyle: { color: 'auto' }
-            },
-            axisLine: {
-                lineStyle: { width: 16, color: colorStops }
-            },
-            axisTick: { show: false },
-            splitLine: { show: false },
-            axisLabel: { show: false },
-            detail: {
-                formatter: '{value}%',
-                fontSize: 22,
-                fontWeight: 700,
-                color: '#0F172A',
-                offsetCenter: [0, '30%']
-            },
+            type: 'gauge', startAngle: 210, endAngle: -30, min: 0, max: 100,
+            radius: '92%', center: ['50%', '60%'],
+            pointer: { show: true, length: '65%', width: 5, itemStyle: { color: 'auto' } },
+            axisLine: { lineStyle: { width: 10, color: colorStops } },
+            axisTick: { show: false }, splitLine: { show: false }, axisLabel: { show: false },
+            detail: { formatter: '{value}%', fontSize: 16, fontWeight: 700, color: '#0F172A', offsetCenter: [0, '30%'] },
             title: { show: false },
             data: [{ value: pct }]
         }]
     });
 
     charts.gaugeThuDetail = echarts.init(document.getElementById('gaugeThuDetail'));
-    charts.gaugeThuDetail.setOption(makeGaugeOpt(thuPct,
-        [[0.6, '#FCA5A5'], [0.8, '#FCD34D'], [1, '#4ADE80']]
-    ));
+    charts.gaugeThuDetail.setOption(makeGaugeOpt(thuPct, [[0.6, '#FCA5A5'], [0.8, '#FCD34D'], [1, '#4ADE80']]));
 
     charts.gaugeChiDetail = echarts.init(document.getElementById('gaugeChiDetail'));
-    charts.gaugeChiDetail.setOption(makeGaugeOpt(chiPct,
-        [[0.6, '#4ADE80'], [0.8, '#FCD34D'], [1, '#F87171']]
-    ));
+    charts.gaugeChiDetail.setOption(makeGaugeOpt(chiPct, [[0.6, '#4ADE80'], [0.8, '#FCD34D'], [1, '#F87171']]));
+    
+    charts.gaugeSanLuongDetail = echarts.init(document.getElementById('gaugeSanLuongDetail'));
+    charts.gaugeSanLuongDetail.setOption(makeGaugeOpt(slPct, [[0.6, '#FCA5A5'], [0.8, '#FCD34D'], [1, '#60A5FA']]));
 }
 
-function renderFHITrendChart(proj) {
-    // FHI trend over months - simulated data
-    const fhiActual = [1.35, 1.38, 1.40, 1.42, 1.45, 1.44, 1.46, 1.47, 1.48, 1.47];
-    const fhiExpected = [1.50, 1.50, 1.50, 1.50, 1.50, 1.50, 1.50, 1.50, 1.50, 1.50];
-
-    charts.lineFHITrend = echarts.init(document.getElementById('lineFHITrend'));
-    charts.lineFHITrend.setOption({
-        tooltip: { trigger: 'axis' },
-        legend: { data: ['FHI Thực tế', 'FHI Dự kiến'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
-        grid: { left: '3%', right: '4%', bottom: '10%', top: '15%', containLabel: true },
-        xAxis: { type: 'category', data: demoData.months.slice(0, 10), axisLabel: { color: '#64748B', fontSize: 9 } },
-        yAxis: { type: 'value', min: 1, max: 2, axisLabel: { color: '#64748B', fontSize: 9 }, splitLine: { lineStyle: { color: '#E2E8F0' } } },
-        series: [
-            {
-                name: 'FHI Thực tế',
-                type: 'line',
-                smooth: true,
-                data: fhiActual,
-                lineStyle: { color: '#F59E0B', width: 3 },
-                itemStyle: { color: '#F59E0B' },
-                areaStyle: { color: 'rgba(245,158,11,0.1)' },
-                symbol: 'circle',
-                symbolSize: 5,
-                label: { show: false }
-            },
-            {
-                name: 'FHI Dự kiến',
-                type: 'line',
-                data: fhiExpected,
-                lineStyle: { color: '#3B82F6', width: 2, type: 'dashed' },
-                itemStyle: { color: '#3B82F6' },
-                symbol: 'none'
-            }
-        ]
-    });
-}
-
+// Lũy Kế chart — wider, with sản lượng line, 48 months
 function renderLineCumulativeDetail(proj) {
+    // Generate 48 month labels (T1, T2...)
+    const months48 = [];
+    for (let m = 1; m <= 48; m++) {
+        months48.push(`T${m}`);
+    }
+    const showMonths = months48.slice(0, 24);
+
+    // Generate cumulative data
+    const thuData = [], chiData = [], slData = [];
+    let cumThu = 0, cumChi = 0, cumSL = 0;
+    showMonths.forEach((_, i) => {
+        if (i < 12) {
+            cumThu += 6 + Math.random() * 4;
+            cumChi += 4 + Math.random() * 3;
+            cumSL += 5 + Math.random() * 3;
+        }
+        thuData.push(+cumThu.toFixed(1));
+        chiData.push(+cumChi.toFixed(1));
+        slData.push(+cumSL.toFixed(1));
+    });
+
     charts.lineCumulativeDetail = echarts.init(document.getElementById('lineCumulativeDetail'));
     charts.lineCumulativeDetail.setOption({
         tooltip: { trigger: 'axis' },
-        legend: { data: ['Lũy kế Thu', 'Lũy kế Chi'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
+        legend: { data: ['Lũy kế Thu', 'Lũy kế Chi', 'Sản lượng TH'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
         grid: { left: '3%', right: '4%', bottom: '10%', top: '15%', containLabel: true },
-        xAxis: { type: 'category', data: demoData.months, axisLabel: { color: '#64748B', fontSize: 9 } },
+        xAxis: { type: 'category', data: showMonths, axisLabel: { color: '#64748B', fontSize: 9, rotate: 45 } },
         yAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ', fontSize: 9 } },
         series: [
-            { name: 'Lũy kế Thu', type: 'line', smooth: true, data: [8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96], lineStyle: { color: '#16A34A', width: 2 }, itemStyle: { color: '#16A34A' }, areaStyle: { color: 'rgba(22,163,74,0.1)' }, symbol: 'circle', symbolSize: 4 },
-            { name: 'Lũy kế Chi', type: 'line', smooth: true, data: [6, 13, 20, 27, 34, 41, 48, 55, 62, 68, 74, 78], lineStyle: { color: '#DC2626', width: 2 }, itemStyle: { color: '#DC2626' }, areaStyle: { color: 'rgba(220,38,38,0.1)' }, symbol: 'circle', symbolSize: 4 }
-        ]
-    });
-}
-
-function renderComboMonthlyThuDetail(proj) {
-    const months = demoData.months.slice(0, 10);
-    const thuActual = [7.5, 7.8, 8.0, 8.2, 8.5, 8.8, 9.0, 8.5, 8.2, 7.8];
-    const thuBudget = [8.0, 8.2, 8.5, 8.8, 9.0, 9.2, 9.5, 9.0, 8.8, 8.5];
-    const thuDiff = thuActual.map((v, i) => +(v - thuBudget[i]).toFixed(1));
-
-    charts.comboMonthlyThuDetail = echarts.init(document.getElementById('comboMonthlyThuDetail'));
-    charts.comboMonthlyThuDetail.setOption({
-        tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
-        legend: { data: ['Thực thu', 'Ngân sách', 'Chênh lệch'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
-        grid: { left: '3%', right: '4%', bottom: '10%', containLabel: true },
-        xAxis: { type: 'category', data: months, axisLabel: { color: '#64748B' } },
-        yAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
-        series: [
-            { name: 'Chênh lệch', type: 'bar', data: thuDiff.map(v => ({ value: v, itemStyle: { color: v >= 0 ? 'rgba(22,163,74,0.6)' : 'rgba(220,38,38,0.6)' } })), barWidth: '40%', label: { show: true, position: 'top', formatter: p => p.value !== 0 ? p.value : '', fontSize: 9, color: '#64748B' } },
-            { name: 'Thực thu', type: 'line', smooth: true, data: thuActual, lineStyle: { color: '#16A34A', width: 3 }, itemStyle: { color: '#16A34A' }, symbol: 'circle', symbolSize: 6 },
-            { name: 'Ngân sách', type: 'line', smooth: true, data: thuBudget, lineStyle: { color: '#3B82F6', width: 2, type: 'dashed' }, itemStyle: { color: '#3B82F6' }, symbol: 'diamond', symbolSize: 6 }
-        ]
-    });
-}
-
-function renderComboMonthlyChiDetail(proj) {
-    const months = demoData.months.slice(0, 10);
-    const chiActual = [6.0, 6.5, 6.8, 7.0, 7.2, 7.5, 7.8, 7.5, 7.2, 6.8];
-    const chiBudget = [7.0, 7.2, 7.5, 7.8, 8.0, 8.2, 8.5, 8.0, 7.8, 7.5];
-    const chiDiff = chiActual.map((v, i) => +(v - chiBudget[i]).toFixed(1));
-
-    charts.comboMonthlyChiDetail = echarts.init(document.getElementById('comboMonthlyChiDetail'));
-    charts.comboMonthlyChiDetail.setOption({
-        tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
-        legend: { data: ['Thực chi', 'Ngân sách', 'Chênh lệch'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
-        grid: { left: '3%', right: '4%', bottom: '10%', containLabel: true },
-        xAxis: { type: 'category', data: months, axisLabel: { color: '#64748B' } },
-        yAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
-        series: [
-            { name: 'Chênh lệch', type: 'bar', data: chiDiff.map(v => ({ value: v, itemStyle: { color: v <= 0 ? 'rgba(22,163,74,0.6)' : 'rgba(220,38,38,0.6)' } })), barWidth: '40%', label: { show: true, position: 'top', formatter: p => p.value !== 0 ? p.value : '', fontSize: 9, color: '#64748B' } },
-            { name: 'Thực chi', type: 'line', smooth: true, data: chiActual, lineStyle: { color: '#DC2626', width: 3 }, itemStyle: { color: '#DC2626' }, symbol: 'circle', symbolSize: 6 },
-            { name: 'Ngân sách', type: 'line', smooth: true, data: chiBudget, lineStyle: { color: '#3B82F6', width: 2, type: 'dashed' }, itemStyle: { color: '#3B82F6' }, symbol: 'diamond', symbolSize: 6 }
+            { name: 'Lũy kế Thu', type: 'line', smooth: true, data: thuData, lineStyle: { color: '#16A34A', width: 2.5 }, itemStyle: { color: '#16A34A' }, areaStyle: { color: 'rgba(22,163,74,0.08)' }, symbol: 'circle', symbolSize: 3 },
+            { name: 'Lũy kế Chi', type: 'line', smooth: true, data: chiData, lineStyle: { color: '#DC2626', width: 2.5 }, itemStyle: { color: '#DC2626' }, areaStyle: { color: 'rgba(220,38,38,0.08)' }, symbol: 'circle', symbolSize: 3 },
+            { name: 'Sản lượng TH', type: 'line', smooth: true, data: slData, lineStyle: { color: '#2563EB', width: 2, type: 'dashed' }, itemStyle: { color: '#2563EB' }, symbol: 'diamond', symbolSize: 4 }
         ]
     });
 }
 
 function renderStructureThuDetail() {
-    const thuCats = demoData.thuItems.map(i => i.shortName);
-    const thuActual = [42.5, 20.2, 13.7, 9.4];
-    const thuBudget = [48.2, 27.0, 17.0, 11];
+    const thuCats = ['Thu CĐT', 'Thu HĐ Tài chính', 'Thu khác'];
+    const thuActual = [42.5, 20.2, 13.7];
+    const thuBudget = [48.2, 27.0, 17.0];
 
     charts.barStructureThuDetail = echarts.init(document.getElementById('barStructureThuDetail'));
     charts.barStructureThuDetail.setOption({
-        tooltip: {
-            trigger: 'axis',
-            formatter: params => {
-                const actual = params.find(p => p.seriesName === 'Thực thu');
-                if (!actual) return '';
-                const budget = thuBudget[actual.dataIndex];
-                const pct = ((actual.value / budget) * 100).toFixed(0);
-                return `<strong>${actual.name}</strong><br/>Thực thu: <strong>${actual.value} tỷ</strong><br/>Ngân sách: ${budget} tỷ<br/>Đạt: ${pct}%`;
-            }
-        },
+        tooltip: { trigger: 'axis' },
         grid: { left: '3%', right: '22%', bottom: '3%', top: '3%', containLabel: true },
         yAxis: { type: 'category', data: thuCats, axisLabel: { color: '#64748B' } },
         xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
         series: [
+            { name: 'Thực thu', type: 'bar', data: thuActual, itemStyle: { color: '#16A34A' }, barWidth: '50%', z: 1 },
             {
-                name: 'Thực thu',
-                type: 'bar',
-                data: thuActual,
-                itemStyle: { color: '#16A34A' },
-                barWidth: '50%',
-                z: 1
-            },
-            {
-                name: 'Ngân sách',
-                type: 'scatter',
-                symbol: 'rect',
-                symbolSize: [3, 24],
+                name: 'Ngân sách', type: 'scatter', symbol: 'rect', symbolSize: [3, 24],
                 data: thuBudget.map((budget, idx) => {
                     const val = thuActual[idx];
                     const pct = ((val / budget) * 100 - 100).toFixed(0);
-                    const pctStr = pct >= 0 ? `+${pct}%` : `${pct}%`;
-                    return {
-                        value: [budget, idx],
-                        label: {
-                            show: true,
-                            position: 'right',
-                            formatter: `${val} tỷ | ${pctStr}`,
-                            fontSize: 10,
-                            color: '#333',
-                            distance: 8
-                        }
-                    };
+                    return { value: [budget, idx], label: { show: true, position: 'right', formatter: `${val} tỷ | ${pct >= 0 ? '+' : ''}${pct}%`, fontSize: 10, color: '#333', distance: 8 } };
                 }),
-                itemStyle: { color: '#1E293B' },
-                z: 10
+                itemStyle: { color: '#1E293B' }, z: 10
             }
         ]
     });
 }
 
+// Cơ cấu Chi — đầy đủ 12 mã (01→12)
 function renderStructureChiDetail() {
-    const chiCats = demoData.chiItems.slice(0, 6).map(i => i.shortName);
-    const chiActual = [1.6, 15, 10.5, 7.8, 12.5, 28];
-    const chiBudget = [1.8, 16.2, 11.8, 9.2, 14.5, 32];
+    const chiCats = ['01-PhátTriển', '02-KiếnThiết', '03-DVKD', '04-ChuẩnBị', '05-ThiếtBị', '06-ThầuPhụ', '07-VậtTư', '08-HĐ TT', '09-GiánTiếp', '10-TàiChính', '11-ChiKhác', '12-DựPhòng'];
+    const chiActual = [1.6, 15, 10.5, 7.8, 12.5, 28, 16.5, 9.2, 4.8, 2.5, 1.8, 0];
+    const chiBudget = [2.5, 18.5, 12.0, 8.2, 15.0, 32.0, 20.0, 10.5, 5.5, 3.0, 2.0, 4.0];
 
     charts.barStructureChiDetail = echarts.init(document.getElementById('barStructureChiDetail'));
     charts.barStructureChiDetail.setOption({
-        tooltip: {
-            trigger: 'axis',
-            formatter: params => {
-                const actual = params.find(p => p.seriesName === 'Thực chi');
-                if (!actual) return '';
-                const budget = chiBudget[actual.dataIndex];
-                const pct = ((actual.value / budget) * 100).toFixed(0);
-                return `<strong>${actual.name}</strong><br/>Thực chi: <strong>${actual.value} tỷ</strong><br/>Ngân sách: ${budget} tỷ<br/>Sử dụng: ${pct}%`;
-            }
-        },
-        grid: { left: '3%', right: '22%', bottom: '3%', top: '3%', containLabel: true },
-        yAxis: { type: 'category', data: chiCats, axisLabel: { color: '#64748B' } },
+        tooltip: { trigger: 'axis' },
+        grid: { left: '3%', right: '18%', bottom: '3%', top: '3%', containLabel: true },
+        yAxis: { type: 'category', data: chiCats, axisLabel: { color: '#64748B', fontSize: 9 } },
         xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
         series: [
+            { name: 'Thực chi', type: 'bar', data: chiActual, itemStyle: { color: '#DC2626' }, barWidth: '50%', z: 1 },
             {
-                name: 'Thực chi',
-                type: 'bar',
-                data: chiActual,
-                itemStyle: { color: '#DC2626' },
-                barWidth: '50%',
-                z: 1
-            },
-            {
-                name: 'Ngân sách',
-                type: 'scatter',
-                symbol: 'rect',
-                symbolSize: [3, 24],
+                name: 'Ngân sách', type: 'scatter', symbol: 'rect', symbolSize: [3, 18],
                 data: chiBudget.map((budget, idx) => {
                     const val = chiActual[idx];
-                    const pct = ((val / budget) * 100 - 100).toFixed(0);
-                    const pctStr = pct >= 0 ? `+${pct}%` : `${pct}%`;
+                    const pct = budget > 0 ? ((val / budget) * 100 - 100).toFixed(0) : 0;
                     const isOver = val > budget;
                     return {
                         value: [budget, idx],
                         label: {
-                            show: true,
-                            position: 'right',
-                            formatter: `${val} tỷ | ${pctStr}`,
-                            fontSize: 10,
-                            padding: [3, 6],
-                            borderRadius: 3,
-                            backgroundColor: isOver ? '#DC2626' : '#16A34A',
-                            color: '#fff',
-                            distance: 8
+                            show: true, position: 'right',
+                            formatter: `${val} tỷ | ${pct >= 0 ? '+' : ''}${pct}%`,
+                            fontSize: 9, padding: [2, 5], borderRadius: 3,
+                            backgroundColor: isOver ? '#DC2626' : '#16A34A', color: '#fff', distance: 6
                         }
                     };
                 }),
-                itemStyle: { color: '#1E293B' },
-                z: 10
+                itemStyle: { color: '#1E293B' }, z: 10
             }
         ]
     });
@@ -1577,48 +1092,541 @@ function renderStructureChiDetail() {
 function updateFHICards(proj) {
     const fhiCurrent = (proj.actualThu / proj.actualChi).toFixed(2);
     const fhiExpected = (proj.budgetThuTotal / proj.budgetChiTotal).toFixed(2);
-
     document.getElementById('fhiCurrent').textContent = fhiCurrent;
     document.getElementById('fhiExpected').textContent = fhiExpected;
 
-    // Update status
     const statusEl = document.getElementById('fhiCurrentStatus');
-    if (fhiCurrent >= 1.2) {
-        statusEl.innerHTML = '✓ Hiệu quả tốt';
-        statusEl.style.color = '#16A34A';
-    } else if (fhiCurrent >= 1) {
-        statusEl.innerHTML = '⚠ Đạt mức cơ bản';
-        statusEl.style.color = '#F59E0B';
-    } else {
-        statusEl.innerHTML = '✗ Cần cải thiện';
-        statusEl.style.color = '#DC2626';
-    }
+    if (fhiCurrent >= 1.2) { statusEl.innerHTML = '✓ Hiệu quả tốt'; statusEl.style.color = '#16A34A'; }
+    else if (fhiCurrent >= 1) { statusEl.innerHTML = '⚠ Đạt mức cơ bản'; statusEl.style.color = '#F59E0B'; }
+    else { statusEl.innerHTML = '✗ Cần cải thiện'; statusEl.style.color = '#DC2626'; }
 }
 
 function updatePage3Detail() {
-    const projId = document.getElementById('projectFilterPage3').value;
+    const projId = document.getElementById('projectFilterPage3_level2').value;
     const proj = demoData.projects.find(p => p.id === projId) || demoData.projects[0];
 
     const thuPct = Math.round(proj.actualThu / proj.budgetThuTotal * 100);
     const chiPct = Math.round(proj.actualChi / proj.budgetChiTotal * 100);
 
-    // Update gauges
-    if (charts.gaugeThuDetail) {
-        charts.gaugeThuDetail.setOption({ series: [{ data: [{ value: thuPct }] }] });
-    }
-    if (charts.gaugeChiDetail) {
-        charts.gaugeChiDetail.setOption({ series: [{ data: [{ value: chiPct }] }] });
-    }
+    if (charts.gaugeThuDetail) charts.gaugeThuDetail.setOption({ series: [{ data: [{ value: thuPct }] }] });
+    if (charts.gaugeChiDetail) charts.gaugeChiDetail.setOption({ series: [{ data: [{ value: chiPct }] }] });
 
-    // Update FHI cards
     updateFHICards(proj);
 }
 
-// Init - Updated for 4 pages
-// Mapping: page1=Quản lý dòng tiền, page2=Duyệt Chi, page3=Chi tiết DA, page4=Quản lý Ngân sách
+// ============================================================
+// PAGE 4: QUẢN LÝ HỢP ĐỒNG (new)
+// ============================================================
+function initPage4() {
+    renderContractKPIs();
+    renderContractDebtChart();
+    renderContractComparisonChart();
+    renderContractTableThu();
+    renderContractTableChi();
+}
+
+function renderContractKPIs() {
+    // Static demo data
+    document.getElementById('kpiContractHDAB').textContent = '215.5 tỷ';
+    document.getElementById('kpiContractInvoice').textContent = '162.3 tỷ';
+    document.getElementById('kpiContractPaid').textContent = '138.7 tỷ';
+    document.getElementById('kpiContractDebt').textContent = '23.6 tỷ';
+}
+
+function renderContractDebtChart() {
+    const chiCodes = ['06-ThầuPhụ', '07-VậtTư', '02-KiếnThiết', '05-ThiếtBị', '08-HĐ TT', '04-ChuẩnBị', '09-GiánTiếp', '01-PhátTriển'];
+    const debtValues = [8.5, 4.2, 3.5, 2.8, 2.1, 1.5, 0.6, 0.4];
+
+    charts.barContractDebt = echarts.init(document.getElementById('barContractDebt'));
+    charts.barContractDebt.setOption({
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        grid: { left: '3%', right: '12%', bottom: '3%', top: '8%', containLabel: true },
+        yAxis: { type: 'category', data: chiCodes, axisLabel: { color: '#64748B', fontSize: 10 } },
+        xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
+        series: [{
+            type: 'bar', data: debtValues.map((v, i) => ({
+                value: v, itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                        { offset: 0, color: i < 3 ? '#DC2626' : '#3B82F6' },
+                        { offset: 1, color: i < 3 ? '#EF4444' : '#60A5FA' }
+                    ]), borderRadius: [0, 6, 6, 0]
+                }
+            })),
+            barWidth: '55%',
+            label: { show: true, position: 'right', formatter: '{c} tỷ', color: '#64748B', fontSize: 10, fontWeight: 600 }
+        }]
+    });
+}
+
+function renderContractComparisonChart() {
+    const projects = ['L59', 'GSW', 'VHG', 'TPK', 'BDN'];
+    const hdData = [82.5, 62.0, 42.0, 36.0, 26.0];
+    const invoiceData = [65.0, 50.0, 32.0, 28.0, 20.0];
+    const billData = [58.0, 45.0, 28.0, 24.0, 17.0];
+    const paidData = [52.0, 40.0, 24.0, 20.0, 14.0];
+
+    charts.barContractComparison = echarts.init(document.getElementById('barContractComparison'));
+    charts.barContractComparison.setOption({
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        legend: { data: ['HĐ', 'Hoá đơn', 'Bill', 'Nhận TT'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
+        grid: { left: '3%', right: '4%', bottom: '5%', top: '14%', containLabel: true },
+        xAxis: { type: 'category', data: projects, axisLabel: { color: '#1E293B', fontSize: 11, fontWeight: 600 } },
+        yAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' }, splitLine: { lineStyle: { color: '#E2E8F0', type: 'dashed' } } },
+        series: [
+            { name: 'HĐ', type: 'bar', data: hdData, itemStyle: { color: '#3B82F6', borderRadius: [3, 3, 0, 0] } },
+            { name: 'Hoá đơn', type: 'bar', data: invoiceData, itemStyle: { color: '#8B5CF6', borderRadius: [3, 3, 0, 0] } },
+            { name: 'Bill', type: 'bar', data: billData, itemStyle: { color: '#F59E0B', borderRadius: [3, 3, 0, 0] } },
+            { name: 'Nhận TT', type: 'bar', data: paidData, itemStyle: { color: '#16A34A', borderRadius: [3, 3, 0, 0] } }
+        ]
+    });
+}
+
+function renderContractTableThu() {
+    const thuRows = [
+        { code: 'THU', name: 'THU', level: 0, nsda: 178.5, hd: 172.0, tu: 35.0, hoaDon: 125.0, bill: 110.0, tt: 95.0 },
+        { code: '21', name: 'HĐ A/B', level: 1, nsda: 145.0, hd: 140.0, tu: 30.0, hoaDon: 105.0, bill: 92.0, tt: 80.0 },
+        { code: '21.10', name: '  Thu Tạm ứng', level: 2, nsda: 35.0, hd: 35.0, tu: 30.0, hoaDon: 35.0, bill: 35.0, tt: 35.0 },
+        { code: '21.20', name: '  Thu Thanh toán đợt', level: 2, nsda: 80.0, hd: 78.0, tu: 0, hoaDon: 50.0, bill: 42.0, tt: 35.0 },
+        { code: '21.30', name: '  Thu Quyết toán', level: 2, nsda: 20.0, hd: 18.0, tu: 0, hoaDon: 15.0, bill: 12.0, tt: 8.0 },
+        { code: '21.40', name: '  Thu Bảo hành', level: 2, nsda: 10.0, hd: 9.0, tu: 0, hoaDon: 5.0, bill: 3.0, tt: 2.0 },
+        { code: '22', name: 'Thu hoạt động tài chính', level: 1, nsda: 25.0, hd: 24.0, tu: 5.0, hoaDon: 15.0, bill: 14.0, tt: 12.0 },
+        { code: '23', name: 'Thu khác thuộc dự án', level: 1, nsda: 8.5, hd: 8.0, tu: 0, hoaDon: 5.0, bill: 4.0, tt: 3.0 }
+    ];
+
+    const thStyle = 'padding:8px 6px;font-size:11px;font-weight:600;white-space:nowrap;border-bottom:2px solid #CBD5E1;';
+    let html = '<table style="font-size:11px;border-collapse:collapse;width:100%;min-width:900px;">';
+    html += '<thead><tr>';
+    html += `<th style="${thStyle}text-align:left;background:#DCFCE7;min-width:180px;">(1) Mã NS</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#DCFCE7;">(2) NSDA</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#DCFCE7;">(3) Hợp đồng</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#DCFCE7;">(4) Tạm ứng</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#DCFCE7;">(5) Hoá đơn</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#DCFCE7;">(6) Bill</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#DCFCE7;">(7) Thanh toán</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FEF2F2;color:#DC2626;">(8) Công nợ</th>`;
+    html += '</tr></thead><tbody>';
+
+    thuRows.forEach(row => {
+        const indent = row.level * 14;
+        const bold = row.level <= 1 ? 'font-weight:700;' : '';
+        const bg = row.level === 0 ? 'background:rgba(22,163,74,0.08);' : '';
+        const congNo = +(row.bill - row.tt).toFixed(1);
+        const td = 'padding:7px 6px;border-bottom:1px solid #E2E8F0;white-space:nowrap;font-size:11px;';
+
+        html += `<tr style="${bg}">`;
+        html += `<td style="${td}text-align:left;padding-left:${8 + indent}px;${bold}color:#16A34A;">${row.code} — ${row.name}</td>`;
+        html += `<td style="${td}text-align:right;">${row.nsda.toFixed(1)}</td>`;
+        html += `<td style="${td}text-align:right;">${row.hd.toFixed(1)}</td>`;
+        html += `<td style="${td}text-align:right;">${row.tu > 0 ? row.tu.toFixed(1) : '—'}</td>`;
+        html += `<td style="${td}text-align:right;">${row.hoaDon.toFixed(1)}</td>`;
+        html += `<td style="${td}text-align:right;">${row.bill.toFixed(1)}</td>`;
+        html += `<td style="${td}text-align:right;">${row.tt.toFixed(1)}</td>`;
+        html += `<td style="${td}text-align:right;color:${congNo > 0 ? '#DC2626' : '#16A34A'};font-weight:700;">${congNo.toFixed(1)}</td>`;
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('contractTableThu').innerHTML = html;
+}
+
+function renderContractTableChi() {
+    const chiRows = [
+        { code: 'CHI', name: 'CHI', level: 0, nsda: 133.2, hd: 125.0, tu: 18.0, hoaDon: 85.0, bill: 72.0, tt: 60.0 },
+        { code: '01', name: 'Chi phát triển dự án', level: 1, nsda: 2.5, hd: 2.3, tu: 0.5, hoaDon: 1.8, bill: 1.5, tt: 1.2 },
+        { code: '02', name: 'Chi kiến thiết cơ bản', level: 1, nsda: 18.5, hd: 17.8, tu: 3.0, hoaDon: 12.0, bill: 10.0, tt: 8.5 },
+        { code: '03', name: 'Chi cho dịch vụ kinh doanh BĐS', level: 1, nsda: 12.0, hd: 11.5, tu: 1.5, hoaDon: 8.0, bill: 6.5, tt: 5.5 },
+        { code: '04', name: 'Công tác chuẩn bị', level: 1, nsda: 8.2, hd: 7.8, tu: 1.5, hoaDon: 5.5, bill: 4.5, tt: 3.8 },
+        { code: '05', name: 'Công tác thiết bị', level: 1, nsda: 15.0, hd: 14.2, tu: 2.0, hoaDon: 9.0, bill: 7.5, tt: 6.2 },
+        { code: '06', name: 'Chi cho thầu phụ / tổ đội', level: 1, nsda: 32.0, hd: 30.5, tu: 5.0, hoaDon: 22.0, bill: 18.5, tt: 15.0 },
+        { code: '06.10', name: '  Gói thầu cọc', level: 2, nsda: 5.0, hd: 4.8, tu: 0.8, hoaDon: 3.5, bill: 3.0, tt: 2.5 },
+        { code: '06.20', name: '  Gói thầu Biện pháp thi công', level: 2, nsda: 3.5, hd: 3.2, tu: 0.5, hoaDon: 2.5, bill: 2.0, tt: 1.5 },
+        { code: '06.30', name: '  Gói thầu kết cấu', level: 2, nsda: 12.0, hd: 11.5, tu: 2.0, hoaDon: 8.5, bill: 7.0, tt: 5.5 },
+        { code: '06.40', name: '  Gói thầu hoàn thiện', level: 2, nsda: 5.0, hd: 4.8, tu: 0.7, hoaDon: 3.5, bill: 3.0, tt: 2.5 },
+        { code: '06.50', name: '  Kết cấu thép', level: 2, nsda: 2.0, hd: 2.0, tu: 0.3, hoaDon: 1.5, bill: 1.2, tt: 1.0 },
+        { code: '06.60', name: '  Gói thầu MEP', level: 2, nsda: 3.0, hd: 2.8, tu: 0.5, hoaDon: 2.0, bill: 1.8, tt: 1.5 },
+        { code: '06.70', name: '  Gói thầu trung hạ thế, máy biến thế', level: 2, nsda: 1.0, hd: 1.0, tu: 0.1, hoaDon: 0.3, bill: 0.3, tt: 0.3 },
+        { code: '06.80', name: '  Gói thầu Hạ Tầng - Cảnh quan', level: 2, nsda: 0.5, hd: 0.4, tu: 0.1, hoaDon: 0.2, bill: 0.2, tt: 0.2 },
+        { code: '07', name: 'Chi vật tư', level: 1, nsda: 20.0, hd: 19.0, tu: 3.0, hoaDon: 14.0, bill: 12.0, tt: 10.0 },
+        { code: '08', name: 'Chi hoạt động trực tiếp', level: 1, nsda: 10.5, hd: 10.0, tu: 1.5, hoaDon: 7.0, bill: 6.0, tt: 5.0 },
+        { code: '09', name: 'Chi phí gián tiếp', level: 1, nsda: 5.5, hd: 5.2, tu: 0.8, hoaDon: 3.5, bill: 3.0, tt: 2.5 },
+        { code: '10', name: 'Chi hoạt động tài chính', level: 1, nsda: 3.0, hd: 2.8, tu: 0.5, hoaDon: 2.0, bill: 1.5, tt: 1.2 },
+        { code: '11', name: 'Chi khác', level: 1, nsda: 2.0, hd: 1.8, tu: 0.2, hoaDon: 1.2, bill: 1.0, tt: 0.8 },
+        { code: '12', name: 'Dự phòng phí', level: 1, nsda: 4.0, hd: 0, tu: 0, hoaDon: 0, bill: 0, tt: 0 }
+    ];
+
+    const thStyle = 'padding:8px 6px;font-size:11px;font-weight:600;white-space:nowrap;border-bottom:2px solid #CBD5E1;';
+    let html = '<table style="font-size:11px;border-collapse:collapse;width:100%;min-width:900px;">';
+    html += '<thead><tr>';
+    html += `<th style="${thStyle}text-align:left;background:#FEE2E2;min-width:220px;">(1) Mã NS</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FEE2E2;">(2) NSDA</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FEE2E2;">(3) Hợp đồng</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FEE2E2;">(4) Tạm ứng</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FEE2E2;">(5) Hoá đơn</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FEE2E2;">(6) Bill</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FEE2E2;">(7) Thanh toán</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FFF1F2;color:#DC2626;">(8) Công nợ</th>`;
+    html += '</tr></thead><tbody>';
+
+    chiRows.forEach(row => {
+        const indent = row.level * 14;
+        const bold = row.level <= 1 ? 'font-weight:700;' : '';
+        const bg = row.level === 0 ? 'background:rgba(220,38,38,0.06);' : '';
+        const congNo = +(row.bill - row.tt).toFixed(1);
+        const td = 'padding:7px 6px;border-bottom:1px solid #E2E8F0;white-space:nowrap;font-size:11px;';
+
+        html += `<tr style="${bg}">`;
+        html += `<td style="${td}text-align:left;padding-left:${8 + indent}px;${bold}color:#DC2626;">${row.code} — ${row.name}</td>`;
+        html += `<td style="${td}text-align:right;">${row.nsda.toFixed(1)}</td>`;
+        html += `<td style="${td}text-align:right;">${row.hd > 0 ? row.hd.toFixed(1) : '—'}</td>`;
+        html += `<td style="${td}text-align:right;">${row.tu > 0 ? row.tu.toFixed(1) : '—'}</td>`;
+        html += `<td style="${td}text-align:right;">${row.hoaDon > 0 ? row.hoaDon.toFixed(1) : '—'}</td>`;
+        html += `<td style="${td}text-align:right;">${row.bill > 0 ? row.bill.toFixed(1) : '—'}</td>`;
+        html += `<td style="${td}text-align:right;">${row.tt > 0 ? row.tt.toFixed(1) : '—'}</td>`;
+        html += `<td style="${td}text-align:right;color:${congNo > 0 ? '#DC2626' : '#CBD5E1'};font-weight:700;">${congNo > 0 ? congNo.toFixed(1) : '—'}</td>`;
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('contractTableChi').innerHTML = html;
+}
+
+function updateContractPage() {
+    renderContractKPIs();
+    renderContractDebtChart();
+    renderContractComparisonChart();
+    renderContractTableThu();
+    renderContractTableChi();
+}
+
+// ============================================================
+// PAGE 5: QUẢN LÝ NGÂN SÁCH (brand new)
+// ============================================================
+function initPage5() {
+    renderBudgetNewKPIs();
+    renderBudgetThuPie();
+    renderBudgetChiBar();
+    renderBudgetVsActualChart();
+    renderBudgetDetailTableNew();
+}
+
+function renderBudgetNewKPIs() {
+    // Demo values — would be calculated from data
+    if (document.getElementById('kpiBudgetGrossProfit')) document.getElementById('kpiBudgetGrossProfit').textContent = '32.5 tỷ';
+    if (document.getElementById('kpiBudgetGrossPct')) document.getElementById('kpiBudgetGrossPct').textContent = 'Tỷ suất: 18.2%';
+    if (document.getElementById('kpiBudgetAdjProfit')) document.getElementById('kpiBudgetAdjProfit').textContent = '28.8 tỷ';
+    if (document.getElementById('kpiBudgetAdjNote')) document.getElementById('kpiBudgetAdjNote').textContent = '-3.7 tỷ so KH ban đầu';
+}
+
+
+
+function renderBudgetThuPie() {
+    charts.pieBudgetThu = echarts.init(document.getElementById('pieBudgetThu'));
+    charts.pieBudgetThu.setOption({
+        tooltip: { trigger: 'item', formatter: '{b}: {c} tỷ ({d}%)' },
+        legend: { orient: 'vertical', right: '5%', top: 'center', textStyle: { color: '#64748B', fontSize: 10 } },
+        series: [{
+            type: 'pie', radius: ['40%', '70%'], center: ['35%', '50%'],
+            data: [
+                { value: 145.0, name: 'Thu CĐT (21)', itemStyle: { color: '#16A34A' } },
+                { value: 25.0, name: 'Thu HĐ TC (22)', itemStyle: { color: '#3B82F6' } },
+                { value: 8.5, name: 'Thu khác (23)', itemStyle: { color: '#F59E0B' } }
+            ],
+            label: { formatter: '{d}%', fontSize: 10 },
+            emphasis: { itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.2)' } }
+        }]
+    });
+}
+
+function renderBudgetChiBar() {
+    const codes = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    const values = [2.5, 18.5, 12.0, 8.2, 15.0, 32.0, 20.0, 10.5, 5.5, 3.0, 2.0, 4.0];
+
+    charts.barBudgetChi = echarts.init(document.getElementById('barBudgetChi'));
+    charts.barBudgetChi.setOption({
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        grid: { left: '3%', right: '8%', bottom: '3%', top: '3%', containLabel: true },
+        yAxis: { type: 'category', data: codes, axisLabel: { color: '#64748B', fontSize: 10 } },
+        xAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' } },
+        series: [{
+            type: 'bar',
+            data: values.map(v => ({ value: v, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{ offset: 0, color: '#DC2626' }, { offset: 1, color: '#F87171' }]), borderRadius: [0, 4, 4, 0] } })),
+            barWidth: '60%',
+            label: { show: true, position: 'right', formatter: '{c} tỷ', fontSize: 9, color: '#64748B' }
+        }]
+    });
+}
+
+function renderBudgetVsActualChart() {
+    const codes = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    const khDau = [2.5, 18.5, 12.0, 8.2, 15.0, 32.0, 20.0, 10.5, 5.5, 3.0, 2.0, 4.0];
+    const khHienTai = [2.5, 17.5, 11.5, 8.0, 14.5, 30.5, 19.0, 10.0, 5.2, 2.8, 1.8, 3.5];
+    const thucTe = [1.6, 15.0, 10.5, 7.8, 12.5, 28.0, 16.5, 9.2, 4.8, 2.5, 1.8, 0];
+
+    charts.barBudgetVsActual = echarts.init(document.getElementById('barBudgetVsActual'));
+    charts.barBudgetVsActual.setOption({
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        legend: { data: ['KH Đầu dự án', 'KH Hiện tại', 'Thực tế'], textStyle: { color: '#64748B', fontSize: 10 }, top: 0 },
+        grid: { left: '3%', right: '4%', bottom: '8%', top: '14%', containLabel: true },
+        xAxis: { type: 'category', data: codes, axisLabel: { color: '#1E293B', fontSize: 11, fontWeight: 600 } },
+        yAxis: { type: 'value', axisLabel: { color: '#64748B', formatter: v => v + ' tỷ' }, splitLine: { lineStyle: { color: '#E2E8F0', type: 'dashed' } } },
+        series: [
+            { name: 'KH Đầu dự án', type: 'bar', data: khDau, itemStyle: { color: 'rgba(37,99,235,0.7)', borderRadius: [3, 3, 0, 0] } },
+            { name: 'KH Hiện tại', type: 'bar', data: khHienTai, itemStyle: { color: 'rgba(139,92,246,0.7)', borderRadius: [3, 3, 0, 0] } },
+            { name: 'Thực tế', type: 'bar', data: thucTe, itemStyle: { color: 'rgba(220,38,38,0.7)', borderRadius: [3, 3, 0, 0] } }
+        ]
+    });
+}
+
+function renderBudgetDetailTableNew() {
+    // type: 'sl'=sản lượng, 'thu'=thu, 'chi'=chi, 'header'=tiêu đề nhóm (có mã), 'subheader'=tiêu đề nhóm con (không mã, in nghiêng, nền xám), 'summary'/'pct'/'profit'=tổng hợp
+    const rows = [
+        // ─── SẢN LƯỢNG ───
+        { code: '', name: 'SẢN LƯỢNG THỰC HIỆN', level: 0, type: 'subheader' },
+        { code: '51.10', name: 'Sản lượng thực hiện', level: 1, type: 'sl', khDau: 180.0, khHT: 175.0, giaoThau: 160.0, daThuChi: 145.0, note: '' },
+        // ─── THU ───
+        { code: '', name: 'THU', level: 0, type: 'subheader' },
+        { code: '21', name: 'Thu CĐT', level: 1, type: 'thu', khDau: 145.0, khHT: 140.0, giaoThau: 135.0, daThuChi: 125.0, note: '' },
+        { code: '21.10', name: 'Thu Tạm ứng', level: 2, type: 'thu', khDau: 35.0, khHT: 35.0, giaoThau: 35.0, daThuChi: 35.0, note: 'Đã thu đủ' },
+        { code: '21.20', name: 'Thu Thanh toán đợt', level: 2, type: 'thu', khDau: 80.0, khHT: 78.0, giaoThau: 72.0, daThuChi: 65.0, note: '' },
+        { code: '21.30', name: 'Thu Quyết toán', level: 2, type: 'thu', khDau: 20.0, khHT: 18.0, giaoThau: 18.0, daThuChi: 15.0, note: '' },
+        { code: '21.40', name: 'Thu Bảo hành', level: 2, type: 'thu', khDau: 10.0, khHT: 9.0, giaoThau: 10.0, daThuChi: 10.0, note: '' },
+        { code: '22', name: 'Thu hoạt động tài chính', level: 1, type: 'thu', khDau: 25.0, khHT: 24.0, giaoThau: 22.0, daThuChi: 20.0, note: '' },
+        { code: '22.51', name: 'Thu từ vay bank', level: 2, type: 'thu', khDau: 12.0, khHT: 12.0, giaoThau: 10.0, daThuChi: 10.0, note: '' },
+        { code: '22.52', name: 'Thu gốc vay nội bộ, thu tiền mượn', level: 2, type: 'thu', khDau: 8.0, khHT: 7.0, giaoThau: 7.0, daThuChi: 6.0, note: '' },
+        { code: '22.53', name: 'Thu hồi các khoản cho vay, thu hồi tiền cho mượn', level: 2, type: 'thu', khDau: 5.0, khHT: 5.0, giaoThau: 5.0, daThuChi: 4.0, note: '' },
+        { code: '23', name: 'Thu khác thuộc dự án', level: 1, type: 'thu', khDau: 8.5, khHT: 8.0, giaoThau: 8.0, daThuChi: 7.0, note: '' },
+        { code: '23.99', name: 'Thu khác (thu hoàn ứng, khác…)', level: 2, type: 'thu', khDau: 8.5, khHT: 8.0, giaoThau: 8.0, daThuChi: 7.0, note: '' },
+        // ─── CHI ───
+        { code: '', name: 'CHI', level: 0, type: 'subheader' },
+        // 01
+        { code: '01', name: 'Chi phát triển dự án', level: 1, type: 'chi', khDau: 2.5, khHT: 2.5, giaoThau: 2.3, daThuChi: 1.6, note: '' },
+        { code: '01.51', name: 'Xin chấp thuận chủ trương đầu tư', level: 2, type: 'chi', khDau: 0.3, khHT: 0.3, giaoThau: 0.3, daThuChi: 0.2, note: '' },
+        { code: '01.59', name: 'Quy hoạch tổng mặt bằng 1/500', level: 2, type: 'chi', khDau: 0.5, khHT: 0.5, giaoThau: 0.4, daThuChi: 0.3, note: '' },
+        { code: '01.69', name: 'Cấp giấy phép xây dựng', level: 2, type: 'chi', khDau: 0.4, khHT: 0.4, giaoThau: 0.4, daThuChi: 0.3, note: '' },
+        { code: '01.77', name: 'Cấp GCNSHN&QSDĐ cho khách hàng', level: 2, type: 'chi', khDau: 1.3, khHT: 1.3, giaoThau: 1.2, daThuChi: 0.8, note: '' },
+        // 02
+        { code: '02', name: 'Chi kiến thiết cơ bản', level: 1, type: 'chi', khDau: 18.5, khHT: 17.5, giaoThau: 17.0, daThuChi: 15.0, note: '' },
+        { code: '02.51', name: 'Thiết kế ý tưởng', level: 2, type: 'chi', khDau: 3.0, khHT: 2.8, giaoThau: 2.8, daThuChi: 2.5, note: '' },
+        { code: '02.53', name: 'Thiết kế triển khai', level: 2, type: 'chi', khDau: 5.5, khHT: 5.2, giaoThau: 5.0, daThuChi: 4.5, note: '' },
+        { code: '02.55', name: 'Lập khái toán - dự toán', level: 2, type: 'chi', khDau: 4.0, khHT: 4.0, giaoThau: 3.8, daThuChi: 3.5, note: '' },
+        { code: '02.56', name: 'Chi phí tư vấn', level: 2, type: 'chi', khDau: 3.5, khHT: 3.2, giaoThau: 3.2, daThuChi: 2.8, note: '' },
+        { code: '02.57', name: 'Chi phí kiến thiết cơ bản khác', level: 2, type: 'chi', khDau: 2.5, khHT: 2.3, giaoThau: 2.2, daThuChi: 1.7, note: '' },
+        // 03
+        { code: '03', name: 'Chi cho dịch vụ kinh doanh BĐS', level: 1, type: 'chi', khDau: 12.0, khHT: 11.5, giaoThau: 11.0, daThuChi: 10.5, note: '' },
+        { code: '03.51', name: 'ADKIT - Tiếp thị, Marketing', level: 2, type: 'chi', khDau: 3.0, khHT: 2.8, giaoThau: 2.5, daThuChi: 2.5, note: '' },
+        { code: '03.52', name: 'Site décor', level: 2, type: 'chi', khDau: 1.5, khHT: 1.5, giaoThau: 1.5, daThuChi: 1.5, note: '' },
+        { code: '03.60', name: 'Chi cho thi công nhà mẫu', level: 2, type: 'chi', khDau: 4.0, khHT: 3.8, giaoThau: 3.5, daThuChi: 3.2, note: '' },
+        { code: '03.61', name: 'Chi cho hoạt động bán hàng', level: 2, type: 'chi', khDau: 2.5, khHT: 2.5, giaoThau: 2.5, daThuChi: 2.3, note: '' },
+        { code: '03.62', name: 'Chi phí bán hàng khác', level: 2, type: 'chi', khDau: 1.0, khHT: 0.9, giaoThau: 1.0, daThuChi: 1.0, note: '' },
+        // 04 — có tiêu đề nhóm con
+        { code: '04', name: 'Công tác chuẩn bị', level: 1, type: 'chi', khDau: 8.2, khHT: 8.0, giaoThau: 7.5, daThuChi: 7.8, note: 'Vượt KH' },
+        { code: '04.00', name: 'Chi phí bảo lãnh, bảo hiểm', level: 2, type: 'chi', khDau: 1.2, khHT: 1.2, giaoThau: 1.1, daThuChi: 1.1, note: '' },
+        { code: '', name: 'Chi phí bảo lãnh', level: 3, type: 'subheader' },
+        { code: '04.00.51', name: 'Bảo lãnh dự thầu', level: 3, type: 'chi', khDau: 0.1, khHT: 0.1, giaoThau: 0.1, daThuChi: 0.1, note: '' },
+        { code: '04.00.52', name: 'Bảo lãnh tạm ứng', level: 3, type: 'chi', khDau: 0.15, khHT: 0.15, giaoThau: 0.15, daThuChi: 0.15, note: '' },
+        { code: '04.00.53', name: 'Bảo lãnh thực hiện hợp đồng', level: 3, type: 'chi', khDau: 0.2, khHT: 0.2, giaoThau: 0.2, daThuChi: 0.2, note: '' },
+        { code: '04.00.54', name: 'Bảo lãnh bảo hành', level: 3, type: 'chi', khDau: 0.15, khHT: 0.15, giaoThau: 0.15, daThuChi: 0.15, note: '' },
+        { code: '', name: 'Chi phí bảo hiểm', level: 3, type: 'subheader' },
+        { code: '04.00.61', name: 'Bảo hiểm công trình và bên thứ ba', level: 3, type: 'chi', khDau: 0.3, khHT: 0.3, giaoThau: 0.25, daThuChi: 0.25, note: '' },
+        { code: '04.00.62', name: 'Bảo hiểm công nhân', level: 3, type: 'chi', khDau: 0.15, khHT: 0.15, giaoThau: 0.12, daThuChi: 0.12, note: '' },
+        { code: '04.00.63', name: 'Bảo hiểm máy móc thiết bị', level: 3, type: 'chi', khDau: 0.1, khHT: 0.1, giaoThau: 0.08, daThuChi: 0.08, note: '' },
+        { code: '04.00.99', name: 'Các bảo hiểm khác', level: 3, type: 'chi', khDau: 0.05, khHT: 0.05, giaoThau: 0.05, daThuChi: 0.05, note: '' },
+        { code: '04.10', name: 'Chi phí tiện ích phục vụ thi công', level: 2, type: 'chi', khDau: 1.5, khHT: 1.5, giaoThau: 1.4, daThuChi: 1.5, note: '' },
+        { code: '04.10.51', name: 'Gói thầu hàng rào tạm, cổng tạm', level: 3, type: 'chi', khDau: 0.3, khHT: 0.3, giaoThau: 0.28, daThuChi: 0.3, note: '' },
+        { code: '04.10.52', name: 'Gói thầu văn phòng BCH', level: 3, type: 'chi', khDau: 0.4, khHT: 0.4, giaoThau: 0.38, daThuChi: 0.4, note: '' },
+        { code: '04.10.53', name: 'Gói thầu cầu rửa xe, đường tạm', level: 3, type: 'chi', khDau: 0.35, khHT: 0.35, giaoThau: 0.32, daThuChi: 0.35, note: '' },
+        { code: '04.10.99', name: 'Tiện ích phục vụ thi công khác', level: 3, type: 'chi', khDau: 0.45, khHT: 0.45, giaoThau: 0.42, daThuChi: 0.45, note: '' },
+        { code: '04.20', name: 'An toàn lao động & VSMT & PCCC', level: 2, type: 'chi', khDau: 2.0, khHT: 2.0, giaoThau: 1.8, daThuChi: 2.0, note: '' },
+        { code: '', name: 'An toàn lao động (bao gồm cơ khí tạm ATLĐ)', level: 3, type: 'subheader' },
+        { code: '04.20.51', name: 'Hộp cứu thương, phòng y tế', level: 3, type: 'chi', khDau: 0.1, khHT: 0.1, giaoThau: 0.1, daThuChi: 0.1, note: '' },
+        { code: '04.20.55', name: 'Bảo hộ lao động', level: 3, type: 'chi', khDau: 0.3, khHT: 0.3, giaoThau: 0.28, daThuChi: 0.3, note: '' },
+        { code: '', name: 'Vệ sinh môi trường', level: 3, type: 'subheader' },
+        { code: '04.20.61', name: 'Vận chuyển rác thải', level: 3, type: 'chi', khDau: 0.4, khHT: 0.4, giaoThau: 0.35, daThuChi: 0.4, note: '' },
+        { code: '', name: 'Phòng cháy chữa cháy tạm phục vụ thi công', level: 3, type: 'subheader' },
+        { code: '04.20.71', name: 'Bố trí bình chữa cháy, tiêu lệnh', level: 3, type: 'chi', khDau: 0.15, khHT: 0.15, giaoThau: 0.12, daThuChi: 0.15, note: '' },
+        { code: '04.20.99', name: 'ATLĐ & VSMT & PCCC khác', level: 3, type: 'chi', khDau: 1.05, khHT: 1.05, giaoThau: 0.95, daThuChi: 1.05, note: '' },
+        { code: '04.30', name: 'An ninh cho công trường', level: 2, type: 'chi', khDau: 1.0, khHT: 1.0, giaoThau: 0.9, daThuChi: 1.0, note: '' },
+        { code: '', name: 'Bảo vệ', level: 3, type: 'subheader' },
+        { code: '04.30.51', name: 'Bố trí nhân viên bảo vệ 24/24', level: 3, type: 'chi', khDau: 0.6, khHT: 0.6, giaoThau: 0.55, daThuChi: 0.6, note: '' },
+        { code: '', name: 'Thiết lập hệ thống kiểm soát, giám sát ra vào', level: 3, type: 'subheader' },
+        { code: '04.30.61', name: 'Thiết lập hệ thống camera', level: 3, type: 'chi', khDau: 0.25, khHT: 0.25, giaoThau: 0.22, daThuChi: 0.25, note: '' },
+        { code: '04.30.99', name: 'Hạng mục an ninh công trường khác', level: 3, type: 'chi', khDau: 0.15, khHT: 0.15, giaoThau: 0.13, daThuChi: 0.15, note: '' },
+        { code: '04.40', name: 'Trắc đạc công trình', level: 2, type: 'chi', khDau: 0.5, khHT: 0.5, giaoThau: 0.45, daThuChi: 0.5, note: '' },
+        { code: '04.50', name: 'Chi phí thiết kế, thẩm tra BPTC, thí nghiệm', level: 2, type: 'chi', khDau: 0.8, khHT: 0.7, giaoThau: 0.65, daThuChi: 0.6, note: '' },
+        { code: '04.70', name: 'Hệ thống điện, nước tạm phục vụ thi công', level: 2, type: 'chi', khDau: 0.8, khHT: 0.8, giaoThau: 0.75, daThuChi: 0.8, note: '' },
+        { code: '04.80', name: 'Chi phí xin phép thi công tạm', level: 2, type: 'chi', khDau: 0.2, khHT: 0.2, giaoThau: 0.2, daThuChi: 0.2, note: '' },
+        { code: '04.99', name: 'Chi phí khác (công nhật…)', level: 2, type: 'chi', khDau: 0.2, khHT: 0.1, giaoThau: 0.15, daThuChi: 0.1, note: '' },
+        // 05
+        { code: '05', name: 'Công tác thiết bị', level: 1, type: 'chi', khDau: 15.0, khHT: 14.5, giaoThau: 14.0, daThuChi: 12.5, note: '' },
+        { code: '05.40', name: 'Thiết bị phục vụ thi công', level: 2, type: 'chi', khDau: 15.0, khHT: 14.5, giaoThau: 14.0, daThuChi: 12.5, note: '' },
+        // 06
+        { code: '06', name: 'Chi cho thầu phụ / tổ đội', level: 1, type: 'chi', khDau: 32.0, khHT: 30.5, giaoThau: 28.0, daThuChi: 28.0, note: '' },
+        { code: '06.10', name: 'Gói thầu cọc', level: 2, type: 'chi', khDau: 5.0, khHT: 4.8, giaoThau: 4.5, daThuChi: 4.5, note: '' },
+        { code: '06.10.51', name: 'Gói thầu cọc BTCT', level: 3, type: 'chi', khDau: 2.0, khHT: 1.8, giaoThau: 1.8, daThuChi: 1.8, note: '' },
+        { code: '06.10.52', name: 'Gói thầu cọc khoan nhồi', level: 3, type: 'chi', khDau: 2.5, khHT: 2.5, giaoThau: 2.2, daThuChi: 2.2, note: '' },
+        { code: '06.10.99', name: 'Gói thầu cọc khác', level: 3, type: 'chi', khDau: 0.5, khHT: 0.5, giaoThau: 0.5, daThuChi: 0.5, note: '' },
+        { code: '06.20', name: 'Gói thầu Biện pháp thi công', level: 2, type: 'chi', khDau: 3.5, khHT: 3.2, giaoThau: 3.0, daThuChi: 3.0, note: '' },
+        { code: '06.30', name: 'Gói thầu kết cấu', level: 2, type: 'chi', khDau: 12.0, khHT: 11.5, giaoThau: 10.5, daThuChi: 10.5, note: '' },
+        { code: '06.30.51', name: 'Gói thầu tường Barrette', level: 3, type: 'chi', khDau: 4.0, khHT: 3.8, giaoThau: 3.5, daThuChi: 3.5, note: '' },
+        { code: '06.30.52', name: 'Gói thầu công tác đất', level: 3, type: 'chi', khDau: 2.0, khHT: 2.0, giaoThau: 1.8, daThuChi: 1.8, note: '' },
+        { code: '06.30.53', name: 'Gói thầu BTCT', level: 3, type: 'chi', khDau: 3.0, khHT: 2.8, giaoThau: 2.5, daThuChi: 2.5, note: '' },
+        { code: '06.30.55', name: 'Gói thầu chống thấm kết cấu', level: 3, type: 'chi', khDau: 1.5, khHT: 1.5, giaoThau: 1.5, daThuChi: 1.5, note: '' },
+        { code: '06.30.99', name: 'Gói thầu kết cấu khác', level: 3, type: 'chi', khDau: 1.5, khHT: 1.4, giaoThau: 1.2, daThuChi: 1.2, note: '' },
+        { code: '06.40', name: 'Gói thầu hoàn thiện', level: 2, type: 'chi', khDau: 5.0, khHT: 4.8, giaoThau: 4.5, daThuChi: 4.5, note: '' },
+        { code: '06.40.51', name: 'Gói thầu Hồ', level: 3, type: 'chi', khDau: 1.0, khHT: 1.0, giaoThau: 0.9, daThuChi: 0.9, note: '' },
+        { code: '06.40.53', name: 'Gói thầu Vách, trần', level: 3, type: 'chi', khDau: 1.2, khHT: 1.2, giaoThau: 1.1, daThuChi: 1.1, note: '' },
+        { code: '06.40.58', name: 'Gói thầu Nhôm kính', level: 3, type: 'chi', khDau: 1.5, khHT: 1.3, giaoThau: 1.3, daThuChi: 1.3, note: '' },
+        { code: '06.40.99', name: 'Gói thầu hoàn thiện khác', level: 3, type: 'chi', khDau: 1.3, khHT: 1.3, giaoThau: 1.2, daThuChi: 1.2, note: '' },
+        { code: '06.50', name: 'Kết cấu thép', level: 2, type: 'chi', khDau: 2.0, khHT: 2.0, giaoThau: 1.8, daThuChi: 1.8, note: '' },
+        { code: '06.60', name: 'Gói thầu MEP', level: 2, type: 'chi', khDau: 3.0, khHT: 2.8, giaoThau: 2.5, daThuChi: 2.5, note: '' },
+        { code: '06.60.51', name: 'Hệ thống điện', level: 3, type: 'chi', khDau: 0.8, khHT: 0.7, giaoThau: 0.65, daThuChi: 0.65, note: '' },
+        { code: '06.60.52', name: 'Hệ thống cấp thoát nước', level: 3, type: 'chi', khDau: 0.6, khHT: 0.6, giaoThau: 0.55, daThuChi: 0.55, note: '' },
+        { code: '06.60.53', name: 'Hệ thống ĐHKK', level: 3, type: 'chi', khDau: 0.5, khHT: 0.5, giaoThau: 0.45, daThuChi: 0.45, note: '' },
+        { code: '06.60.54', name: 'Hệ thống PCCC', level: 3, type: 'chi', khDau: 0.4, khHT: 0.4, giaoThau: 0.35, daThuChi: 0.35, note: '' },
+        { code: '06.60.99', name: 'Hệ thống MEP khác', level: 3, type: 'chi', khDau: 0.7, khHT: 0.6, giaoThau: 0.5, daThuChi: 0.5, note: '' },
+        { code: '06.70', name: 'Gói thầu trung hạ thế, máy biến thế', level: 2, type: 'chi', khDau: 1.0, khHT: 1.0, giaoThau: 0.8, daThuChi: 0.8, note: '' },
+        { code: '06.80', name: 'Gói thầu Hạ Tầng - Cảnh quan', level: 2, type: 'chi', khDau: 0.5, khHT: 0.4, giaoThau: 0.4, daThuChi: 0.4, note: '' },
+        // 07
+        { code: '07', name: 'Chi vật tư', level: 1, type: 'chi', khDau: 20.0, khHT: 19.0, giaoThau: 18.0, daThuChi: 16.5, note: '' },
+        { code: '07.10', name: 'Vật tư cọc', level: 2, type: 'chi', khDau: 3.5, khHT: 3.3, giaoThau: 3.0, daThuChi: 2.8, note: '' },
+        { code: '07.20', name: 'Vật tư hệ shoring, sàn đạo, Kingpost', level: 2, type: 'chi', khDau: 1.5, khHT: 1.5, giaoThau: 1.4, daThuChi: 1.3, note: '' },
+        { code: '07.30', name: 'Vật tư kết cấu', level: 2, type: 'chi', khDau: 5.0, khHT: 4.8, giaoThau: 4.5, daThuChi: 4.2, note: '' },
+        { code: '07.40', name: 'Vật tư hoàn thiện', level: 2, type: 'chi', khDau: 4.5, khHT: 4.2, giaoThau: 4.0, daThuChi: 3.5, note: '' },
+        { code: '07.50', name: 'Kết cấu thép', level: 2, type: 'chi', khDau: 1.5, khHT: 1.5, giaoThau: 1.4, daThuChi: 1.2, note: '' },
+        { code: '07.60', name: 'Vật tư MEP', level: 2, type: 'chi', khDau: 2.0, khHT: 1.8, giaoThau: 1.8, daThuChi: 1.5, note: '' },
+        { code: '07.70', name: 'Vật tư trung hạ thế, máy biến thế', level: 2, type: 'chi', khDau: 1.0, khHT: 1.0, giaoThau: 1.0, daThuChi: 1.0, note: '' },
+        { code: '07.80', name: 'Vật tư máy phát điện', level: 2, type: 'chi', khDau: 0.5, khHT: 0.5, giaoThau: 0.5, daThuChi: 0.5, note: '' },
+        { code: '07.90', name: 'Vật tư khác (XD và MEP)', level: 2, type: 'chi', khDau: 0.5, khHT: 0.4, giaoThau: 0.4, daThuChi: 0.5, note: '' },
+        // 08
+        { code: '08', name: 'Chi hoạt động trực tiếp', level: 1, type: 'chi', khDau: 10.5, khHT: 10.0, giaoThau: 9.5, daThuChi: 9.2, note: '' },
+        { code: '08.10', name: 'Chi phí trực tiếp BCH', level: 2, type: 'chi', khDau: 5.5, khHT: 5.2, giaoThau: 5.0, daThuChi: 4.8, note: '' },
+        { code: '08.10.51', name: 'Lương trực tiếp BCH', level: 3, type: 'chi', khDau: 3.0, khHT: 2.8, giaoThau: 2.8, daThuChi: 2.6, note: '' },
+        { code: '08.10.54', name: 'BHXH / Y tế / BH thất nghiệp BCH', level: 3, type: 'chi', khDau: 1.0, khHT: 1.0, giaoThau: 0.9, daThuChi: 0.9, note: '' },
+        { code: '08.10.56', name: 'Chi phí thuê ngoài / Outsource', level: 3, type: 'chi', khDau: 1.5, khHT: 1.4, giaoThau: 1.3, daThuChi: 1.3, note: '' },
+        { code: '08.20', name: 'Chi phí hành chính tại công trình', level: 2, type: 'chi', khDau: 3.5, khHT: 3.3, giaoThau: 3.0, daThuChi: 3.0, note: '' },
+        { code: '08.20.55', name: 'Thuê nhà, điện, nước cho BCH', level: 3, type: 'chi', khDau: 1.2, khHT: 1.2, giaoThau: 1.1, daThuChi: 1.1, note: '' },
+        { code: '08.20.57', name: 'Chi phí công nhân trực tiếp', level: 3, type: 'chi', khDau: 1.5, khHT: 1.3, giaoThau: 1.2, daThuChi: 1.2, note: '' },
+        { code: '08.30', name: 'Chi phí trực tiếp khác', level: 2, type: 'chi', khDau: 1.5, khHT: 1.5, giaoThau: 1.5, daThuChi: 1.4, note: '' },
+        // 09
+        { code: '09', name: 'Chi phí gián tiếp', level: 1, type: 'chi', khDau: 5.5, khHT: 5.2, giaoThau: 4.8, daThuChi: 4.8, note: '' },
+        { code: '09.10.51', name: 'Chi phí gián tiếp', level: 2, type: 'chi', khDau: 5.5, khHT: 5.2, giaoThau: 4.8, daThuChi: 4.8, note: '' },
+        // 10
+        { code: '10', name: 'Chi hoạt động tài chính', level: 1, type: 'chi', khDau: 3.0, khHT: 2.8, giaoThau: 2.5, daThuChi: 2.5, note: '' },
+        { code: '10.10.51', name: 'Chi trả nợ gốc vay Bank', level: 2, type: 'chi', khDau: 1.5, khHT: 1.4, giaoThau: 1.2, daThuChi: 1.2, note: '' },
+        { code: '10.10.52', name: 'Chi trả tiền mượn', level: 2, type: 'chi', khDau: 0.5, khHT: 0.5, giaoThau: 0.5, daThuChi: 0.5, note: '' },
+        { code: '10.10.53', name: 'Chi trả lãi vay Bank', level: 2, type: 'chi', khDau: 1.0, khHT: 0.9, giaoThau: 0.8, daThuChi: 0.8, note: '' },
+        // 11
+        { code: '11', name: 'Chi khác', level: 1, type: 'chi', khDau: 2.0, khHT: 1.8, giaoThau: 1.5, daThuChi: 1.8, note: '' },
+        { code: '11.10.51', name: 'Chi hoàn trả tiền tạm ứng cho CĐT', level: 2, type: 'chi', khDau: 1.2, khHT: 1.0, giaoThau: 0.8, daThuChi: 1.0, note: '' },
+        { code: '11.10.52', name: 'Chi khác XD', level: 2, type: 'chi', khDau: 0.8, khHT: 0.8, giaoThau: 0.7, daThuChi: 0.8, note: '' },
+        // 12
+        { code: '12', name: 'Dự phòng phí', level: 1, type: 'chi', khDau: 4.0, khHT: 3.5, giaoThau: 0, daThuChi: 0, note: 'Chưa sử dụng' },
+        { code: '12.10.51', name: 'Dự phòng phí', level: 2, type: 'chi', khDau: 4.0, khHT: 3.5, giaoThau: 0, daThuChi: 0, note: '' },
+        // ─── TỔNG HỢP ───
+        { code: '', name: 'Lợi nhuận gộp dự án = Thu − Chi (01→08)', level: 0, type: 'summary', khDau: 45.3, khHT: 44.0, giaoThau: 45.0, daThuChi: 42.0, note: '' },
+        { code: '', name: 'Tỷ suất lợi nhuận gộp (%)', level: 0, type: 'pct', khDau: 25.4, khHT: 25.6, giaoThau: 27.3, daThuChi: 27.6, note: '' },
+        { code: '', name: 'Chi phí quản lý (CP gián tiếp + Lãi vay)', level: 0, type: 'summary', khDau: 8.5, khHT: 8.0, giaoThau: 7.3, daThuChi: 7.3, note: '' },
+        { code: '', name: 'Dự phòng phí', level: 0, type: 'summary', khDau: 4.0, khHT: 3.5, giaoThau: 0, daThuChi: 0, note: '' },
+        { code: '', name: 'Thuế TNDN (20%)', level: 0, type: 'summary', khDau: 6.56, khHT: 6.50, giaoThau: 7.54, daThuChi: 6.94, note: '' },
+        { code: '', name: 'LỢI NHUẬN SAU THUẾ', level: 0, type: 'profit', khDau: 26.24, khHT: 26.0, giaoThau: 30.16, daThuChi: 27.76, note: '' },
+        { code: '', name: 'Tỷ suất lợi nhuận sau thuế (%)', level: 0, type: 'pct', khDau: 14.7, khHT: 15.1, giaoThau: 18.3, daThuChi: 18.3, note: '' }
+    ];
+
+    const thStyle = 'padding:8px 6px;font-size:11px;font-weight:600;white-space:nowrap;border-bottom:2px solid #CBD5E1;';
+    let html = '<table style="font-size:11px;border-collapse:collapse;width:100%;min-width:1000px;">';
+    html += '<thead><tr>';
+    html += `<th style="${thStyle}text-align:left;background:#F1F5F9;min-width:60px;">(1) Mã NS</th>`;
+    html += `<th style="${thStyle}text-align:left;background:#F1F5F9;min-width:220px;">(2) Nội dung</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#EFF6FF;color:#2563EB;">(3) KH Đầu DA</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#EFF6FF;color:#2563EB;">(4) KH Hiện tại</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#F0FDF4;color:#16A34A;">(5) GT giao thầu</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FFFBEB;color:#D97706;">(6) Đã thu/chi</th>`;
+    html += `<th style="${thStyle}text-align:right;background:#FEF2F2;color:#DC2626;">(7) GT còn lại</th>`;
+    html += `<th style="${thStyle}text-align:left;background:#F1F5F9;min-width:100px;">(8) Ghi chú</th>`;
+    html += '</tr></thead><tbody>';
+
+    rows.forEach(row => {
+        const indent = row.level * 14;
+        const td = 'padding:7px 6px;border-bottom:1px solid #E2E8F0;white-space:nowrap;font-size:11px;';
+
+        // ─── Sub-header rows: no code, italic, grey background, no data ───
+        if (row.type === 'subheader') {
+            html += `<tr style="background:#F1F5F9;">`;
+            html += `<td style="${td}color:#94A3B8;"></td>`;
+            html += `<td style="${td}text-align:left;padding-left:${8 + indent}px;font-style:italic;font-weight:600;color:#475569;" colspan="7">${row.name}</td>`;
+            html += '</tr>';
+            return;
+        }
+
+        const conLai = +(row.giaoThau - row.daThuChi).toFixed(2);
+
+        let bg = '', textColor = '#64748B', bold = '';
+        if (row.type === 'sl') { bg = 'background:rgba(37,99,235,0.06);'; textColor = '#2563EB'; bold = 'font-weight:700;'; }
+        else if (row.type === 'thu' && row.level <= 1) { textColor = '#16A34A'; bold = 'font-weight:600;'; if (row.level === 0) bg = 'background:rgba(22,163,74,0.08);'; }
+        else if (row.type === 'thu') { textColor = '#16A34A'; }
+        else if (row.type === 'chi' && row.level <= 1) { textColor = '#DC2626'; bold = 'font-weight:600;'; if (row.level === 0) bg = 'background:rgba(220,38,38,0.06);'; }
+        else if (row.type === 'chi') { textColor = '#DC2626'; }
+        else if (row.type === 'summary') { bg = 'background:#F8FAFC;'; bold = 'font-weight:600;'; textColor = '#0F172A'; }
+        else if (row.type === 'pct') { bg = 'background:#FFFBEB;'; bold = 'font-weight:600;'; textColor = '#D97706'; }
+        else if (row.type === 'profit') { bg = 'background:linear-gradient(135deg,#DCFCE7,#F0FDF4);'; bold = 'font-weight:700;'; textColor = '#16A34A'; }
+
+        const fmt = (v, isPct) => {
+            if (v === 0 && (row.code === '12' || row.code === '12.10.51')) return '—';
+            if (isPct) return v.toFixed(1) + '%';
+            return v.toFixed(2);
+        };
+        const isPct = row.type === 'pct';
+
+        let toggleIcon = '<span style="display:inline-block;width:12px;"></span>';
+        let cursor = '';
+        let click = '';
+        
+        // Only look at items with codes to handle toggle
+        if (row.code) {
+            let nextIndex = rows.indexOf(row) + 1;
+            // Skip subheaders when checking children
+            while (rows[nextIndex] && rows[nextIndex].type === 'subheader') nextIndex++;
+            const nextItem = rows[nextIndex];
+            
+            const hasChildren = nextItem && nextItem.level > row.level && nextItem.code;
+            if (hasChildren) {
+                toggleIcon = '<span class="toggle-icon" style="display:inline-block;width:12px;color:#64748B;font-size:10px;cursor:pointer;">▼</span>';
+                cursor = 'cursor:pointer;';
+                click = 'onclick="toggleMatrixRow(this)"';
+            }
+        }
+
+        html += `<tr style="${bg}${cursor}" data-level="${row.level}" data-expanded="true" ${click}>`;
+        html += `<td style="${td}text-align:left;${bold}color:${textColor};">${row.code}</td>`;
+        html += `<td style="${td}text-align:left;padding-left:${8 + indent}px;${bold}color:${textColor};">${toggleIcon}${row.name}</td>`;
+        html += `<td style="${td}text-align:right;">${fmt(row.khDau, isPct)}</td>`;
+        html += `<td style="${td}text-align:right;">${fmt(row.khHT, isPct)}</td>`;
+        html += `<td style="${td}text-align:right;">${row.giaoThau > 0 || row.type === 'pct' ? fmt(row.giaoThau, isPct) : '—'}</td>`;
+        html += `<td style="${td}text-align:right;">${row.daThuChi > 0 || row.type === 'pct' ? fmt(row.daThuChi, isPct) : '—'}</td>`;
+        html += `<td style="${td}text-align:right;color:${conLai > 0.01 ? '#16A34A' : conLai < -0.01 ? '#DC2626' : '#CBD5E1'};font-weight:600;">${row.giaoThau > 0 ? conLai.toFixed(2) : '—'}</td>`;
+        html += `<td style="${td}text-align:left;color:#94A3B8;font-size:10px;">${row.note}</td>`;
+        html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    document.getElementById('budgetDetailTableNew').innerHTML = html;
+}
+
+function updateBudgetPageNew() {
+    renderBudgetNewKPIs();
+    renderBudgetDetailTableNew();
+}
+
+// ============================================================
+// Resize handler
+// ============================================================
+window.addEventListener('resize', () => Object.values(charts).forEach(c => c && c.resize()));
+
+// ============================================================
+// Init — Updated for 5 pages
+// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-    initPage2();       // page1 = Quản Lý Dòng Tiền
+    initPage2();       // page1 = Hiệu Quả Dự Án (giữ nguyên)
     initPage3();       // page2 = Duyệt Chi
-    initPage3Detail(); // page3 = Chi tiết Thu-Chi DA
-    initPage1();       // page4 = Quản Lý Ngân Sách
+    initPage3Detail(); // page3 = Quản Lý Thu-Chi DA
+    initPage4();       // page4 = Quản Lý Hợp Đồng
+    initPage5();       // page5 = Quản Lý Ngân Sách
 });
